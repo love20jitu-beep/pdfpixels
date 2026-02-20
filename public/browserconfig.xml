@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<browserconfig>
+  <msapplication>
+    <tile>
+      <square70x70logo src="/tile-small.png"/>
+      <square150x150logo src="/tile-medium.png"/>
+      <wide310x150logo src="/tile-wide.png"/>
+      <square310x310logo src="/tile-large.png"/>
+      <TileColor>#8B5CF6</TileColor>
+    </tile>
+    <notification>
+      <polling-uri src="/notifications.xml"/>
+      <frequency>30</frequency>
+      <cycle>1</cycle>
+    </notification>
+    <config>
+      <name>PDFPixels</name>
+      <author>PDFPixels Team</author>
+    </config>
+  </msapplication>
+</browserconfig>

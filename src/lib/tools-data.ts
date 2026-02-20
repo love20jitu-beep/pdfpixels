@@ -1,0 +1,792 @@
+import {
+  Image,
+  Crop,
+  RotateCw,
+  ZoomIn,
+  FileImage,
+  FileText,
+  Palette,
+  Wand2,
+  Eraser,
+  Layers,
+  Maximize2,
+  Minimize2,
+  ArrowLeftRight,
+  FlipHorizontal,
+  Sparkles,
+  ScanFace,
+  Grid3X3,
+  Heart,
+  Type,
+  Droplets,
+  Contrast,
+  CircleDot,
+  PenTool,
+  Merge,
+  Split,
+  Scissors,
+  Camera,
+  MonitorSmartphone,
+  IdCard,
+  Stamp,
+  Signature,
+  Hash,
+  Ruler,
+  Settings2,
+  Eye,
+  Trash2,
+  User,
+  Wand,
+  FilePlus,
+  FileMinus,
+  FileLock,
+  Shield,
+  Square,
+  Move,
+  Paintbrush,
+  ImagePlus,
+  EyeOff,
+  Sun,
+  FileSearch,
+  Pencil,
+  Download,
+  Upload,
+  Ban,
+  Boxes,
+  Focus,
+  SquareDashedBottom,
+} from 'lucide-react';
+
+export type Tool = {
+  id: string;
+  slug: string;
+  name: string;
+  description: string;
+  icon: React.ComponentType<{ className?: string }>;
+  category: string;
+  keywords: string[];
+  popular?: boolean;
+  badge?: string;
+  isAI?: boolean;
+  processing: 'client' | 'server' | 'ai';
+};
+
+export type ToolCategory = {
+  id: string;
+  name: string;
+  description: string;
+  icon: React.ComponentType<{ className?: string }>;
+  tools: Tool[];
+};
+
+export const toolCategories: ToolCategory[] = [
+  // ═══════════════════════════════════════════════════════════════════════════
+  // MOST POPULAR — high-traffic tools shown first
+  // ═══════════════════════════════════════════════════════════════════════════
+  {
+    id: 'most-used',
+    name: 'Most Popular Tools',
+    description: 'Our most-used image & PDF tools',
+    icon: Sparkles,
+    tools: [
+      {
+        id: 'compress',
+        slug: 'compress-image',
+        name: 'Compress Image',
+        description: 'Reduce image file size to any target (5KB–2MB+). Quality slider & preset sizes.',
+        icon: Minimize2,
+        category: 'most-used',
+        keywords: ['compress image', 'reduce image size', 'image compressor', 'compress jpg', 'compress png', 'reduce file size', 'shrink image', 'image optimizer', 'compress photo', 'reduce image size in kb'],
+        popular: true,
+        badge: 'Popular',
+        processing: 'server',
+      },
+      {
+        id: 'resize',
+        slug: 'resize-image',
+        name: 'Resize Image',
+        description: 'Resize by pixels, cm, mm, or inches. Social media & document presets included.',
+        icon: Maximize2,
+        category: 'most-used',
+        keywords: ['resize image', 'image resizer', 'resize photo', 'change image size', 'resize image pixel', 'resize image in cm', 'resize image in mm', 'resize image in inches', 'bulk resize'],
+        popular: true,
+        badge: 'Popular',
+        processing: 'server',
+      },
+      {
+        id: 'remove-background',
+        slug: 'remove-image-background',
+        name: 'Remove Background',
+        description: 'AI-powered background removal. Get transparent PNG instantly.',
+        icon: Eraser,
+        category: 'most-used',
+        keywords: ['remove background', 'background remover', 'transparent background', 'remove bg', 'background eraser', 'cutout image', 'remove image background'],
+        popular: true,
+        badge: 'AI',
+        isAI: true,
+        processing: 'ai',
+      },
+      {
+        id: 'passport-photo',
+        slug: 'passport-size-photo',
+        name: 'Passport Photo Maker',
+        description: 'Create passport & ID photos for any country. Auto-crop to official sizes.',
+        icon: IdCard,
+        category: 'most-used',
+        keywords: ['passport photo', 'passport size photo', 'passport photo maker', 'id photo', 'visa photo', '35x45mm', '2x2 inch photo', 'passport photo online'],
+        popular: true,
+        badge: 'Popular',
+        processing: 'server',
+      },
+      {
+        id: 'image-to-pdf',
+        slug: 'image-to-pdf',
+        name: 'Image to PDF',
+        description: 'Convert one or multiple images to a single PDF document.',
+        icon: FilePlus,
+        category: 'most-used',
+        keywords: ['image to pdf', 'jpg to pdf', 'png to pdf', 'photo to pdf', 'convert image to pdf', 'picture to pdf'],
+        popular: true,
+        processing: 'server',
+      },
+      {
+        id: 'increase-image-size',
+        slug: 'increase-image-size-in-kb',
+        name: 'Increase Image Size',
+        description: 'Increase image file size to meet minimum upload requirements.',
+        icon: ImagePlus,
+        category: 'most-used',
+        keywords: ['increase image size', 'increase file size', 'make image bigger', 'increase image size in kb', 'increase photo size', 'enlarge file size'],
+        popular: true,
+        processing: 'server',
+      },
+      {
+        id: 'enhance-image',
+        slug: 'increase-image-quality',
+        name: 'AI Image Enhancer',
+        description: 'Enhance image quality with AI. Fix lighting, sharpen, reduce noise.',
+        icon: Sparkles,
+        category: 'most-used',
+        keywords: ['increase image quality', 'enhance image', 'ai photo enhancer', 'improve photo quality', 'fix blurry image', 'image enhancer'],
+        popular: true,
+        badge: 'AI',
+        isAI: true,
+        processing: 'ai',
+      },
+    ],
+  },
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // BASIC EDITING — client-side Canvas tools
+  // ═══════════════════════════════════════════════════════════════════════════
+  {
+    id: 'basic-editing',
+    name: 'Basic Editing',
+    description: 'Essential image editing tools — crop, rotate, flip, watermark & more',
+    icon: Crop,
+    tools: [
+      {
+        id: 'crop',
+        slug: 'crop-image',
+        name: 'Crop Image',
+        description: 'Crop images to any dimension with aspect ratio presets.',
+        icon: Crop,
+        category: 'basic-editing',
+        keywords: ['crop image', 'image cropper', 'photo crop', 'crop online', 'trim image', 'cut image'],
+        processing: 'client',
+      },
+      {
+        id: 'circle-crop',
+        slug: 'circle-crop',
+        name: 'Circle Crop',
+        description: 'Crop images into a perfect circle shape with transparent background.',
+        icon: CircleDot,
+        category: 'basic-editing',
+        keywords: ['circle crop', 'round crop', 'circular crop', 'crop circle shape', 'round image'],
+        processing: 'client',
+      },
+      {
+        id: 'square-crop',
+        slug: 'square-image-cropper',
+        name: 'Square Crop',
+        description: 'Crop images to perfect 1:1 square ratio.',
+        icon: Square,
+        category: 'basic-editing',
+        keywords: ['square crop', 'square image', '1:1 crop', 'square photo', 'instagram square'],
+        processing: 'client',
+      },
+      {
+        id: 'freehand-crop',
+        slug: 'freehand-crop',
+        name: 'Freehand Crop',
+        description: 'Draw a custom shape to crop your image with precision.',
+        icon: Scissors,
+        category: 'basic-editing',
+        keywords: ['freehand crop', 'custom crop', 'free crop', 'polygon crop', 'manual crop'],
+        processing: 'client',
+      },
+      {
+        id: 'rotate',
+        slug: 'rotate-image',
+        name: 'Rotate Image',
+        description: 'Rotate images 90°, 180°, 270° or any custom angle.',
+        icon: RotateCw,
+        category: 'basic-editing',
+        keywords: ['rotate image', 'rotate photo', 'turn image', 'rotate 90 degrees', 'image rotation'],
+        processing: 'client',
+      },
+      {
+        id: 'flip',
+        slug: 'flip-image',
+        name: 'Flip Image',
+        description: 'Mirror images horizontally or vertically instantly.',
+        icon: FlipHorizontal,
+        category: 'basic-editing',
+        keywords: ['flip image', 'mirror image', 'flip horizontal', 'flip vertical', 'mirror photo'],
+        processing: 'client',
+      },
+      {
+        id: 'watermark',
+        slug: 'watermark-image',
+        name: 'Add Watermark',
+        description: 'Add text or image watermark with custom position, opacity & style.',
+        icon: Stamp,
+        category: 'basic-editing',
+        keywords: ['watermark image', 'add watermark', 'photo watermark', 'text watermark', 'image watermark', 'protect image'],
+        processing: 'client',
+      },
+      {
+        id: 'add-text',
+        slug: 'add-text-to-image',
+        name: 'Add Text to Image',
+        description: 'Add custom text with fonts, colors, and effects to your images.',
+        icon: Type,
+        category: 'basic-editing',
+        keywords: ['add text to image', 'text on photo', 'write on image', 'image text editor', 'photo text'],
+        processing: 'client',
+      },
+      {
+        id: 'add-logo',
+        slug: 'add-logo-to-image',
+        name: 'Add Logo to Image',
+        description: 'Overlay your logo on images with position and opacity control.',
+        icon: Layers,
+        category: 'basic-editing',
+        keywords: ['add logo to image', 'logo overlay', 'brand image', 'logo on photo', 'image branding'],
+        processing: 'client',
+      },
+      {
+        id: 'merge-images',
+        slug: 'join-images-online',
+        name: 'Join Images',
+        description: 'Combine multiple images side by side or stacked vertically.',
+        icon: Merge,
+        category: 'basic-editing',
+        keywords: ['join images', 'merge images', 'combine images', 'collage maker', 'stitch images', 'join images online'],
+        processing: 'client',
+      },
+      {
+        id: 'split-image',
+        slug: 'image-splitter',
+        name: 'Split Image',
+        description: 'Split an image into a grid of equal parts. Perfect for Instagram grids.',
+        icon: Grid3X3,
+        category: 'basic-editing',
+        keywords: ['split image', 'image splitter', 'divide image', 'grid splitter', 'instagram grid', 'image grid maker'],
+        processing: 'client',
+      },
+      {
+        id: 'color-picker',
+        slug: 'color-code-from-image',
+        name: 'Image Color Picker',
+        description: 'Extract HEX, RGB & HSL color codes from any image.',
+        icon: Palette,
+        category: 'basic-editing',
+        keywords: ['color picker', 'color code from image', 'extract color', 'hex color picker', 'image color', 'eyedropper'],
+        processing: 'client',
+      },
+    ],
+  },
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // EFFECTS & FILTERS — client-side Canvas processing
+  // ═══════════════════════════════════════════════════════════════════════════
+  {
+    id: 'effects',
+    name: 'Effects & Filters',
+    description: 'Apply blur, pixelate, grayscale, and creative effects',
+    icon: Wand2,
+    tools: [
+      {
+        id: 'blur-image',
+        slug: 'blur-image',
+        name: 'Blur Image',
+        description: 'Apply Gaussian blur effect to entire image with adjustable intensity.',
+        icon: Droplets,
+        category: 'effects',
+        keywords: ['blur image', 'image blur', 'gaussian blur', 'blur photo', 'blur effect', 'soft focus'],
+        processing: 'client',
+      },
+      {
+        id: 'blur-background',
+        slug: 'blur-background',
+        name: 'Blur Background',
+        description: 'AI-powered background blur. Keep subject sharp, blur the rest.',
+        icon: Focus,
+        category: 'effects',
+        keywords: ['blur background', 'background blur', 'bokeh effect', 'depth of field', 'portrait mode'],
+        badge: 'AI',
+        isAI: true,
+        processing: 'ai',
+      },
+      {
+        id: 'blur-face',
+        slug: 'blur-face',
+        name: 'Blur Face',
+        description: 'AI auto-detects and blurs faces for privacy protection.',
+        icon: ScanFace,
+        category: 'effects',
+        keywords: ['blur face', 'face blur', 'anonymize face', 'privacy blur', 'hide face'],
+        badge: 'AI',
+        isAI: true,
+        processing: 'ai',
+      },
+      {
+        id: 'pixelate',
+        slug: 'pixelate-image',
+        name: 'Pixelate Image',
+        description: 'Add pixelation / mosaic effect to images or specific areas.',
+        icon: Grid3X3,
+        category: 'effects',
+        keywords: ['pixelate image', 'pixelate', 'mosaic effect', 'pixel effect', 'censor image'],
+        processing: 'client',
+      },
+      {
+        id: 'grayscale',
+        slug: 'grayscale-image',
+        name: 'Grayscale Image',
+        description: 'Convert any image to professional grayscale tones.',
+        icon: Contrast,
+        category: 'effects',
+        keywords: ['grayscale image', 'convert to grayscale', 'gray image', 'desaturate', 'monochrome'],
+        processing: 'client',
+      },
+      {
+        id: 'black-white',
+        slug: 'turn-image-to-black-and-white',
+        name: 'Black & White',
+        description: 'Convert images to high-contrast black and white with threshold control.',
+        icon: Contrast,
+        category: 'effects',
+        keywords: ['black and white', 'black white image', 'bw photo', 'monochrome', 'high contrast'],
+        processing: 'client',
+      },
+      {
+        id: 'sepia',
+        slug: 'sepia-filter',
+        name: 'Sepia Filter',
+        description: 'Apply warm vintage sepia tone to your images.',
+        icon: Sun,
+        category: 'effects',
+        keywords: ['sepia filter', 'sepia effect', 'vintage filter', 'old photo effect', 'warm tone'],
+        processing: 'client',
+      },
+      {
+        id: 'invert',
+        slug: 'invert-image-colors',
+        name: 'Invert Colors',
+        description: 'Create a negative image by inverting all colors.',
+        icon: Paintbrush,
+        category: 'effects',
+        keywords: ['invert colors', 'negative image', 'color inversion', 'invert photo', 'reverse colors'],
+        processing: 'client',
+      },
+      {
+        id: 'motion-blur',
+        slug: 'motion-blur',
+        name: 'Motion Blur',
+        description: 'Add directional motion blur effect for dynamic action shots.',
+        icon: Move,
+        category: 'effects',
+        keywords: ['motion blur', 'directional blur', 'speed blur', 'action blur', 'movement effect'],
+        processing: 'client',
+      },
+      {
+        id: 'censor-photo',
+        slug: 'censor-photo',
+        name: 'Censor Photo',
+        description: 'Censor sensitive areas of images with blur, pixelate, or black bars.',
+        icon: Ban,
+        category: 'effects',
+        keywords: ['censor photo', 'censor image', 'redact image', 'hide content', 'black bar'],
+        processing: 'client',
+      },
+      {
+        id: 'pixel-art',
+        slug: 'picture-to-pixel-art',
+        name: 'Pixel Art Converter',
+        description: 'Transform any photo into retro-style pixel art.',
+        icon: Boxes,
+        category: 'effects',
+        keywords: ['pixel art', 'picture to pixel art', 'pixel art converter', 'retro pixel', '8-bit art'],
+        processing: 'client',
+      },
+      {
+        id: 'beautify',
+        slug: 'beautify-image',
+        name: 'Beautify Image',
+        description: 'AI-powered portrait enhancement. Smooth skin, brighten eyes.',
+        icon: Heart,
+        category: 'effects',
+        keywords: ['beautify image', 'beautify photo', 'portrait enhancement', 'skin smoothing', 'face beautifier'],
+        badge: 'AI',
+        isAI: true,
+        processing: 'ai',
+      },
+      {
+        id: 'retouch',
+        slug: 'retouch-photo',
+        name: 'Retouch Photo',
+        description: 'AI removes blemishes, spots, and imperfections from photos.',
+        icon: Wand,
+        category: 'effects',
+        keywords: ['retouch photo', 'photo retouch', 'remove blemish', 'skin retouch', 'photo blemish remover'],
+        badge: 'AI',
+        isAI: true,
+        processing: 'ai',
+      },
+    ],
+  },
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // DPI & QUALITY — server-side Sharp processing
+  // ═══════════════════════════════════════════════════════════════════════════
+  {
+    id: 'dpi-quality',
+    name: 'DPI & Quality',
+    description: 'Check, convert DPI and enhance image resolution',
+    icon: Settings2,
+    tools: [
+      {
+        id: 'dpi-converter',
+        slug: 'convert-dpi',
+        name: 'DPI Converter',
+        description: 'Convert image DPI to 72, 96, 150, 200, 300, or 600. Check current DPI.',
+        icon: Settings2,
+        category: 'dpi-quality',
+        keywords: ['convert dpi', 'dpi converter', '300 dpi', '600 dpi', 'change dpi', 'image dpi', 'print resolution', 'dpi checker', 'check image dpi'],
+        processing: 'server',
+      },
+      {
+        id: 'upscale',
+        slug: 'upscale-image',
+        name: 'AI Upscale Image',
+        description: 'Increase image resolution up to 4x with AI. No quality loss.',
+        icon: ZoomIn,
+        category: 'dpi-quality',
+        keywords: ['upscale image', 'ai upscaler', 'increase resolution', 'super resolution', 'enlarge image', 'upscale photo'],
+        badge: 'AI',
+        isAI: true,
+        processing: 'ai',
+      },
+    ],
+  },
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // FORMAT CONVERSION — server-side Sharp processing
+  // ═══════════════════════════════════════════════════════════════════════════
+  {
+    id: 'convert',
+    name: 'Format Conversion',
+    description: 'Convert between image formats — JPG, PNG, WebP, HEIC, AVIF',
+    icon: ArrowLeftRight,
+    tools: [
+      {
+        id: 'png-to-jpg',
+        slug: 'png-to-jpeg',
+        name: 'PNG to JPEG',
+        description: 'Convert PNG images to JPEG format with adjustable quality.',
+        icon: ArrowLeftRight,
+        category: 'convert',
+        keywords: ['png to jpeg', 'png to jpg', 'convert png', 'png converter', 'png to jpeg online'],
+        processing: 'server',
+      },
+      {
+        id: 'jpg-to-png',
+        slug: 'jpeg-to-png',
+        name: 'JPEG to PNG',
+        description: 'Convert JPEG to PNG with transparency support. Lossless output.',
+        icon: ArrowLeftRight,
+        category: 'convert',
+        keywords: ['jpeg to png', 'jpg to png', 'convert jpeg', 'jpeg converter', 'jpg to png online'],
+        processing: 'server',
+      },
+      {
+        id: 'webp-to-jpg',
+        slug: 'webp-to-jpg',
+        name: 'WebP to JPG',
+        description: 'Convert WebP images to universally compatible JPG format.',
+        icon: ArrowLeftRight,
+        category: 'convert',
+        keywords: ['webp to jpg', 'convert webp', 'webp converter', 'webp to jpeg', 'webp to jpg online'],
+        processing: 'server',
+      },
+      {
+        id: 'heic-to-jpg',
+        slug: 'heic-to-jpg',
+        name: 'HEIC to JPG',
+        description: 'Convert iPhone HEIC photos to JPG. Works on any device.',
+        icon: ArrowLeftRight,
+        category: 'convert',
+        keywords: ['heic to jpg', 'heic converter', 'iphone photo converter', 'heic to jpeg', 'convert heic'],
+        processing: 'server',
+      },
+      {
+        id: 'image-to-text',
+        slug: 'image-to-text',
+        name: 'Image to Text (OCR)',
+        description: 'Extract text from images using OCR. Supports 100+ languages.',
+        icon: FileText,
+        category: 'convert',
+        keywords: ['image to text', 'ocr', 'extract text from image', 'jpg to text', 'png to text', 'photo to text', 'ocr online'],
+        badge: 'OCR',
+        processing: 'client',
+      },
+    ],
+  },
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // SIGNATURE TOOLS — client-side Canvas processing
+  // ═══════════════════════════════════════════════════════════════════════════
+  {
+    id: 'signature',
+    name: 'Signature Tools',
+    description: 'Create, resize, and merge digital signatures',
+    icon: PenTool,
+    tools: [
+      {
+        id: 'generate-signature',
+        slug: 'generate-signature',
+        name: 'Signature Maker',
+        description: 'Draw, type, or upload a signature. Export as transparent PNG.',
+        icon: PenTool,
+        category: 'signature',
+        keywords: ['signature maker', 'generate signature', 'digital signature', 'create signature', 'e-signature', 'online signature'],
+        popular: true,
+        processing: 'client',
+      },
+      {
+        id: 'resize-signature',
+        slug: 'resize-signature',
+        name: 'Resize Signature',
+        description: 'Resize signature to exact dimensions. Common presets included.',
+        icon: Ruler,
+        category: 'signature',
+        keywords: ['resize signature', 'signature size', 'signature dimensions', 'resize sign', '6cm x 2cm signature'],
+        processing: 'client',
+      },
+      {
+        id: 'merge-photo-signature',
+        slug: 'merge-photo-and-signature',
+        name: 'Merge Photo & Signature',
+        description: 'Combine passport photo and signature into a single image.',
+        icon: Merge,
+        category: 'signature',
+        keywords: ['merge photo signature', 'photo and signature', 'combine photo signature', 'passport photo with signature'],
+        processing: 'client',
+      },
+    ],
+  },
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // METADATA TOOLS — client-side EXIF processing
+  // ═══════════════════════════════════════════════════════════════════════════
+  {
+    id: 'metadata',
+    name: 'Image Metadata',
+    description: 'View, edit, and remove EXIF data from your images',
+    icon: FileSearch,
+    tools: [
+      {
+        id: 'view-metadata',
+        slug: 'photo-metadata-viewer',
+        name: 'View Metadata',
+        description: 'See all EXIF data: camera, GPS, date, dimensions, and more.',
+        icon: Eye,
+        category: 'metadata',
+        keywords: ['view metadata', 'exif viewer', 'photo metadata', 'image info', 'exif data', 'photo metadata viewer'],
+        processing: 'client',
+      },
+      {
+        id: 'edit-metadata',
+        slug: 'photo-exif-editor',
+        name: 'Edit Metadata',
+        description: 'Edit EXIF data like date, camera info, GPS coordinates.',
+        icon: Pencil,
+        category: 'metadata',
+        keywords: ['edit metadata', 'exif editor', 'change exif', 'modify metadata', 'photo exif editor'],
+        processing: 'client',
+      },
+      {
+        id: 'remove-metadata',
+        slug: 'remove-image-metadata',
+        name: 'Remove Metadata',
+        description: 'Strip all EXIF/metadata from images for privacy protection.',
+        icon: Trash2,
+        category: 'metadata',
+        keywords: ['remove metadata', 'strip exif', 'remove exif', 'clear metadata', 'remove image metadata', 'privacy'],
+        processing: 'server',
+      },
+    ],
+  },
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // PDF TOOLS — server-side pdf-lib processing
+  // ═══════════════════════════════════════════════════════════════════════════
+  {
+    id: 'pdf-tools',
+    name: 'PDF Tools',
+    description: 'Complete suite of PDF editing, merging, splitting & conversion',
+    icon: FileImage,
+    tools: [
+      {
+        id: 'pdf-compress',
+        slug: 'compress-pdf',
+        name: 'Compress PDF',
+        description: 'Reduce PDF file size with adjustable compression levels.',
+        icon: FileMinus,
+        category: 'pdf-tools',
+        keywords: ['compress pdf', 'pdf compressor', 'reduce pdf size', 'shrink pdf', 'pdf optimizer', 'compress pdf online'],
+        popular: true,
+        badge: 'Popular',
+        processing: 'server',
+      },
+      {
+        id: 'pdf-merge',
+        slug: 'merge-pdf',
+        name: 'Merge PDF',
+        description: 'Combine multiple PDF files into one. Drag to reorder.',
+        icon: Merge,
+        category: 'pdf-tools',
+        keywords: ['merge pdf', 'combine pdf', 'pdf merger', 'join pdf', 'merge pdf online', 'pdf combiner'],
+        popular: true,
+        badge: 'Popular',
+        processing: 'server',
+      },
+      {
+        id: 'pdf-split',
+        slug: 'split-pdf',
+        name: 'Split PDF',
+        description: 'Extract pages or split PDF into multiple smaller files.',
+        icon: Split,
+        category: 'pdf-tools',
+        keywords: ['split pdf', 'pdf splitter', 'extract pdf pages', 'separate pdf', 'split pdf online'],
+        popular: true,
+        processing: 'server',
+      },
+      {
+        id: 'pdf-to-image',
+        slug: 'pdf-to-jpg',
+        name: 'PDF to JPG',
+        description: 'Convert PDF pages to high-quality JPG or PNG images.',
+        icon: Image,
+        category: 'pdf-tools',
+        keywords: ['pdf to jpg', 'pdf to image', 'pdf to png', 'convert pdf to image', 'pdf to jpg online'],
+        processing: 'server',
+      },
+      {
+        id: 'pdf-rotate',
+        slug: 'rotate-pdf',
+        name: 'Rotate PDF',
+        description: 'Rotate PDF pages 90°, 180°, or 270°.',
+        icon: RotateCw,
+        category: 'pdf-tools',
+        keywords: ['rotate pdf', 'pdf rotation', 'turn pdf', 'rotate pdf pages'],
+        processing: 'server',
+      },
+      {
+        id: 'pdf-watermark',
+        slug: 'add-watermark-pdf',
+        name: 'PDF Watermark',
+        description: 'Add text or image watermark to PDF documents.',
+        icon: Stamp,
+        category: 'pdf-tools',
+        keywords: ['pdf watermark', 'add watermark pdf', 'stamp pdf', 'pdf stamp'],
+        processing: 'server',
+      },
+      {
+        id: 'pdf-protect',
+        slug: 'protect-pdf',
+        name: 'Protect PDF',
+        description: 'Add password protection to PDF files for security.',
+        icon: Shield,
+        category: 'pdf-tools',
+        keywords: ['protect pdf', 'pdf password', 'encrypt pdf', 'secure pdf', 'lock pdf'],
+        badge: 'Secure',
+        processing: 'server',
+      },
+      {
+        id: 'pdf-unlock',
+        slug: 'unlock-pdf',
+        name: 'Unlock PDF',
+        description: 'Remove password from protected PDF files.',
+        icon: FileLock,
+        category: 'pdf-tools',
+        keywords: ['unlock pdf', 'remove pdf password', 'decrypt pdf', 'pdf unlocker'],
+        processing: 'server',
+      },
+      {
+        id: 'pdf-reorder',
+        slug: 'reorder-pdf-pages',
+        name: 'Reorder PDF Pages',
+        description: 'Drag and drop to rearrange pages in your PDF.',
+        icon: Layers,
+        category: 'pdf-tools',
+        keywords: ['reorder pdf', 'rearrange pdf pages', 'move pdf pages', 'organize pdf'],
+        processing: 'server',
+      },
+      {
+        id: 'pdf-delete-pages',
+        slug: 'delete-pdf-pages',
+        name: 'Delete PDF Pages',
+        description: 'Remove unwanted pages from any PDF document.',
+        icon: Trash2,
+        category: 'pdf-tools',
+        keywords: ['delete pdf pages', 'remove pdf pages', 'pdf page remover'],
+        processing: 'server',
+      },
+    ],
+  },
+];
+
+// ─── Derived exports ────────────────────────────────────────────────────────────
+
+export const allTools = toolCategories.flatMap(cat => cat.tools);
+
+export const popularTools = allTools.filter(tool => tool.popular);
+
+export const aiTools = allTools.filter(tool => tool.isAI);
+
+export const getToolBySlug = (slug: string): Tool | undefined => {
+  return allTools.find(tool => tool.slug === slug);
+};
+
+export const getToolById = (id: string): Tool | undefined => {
+  return allTools.find(tool => tool.id === id);
+};
+
+export const searchTools = (query: string): Tool[] => {
+  const lowerQuery = query.toLowerCase().trim();
+  if (!lowerQuery) return [];
+
+  return allTools.filter(tool =>
+    tool.name.toLowerCase().includes(lowerQuery) ||
+    tool.description.toLowerCase().includes(lowerQuery) ||
+    tool.keywords.some(kw => kw.includes(lowerQuery))
+  );
+};
+
+export const getToolsByCategory = (categoryId: string): Tool[] => {
+  const category = toolCategories.find(cat => cat.id === categoryId);
+  return category?.tools ?? [];
+};

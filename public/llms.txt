@@ -1,0 +1,52 @@
+# PdfPixels
+
+> Free online image and PDF processing tools. Compress, resize, convert images and manage PDFs — no registration required.
+
+## About
+
+PdfPixels is a free web-based platform offering 38+ professional tools for image and PDF processing. All tools work directly in the browser with no signup, no watermarks, and no hidden fees. Files are automatically deleted within 1 hour of processing.
+
+## Core Tools
+
+### Image Tools
+- **Compress Image**: Reduce image file size (JPG, PNG, WebP, HEIC) while maintaining quality. Target specific sizes like 20KB, 50KB, 100KB.
+- **Resize Image**: Change image dimensions in pixels, centimeters, or inches with DPI control.
+- **PNG to JPG**: Convert PNG images to JPG format instantly.
+- **JPG to PNG**: Convert JPG images to PNG format with transparency support.
+- **WebP to JPG**: Convert WebP images to widely-compatible JPG format.
+- **HEIC to JPG**: Convert iPhone HEIC photos to JPG format.
+- **Background Remover** (AI): Automatically detect and remove image backgrounds using AI.
+- **Image Enhancement** (AI): Improve image quality, lighting, and colors with AI.
+- **Crop Image**: Crop images to custom, square, or circle shapes.
+- **Rotate Image**: Rotate images by any angle.
+- **Add Watermark**: Add text or logo watermarks to images.
+- **Passport Photo Maker**: Resize photos to official passport/visa dimensions.
+
+### PDF Tools
+- **Merge PDF**: Combine multiple PDF files into one document.
+- **Split PDF**: Extract specific pages or split PDF into individual files.
+- **Compress PDF**: Reduce PDF file size while maintaining readability.
+- **Image to PDF**: Convert images to PDF documents.
+- **PDF to Image**: Convert PDF pages to image files.
+
+## Technical Details
+- **URL**: https://www.pdfpixels.com
+- **Pricing**: 100% Free
+- **Registration**: Not required
+- **File Security**: 256-bit SSL encryption, GDPR compliant, auto-delete within 1 hour
+- **Supported Input Formats**: JPG, JPEG, PNG, WebP, HEIC, GIF, BMP, TIFF, PDF
+- **Supported Output Formats**: JPG, PNG, WebP, PDF
+- **API Documentation**: https://www.pdfpixels.com/api-docs
+
+## Links
+- Homepage: https://www.pdfpixels.com
+- Compress Image: https://www.pdfpixels.com/compress-image
+- Resize Image: https://www.pdfpixels.com/resize-image
+- Merge PDF: https://www.pdfpixels.com/merge-pdf
+- All Tools: https://www.pdfpixels.com
+- Privacy Policy: https://www.pdfpixels.com/privacy
+- Terms of Service: https://www.pdfpixels.com/terms
+- Contact: https://www.pdfpixels.com/contact
+
+## Full Documentation
+For comprehensive details, see: https://www.pdfpixels.com/llms-full.txt

@@ -1,0 +1,547 @@
+openapi: 3.1.0
+info:
+  title: PdfPixels API
+  description: |
+    Free online image and PDF processing API. Compress, resize, convert, and edit images with professional-grade tools.
+    
+    ## Features
+    - Image compression with quality or target size
+    - Image resizing with multiple units (px, cm, inch)
+    - Format conversion (JPG, PNG, WebP, AVIF, GIF, TIFF)
+    - Image filters and effects
+    - Rotation and flip
+    - PDF merge, split, and compression
+    - PDF to image and image to PDF conversion
+    
+    ## Authentication
+    No authentication required. All endpoints are public.
+    
+    ## Rate Limits
+    - 60 requests per minute
+    - 1000 requests per day
+    
+    ## Support
+    Email: support@pdfpixels.com
+    Website: https://pdfpixels.com
+  version: 1.0.0
+  contact:
+    name: PdfPixels Support
+    email: support@pdfpixels.com
+    url: https://pdfpixels.com
+  license:
+    name: Free to Use
+    url: https://pdfpixels.com/#terms
+
+servers:
+  - url: https://pdfpixels.com/api
+    description: Production server
+
+tags:
+  - name: Image Processing
+    description: Image compression, resizing, conversion, and effects
+  - name: PDF Processing
+    description: PDF merge, split, compression, and conversion
+  - name: Health
+    description: API health check
+
+paths:
+  /image/process:
+    post:
+      summary: Process an image
+      description: |
+        Comprehensive image processing endpoint supporting:
+        - Compression (quality-based or target-size-based)
+        - Resizing (with aspect ratio lock)
+        - Format conversion
+        - Rotation and flip
+        - Color adjustments (brightness, contrast, saturation)
+        - Effects (blur, sharpen, grayscale, sepia)
+        - Cropping
+      operationId: processImage
+      tags:
+        - Image Processing
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required:
+                - image
+              properties:
+                image:
+                  type: string
+                  format: binary
+                  description: Image file to process (max 100MB)
+                  example: "image.jpg"
+                operation:
+                  type: string
+                  description: Type of operation to perform
+                  enum: [compress, resize, convert, filter, transform]
+                  default: process
+                quality:
+                  type: integer
+                  description: Output quality (1-100)
+                  minimum: 1
+                  maximum: 100
+                  default: 85
+                  example: 85
+                format:
+                  type: string
+                  description: Output format
+                  enum: [jpg, jpeg, png, webp, avif, gif, tiff]
+                  default: jpg
+                  example: webp
+                width:
+                  type: integer
+                  description: Target width in pixels
+                  minimum: 1
+                  maximum: 10000
+                  example: 800
+                height:
+                  type: integer
+                  description: Target height in pixels
+                  minimum: 1
+                  maximum: 10000
+                  example: 600
+                fit:
+                  type: string
+                  description: How to fit the image when resizing
+                  enum: [inside, outside, cover, contain, fill]
+                  default: inside
+                targetSize:
+                  type: integer
+                  description: Target file size in KB
+                  minimum: 1
+                  maximum: 50000
+                  example: 100
+                rotate:
+                  type: integer
+                  description: Rotation angle in degrees
+                  minimum: -360
+                  maximum: 360
+                  example: 90
+                flip:
+                  type: boolean
+                  description: Flip image vertically
+                  default: false
+                flop:
+                  type: boolean
+                  description: Flip image horizontally
+                  default: false
+                brightness:
+                  type: number
+                  description: Brightness adjustment (0.5-2.0, 1.0 = normal)
+                  minimum: 0.5
+                  maximum: 2.0
+                  example: 1.2
+                contrast:
+                  type: number
+                  description: Contrast adjustment (0.5-2.0, 1.0 = normal)
+                  minimum: 0.5
+                  maximum: 2.0
+                  example: 1.1
+                saturation:
+                  type: number
+                  description: Saturation adjustment (0.5-2.0, 1.0 = normal)
+                  minimum: 0.5
+                  maximum: 2.0
+                  example: 1.3
+                blur:
+                  type: number
+                  description: Blur radius (0-20)
+                  minimum: 0
+                  maximum: 20
+                  example: 2
+                sharpen:
+                  type: number
+                  description: Sharpen amount (0-10)
+                  minimum: 0
+                  maximum: 10
+                  example: 1
+                grayscale:
+                  type: boolean
+                  description: Convert to grayscale
+                  default: false
+                sepia:
+                  type: boolean
+                  description: Apply sepia effect
+                  default: false
+                negate:
+                  type: boolean
+                  description: Invert colors
+                  default: false
+                cropLeft:
+                  type: integer
+                  description: Crop left position
+                  minimum: 0
+                cropTop:
+                  type: integer
+                  description: Crop top position
+                  minimum: 0
+                cropWidth:
+                  type: integer
+                  description: Crop width
+                  minimum: 1
+                cropHeight:
+                  type: integer
+                  description: Crop height
+                  minimum: 1
+                density:
+                  type: integer
+                  description: DPI density for output
+                  minimum: 72
+                  maximum: 600
+                  example: 300
+      responses:
+        '200':
+          description: Successfully processed image
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  imageUrl:
+                    type: string
+                    format: uri
+                    description: Base64 data URL of processed image
+                  originalSize:
+                    type: integer
+                    description: Original file size in bytes
+                    example: 1048576
+                  processedSize:
+                    type: integer
+                    description: Processed file size in bytes
+                    example: 524288
+                  savedBytes:
+                    type: integer
+                    description: Bytes saved
+                    example: 524288
+                  savedPercent:
+                    type: integer
+                    description: Percentage saved
+                    example: 50
+                  originalDimensions:
+                    type: object
+                    properties:
+                      width:
+                        type: integer
+                        example: 1920
+                      height:
+                        type: integer
+                        example: 1080
+                  format:
+                    type: string
+                    example: webp
+                  mimeType:
+                    type: string
+                    example: image/webp
+                  quality:
+                    type: integer
+                    example: 85
+        '400':
+          description: Bad request - missing or invalid parameters
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Server error during processing
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /pdf/merge:
+    post:
+      summary: Merge multiple PDFs
+      description: Combine multiple PDF files into a single document
+      operationId: mergePdf
+      tags:
+        - PDF Processing
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required:
+                - files
+              properties:
+                files:
+                  type: array
+                  items:
+                    type: string
+                    format: binary
+                  description: PDF files to merge (max 10 files, 500MB total)
+                  maxItems: 10
+      responses:
+        '200':
+          description: Successfully merged PDFs
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  pdfUrl:
+                    type: string
+                    format: uri
+                    description: Base64 data URL of merged PDF
+                  pageCount:
+                    type: integer
+                    description: Total pages in merged PDF
+                    example: 15
+                  fileName:
+                    type: string
+                    example: merged-1234567890.pdf
+        '400':
+          description: Bad request - missing or invalid files
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /pdf/split:
+    post:
+      summary: Split PDF
+      description: Split a PDF into individual pages or extract specific pages
+      operationId: splitPdf
+      tags:
+        - PDF Processing
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required:
+                - file
+              properties:
+                file:
+                  type: string
+                  format: binary
+                  description: PDF file to split (max 500MB)
+                mode:
+                  type: string
+                  description: Split mode
+                  enum: [all, range, single]
+                  default: all
+                pageRange:
+                  type: string
+                  description: Page range for extraction (e.g., "1-3,5,7-9")
+                  example: "1-3,5"
+                singlePage:
+                  type: integer
+                  description: Single page number to extract
+                  example: 2
+      responses:
+        '200':
+          description: Successfully split PDF
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  mode:
+                    type: string
+                    example: split-all
+                  totalPages:
+                    type: integer
+                    example: 10
+                  pages:
+                    type: array
+                    description: Array of split pages (for 'all' mode)
+                    items:
+                      type: object
+                      properties:
+                        pageNumber:
+                          type: integer
+                        pdfUrl:
+                          type: string
+                          format: uri
+                        fileName:
+                          type: string
+                  pdfUrl:
+                    type: string
+                    format: uri
+                    description: Extracted PDF URL (for 'range' or 'single' mode)
+                  extractedPages:
+                    type: array
+                    items:
+                      type: integer
+                    example: [1, 2, 3, 5]
+
+  /pdf/compress:
+    post:
+      summary: Compress PDF
+      description: Reduce PDF file size while maintaining quality
+      operationId: compressPdf
+      tags:
+        - PDF Processing
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required:
+                - file
+              properties:
+                file:
+                  type: string
+                  format: binary
+                  description: PDF file to compress (max 500MB)
+                quality:
+                  type: string
+                  description: Compression quality
+                  enum: [low, medium, high]
+                  default: medium
+      responses:
+        '200':
+          description: Successfully compressed PDF
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  pdfUrl:
+                    type: string
+                    format: uri
+                  originalSize:
+                    type: integer
+                  compressedSize:
+                    type: integer
+                  savedPercent:
+                    type: integer
+
+  /pdf/to-image:
+    post:
+      summary: Convert PDF to images
+      description: Convert PDF pages to image files
+      operationId: pdfToImage
+      tags:
+        - PDF Processing
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required:
+                - file
+              properties:
+                file:
+                  type: string
+                  format: binary
+                  description: PDF file to convert (max 500MB)
+                format:
+                  type: string
+                  description: Output image format
+                  enum: [jpg, png, webp]
+                  default: jpg
+                quality:
+                  type: integer
+                  minimum: 10
+                  maximum: 100
+                  default: 85
+                dpi:
+                  type: integer
+                  description: Resolution DPI
+                  minimum: 72
+                  maximum: 300
+                  default: 150
+      responses:
+        '200':
+          description: Successfully converted PDF to images
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  images:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        pageNumber:
+                          type: integer
+                        imageUrl:
+                          type: string
+                          format: uri
+                        fileName:
+                          type: string
+
+  /pdf/from-image:
+    post:
+      summary: Create PDF from images
+      description: Convert images to a PDF document
+      operationId: imageToPdf
+      tags:
+        - PDF Processing
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required:
+                - files
+              properties:
+                files:
+                  type: array
+                  items:
+                    type: string
+                    format: binary
+                  description: Images to convert to PDF
+                  maxItems: 50
+                pageSize:
+                  type: string
+                  description: PDF page size
+                  enum: [a4, letter, original]
+                  default: a4
+      responses:
+        '200':
+          description: Successfully created PDF from images
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  pdfUrl:
+                    type: string
+                    format: uri
+                  pageCount:
+                    type: integer
+
+components:
+  schemas:
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Error message
+          example: No image provided
+        details:
+          type: string
+          description: Detailed error information
+          example: The request did not contain an image file
+
+externalDocs:
+  description: PdfPixels Documentation
+  url: https://pdfpixels.com/api-docs

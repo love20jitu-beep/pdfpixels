@@ -1,0 +1,86 @@
+{
+  "name": "PdfPixels - Free Online Image & PDF Tools",
+  "short_name": "PdfPixels",
+  "description": "Free online image and PDF tools. Compress, resize, convert, and edit images with AI-powered features. No signup required.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#8B5CF6",
+  "orientation": "any",
+  "scope": "/",
+  "lang": "en",
+  "categories": [
+    "productivity",
+    "utilities",
+    "design",
+    "photo"
+  ],
+  "icons": [
+    {
+      "src": "/logo.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/og-image.png",
+      "sizes": "1200x630",
+      "type": "image/png",
+      "label": "PdfPixels Homepage"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Compress Image",
+      "short_name": "Compress",
+      "description": "Compress image file size",
+      "url": "/?tool=compress",
+      "icons": [
+        {
+          "src": "/logo.svg",
+          "sizes": "any"
+        }
+      ]
+    },
+    {
+      "name": "Resize Image",
+      "short_name": "Resize",
+      "description": "Resize image dimensions",
+      "url": "/?tool=resize",
+      "icons": [
+        {
+          "src": "/logo.svg",
+          "sizes": "any"
+        }
+      ]
+    },
+    {
+      "name": "Merge PDF",
+      "short_name": "Merge PDF",
+      "description": "Combine multiple PDFs",
+      "url": "/?tool=pdf-merge",
+      "icons": [
+        {
+          "src": "/logo.svg",
+          "sizes": "any"
+        }
+      ]
+    }
+  ],
+  "related_applications": [],
+  "prefer_related_applications": false
+}

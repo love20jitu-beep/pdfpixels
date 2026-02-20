@@ -1,0 +1,678 @@
+'use client';
+
+import { motion, AnimatePresence } from 'framer-motion';
+import {
+    ArrowLeft, Download, RotateCcw, RotateCw, Sparkles, ChevronRight,
+    Stamp, Shield, FileLock, Layers, Trash2, GripVertical, Plus, Minus, Check
+} from 'lucide-react';
+import Link from 'next/link';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Slider } from '@/components/ui/slider';
+import { useAppStore } from '@/store/app-store';
+import { FileUpload } from './file-upload';
+import { useState, useCallback, useEffect } from 'react';
+import { toast } from 'sonner';
+import { Badge } from '@/components/ui/badge';
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue
+} from '@/components/ui/select';
+
+// ─── Types ────────────────────────────────────────────────────────────────────
+
+interface PDFResult {
+    pdfUrl: string;
+    fileName: string;
+    pageCount?: number;
+}
+
+// ─── Tool-specific settings panels ────────────────────────────────────────────
+
+function RotateSettings({
+    angle, setAngle, pages, setPages, totalPages
+}: {
+    angle: number; setAngle: (a: number) => void;
+    pages: string; setPages: (p: string) => void;
+    totalPages: number;
+}) {
+    return (
+        <div className="space-y-5">
+            <div className="space-y-2">
+                <Label>Rotation Angle</Label>
+                <div className="grid grid-cols-4 gap-2">
+                    {[90, 180, 270, -90].map(a => (
+                        <Button
+                            key={a}
+                            variant={angle === a ? 'default' : 'outline'}
+                            size="sm"
+                            onClick={() => setAngle(a)}
+                            className="gap-1"
+                        >
+                            {a === -90 ? '-90°' : `${a}°`}
+                        </Button>
+                    ))}
+                </div>
+                <p className="text-xs text-muted-foreground">Rotates pages clockwise</p>
+            </div>
+
+            {totalPages > 0 && (
+                <div className="space-y-2">
+                    <Label>Pages to Rotate</Label>
+                    <div className="grid grid-cols-2 gap-2">
+                        <Button variant={pages === 'all' ? 'default' : 'outline'} size="sm" onClick={() => setPages('all')}>
+                            All Pages
+                        </Button>
+                        <Button variant={pages !== 'all' ? 'default' : 'outline'} size="sm" onClick={() => setPages('1')}>
+                            Specific
+                        </Button>
+                    </div>
+                    {pages !== 'all' && (
+                        <Input
+                            value={pages}
+                            onChange={e => setPages(e.target.value)}
+                            placeholder="e.g. 1,2,4-6"
+                            className="font-mono text-sm"
+                        />
+                    )}
+                    <p className="text-xs text-muted-foreground">
+                        {totalPages > 0 ? `PDF has ${totalPages} pages` : 'Upload a PDF to see page count'}
+                    </p>
+                </div>
+            )}
+        </div>
+    );
+}
+
+function WatermarkSettings({
+    text, setText, opacity, setOpacity,
+    color, setColor, fontSize, setFontSize,
+    position, setPosition, rotation, setRotation
+}: {
+    text: string; setText: (v: string) => void;
+    opacity: number; setOpacity: (v: number) => void;
+    color: string; setColor: (v: string) => void;
+    fontSize: number; setFontSize: (v: number) => void;
+    position: string; setPosition: (v: string) => void;
+    rotation: number; setRotation: (v: number) => void;
+}) {
+    return (
+        <div className="space-y-5">
+            <div className="space-y-2">
+                <Label>Watermark Text</Label>
+                <Input value={text} onChange={e => setText(e.target.value)} placeholder="e.g. CONFIDENTIAL" />
+            </div>
+
+            <div className="space-y-3">
+                <div className="flex items-center justify-between">
+                    <Label>Opacity</Label>
+                    <span className="text-sm font-mono text-primary">{Math.round(opacity * 100)}%</span>
+                </div>
+                <Slider value={[opacity * 100]} onValueChange={([v]) => setOpacity(v / 100)} min={5} max={100} step={5} />
+            </div>
+
+            <div className="space-y-3">
+                <div className="flex items-center justify-between">
+                    <Label>Font Size</Label>
+                    <span className="text-sm font-mono text-primary">{fontSize}pt</span>
+                </div>
+                <Slider value={[fontSize]} onValueChange={([v]) => setFontSize(v)} min={12} max={120} step={4} />
+            </div>
+
+            <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                    <Label>Color</Label>
+                    <div className="flex items-center gap-2">
+                        <input type="color" value={color} onChange={e => setColor(e.target.value)} className="w-8 h-8 rounded cursor-pointer border border-border" />
+                        <span className="text-sm font-mono text-muted-foreground">{color}</span>
+                    </div>
+                </div>
+                <div className="space-y-2">
+                    <Label>Rotation</Label>
+                    <Select value={rotation.toString()} onValueChange={v => setRotation(parseInt(v))}>
+                        <SelectTrigger><SelectValue /></SelectTrigger>
+                        <SelectContent>
+                            <SelectItem value="0">Horizontal</SelectItem>
+                            <SelectItem value="45">45° Diagonal</SelectItem>
+                            <SelectItem value="90">Vertical</SelectItem>
+                            <SelectItem value="-45">-45° Diagonal</SelectItem>
+                        </SelectContent>
+                    </Select>
+                </div>
+            </div>
+
+            <div className="space-y-2">
+                <Label>Position</Label>
+                <Select value={position} onValueChange={setPosition}>
+                    <SelectTrigger><SelectValue /></SelectTrigger>
+                    <SelectContent>
+                        <SelectItem value="center">Center (with rotation)</SelectItem>
+                        <SelectItem value="diagonal">Diagonal Repeat</SelectItem>
+                        <SelectItem value="top-left">Top Left</SelectItem>
+                        <SelectItem value="top-right">Top Right</SelectItem>
+                        <SelectItem value="bottom-left">Bottom Left</SelectItem>
+                        <SelectItem value="bottom-right">Bottom Right</SelectItem>
+                    </SelectContent>
+                </Select>
+            </div>
+        </div>
+    );
+}
+
+function ProtectSettings({ password, setPassword, confirmPassword, setConfirmPassword }: {
+    password: string; setPassword: (v: string) => void;
+    confirmPassword: string; setConfirmPassword: (v: string) => void;
+}) {
+    return (
+        <div className="space-y-5">
+            <div className="space-y-2">
+                <Label>Password</Label>
+                <Input type="password" value={password} onChange={e => setPassword(e.target.value)} placeholder="Enter password" />
+            </div>
+            <div className="space-y-2">
+                <Label>Confirm Password</Label>
+                <Input type="password" value={confirmPassword} onChange={e => setConfirmPassword(e.target.value)} placeholder="Confirm password" />
+                {password && confirmPassword && password !== confirmPassword && (
+                    <p className="text-xs text-red-500">Passwords do not match</p>
+                )}
+            </div>
+            <div className="p-3 rounded-lg bg-amber-500/10 border border-amber-500/20">
+                <p className="text-xs text-amber-600 dark:text-amber-400">
+                    <strong>Note:</strong> PDF password protection is applied at the document level.
+                    Share the password securely with intended recipients.
+                </p>
+            </div>
+        </div>
+    );
+}
+
+function UnlockSettings({ password, setPassword }: { password: string; setPassword: (v: string) => void }) {
+    return (
+        <div className="space-y-5">
+            <div className="space-y-2">
+                <Label>PDF Password (if known)</Label>
+                <Input type="password" value={password} onChange={e => setPassword(e.target.value)} placeholder="Enter PDF password (optional)" />
+                <p className="text-xs text-muted-foreground">
+                    Leave blank to attempt unlocking without a password.
+                </p>
+            </div>
+            <div className="p-3 rounded-lg bg-blue-500/10 border border-blue-500/20">
+                <p className="text-xs text-blue-600 dark:text-blue-400">
+                    This tool removes restrictions from PDFs. Only use on PDFs you own.
+                </p>
+            </div>
+        </div>
+    );
+}
+
+function DeletePagesSettings({ pages, setPages, totalPages }: {
+    pages: string; setPages: (v: string) => void; totalPages: number;
+}) {
+    const [selectedPages, setSelectedPages] = useState<Set<number>>(new Set());
+
+    useEffect(() => {
+        const arr = Array.from(selectedPages).sort((a, b) => a - b);
+        setPages(arr.join(','));
+    }, [selectedPages, setPages]);
+
+    const togglePage = (p: number) => {
+        setSelectedPages(prev => {
+            const next = new Set(prev);
+            if (next.has(p)) next.delete(p);
+            else next.add(p);
+            return next;
+        });
+    };
+
+    return (
+        <div className="space-y-5">
+            {totalPages > 0 ? (
+                <>
+                    <div className="space-y-2">
+                        <Label>Select Pages to Delete</Label>
+                        <div className="grid grid-cols-5 gap-2 max-h-48 overflow-y-auto p-1">
+                            {Array.from({ length: totalPages }, (_, i) => i + 1).map(p => (
+                                <Button
+                                    key={p}
+                                    variant={selectedPages.has(p) ? 'default' : 'outline'}
+                                    size="sm"
+                                    onClick={() => togglePage(p)}
+                                    className="aspect-square relative"
+                                >
+                                    {p}
+                                    {selectedPages.has(p) && (
+                                        <span className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full" />
+                                    )}
+                                </Button>
+                            ))}
+                        </div>
+                        <p className="text-xs text-muted-foreground">
+                            {selectedPages.size > 0
+                                ? `Deleting ${selectedPages.size} page(s): ${Array.from(selectedPages).sort((a, b) => a - b).join(', ')}`
+                                : 'No pages selected'}
+                        </p>
+                    </div>
+
+                    <div className="space-y-2">
+                        <Label>Or enter page numbers manually</Label>
+                        <Input
+                            value={pages}
+                            onChange={e => setPages(e.target.value)}
+                            placeholder="e.g. 1,3,5-7"
+                        />
+                    </div>
+                </>
+            ) : (
+                <p className="text-sm text-muted-foreground">Upload a PDF to select pages to delete.</p>
+            )}
+        </div>
+    );
+}
+
+function ReorderSettings({ order, setOrder, totalPages }: {
+    order: number[]; setOrder: (o: number[]) => void; totalPages: number;
+}) {
+    useEffect(() => {
+        if (totalPages > 0 && order.length !== totalPages) {
+            setOrder(Array.from({ length: totalPages }, (_, i) => i + 1));
+        }
+    }, [totalPages, order.length, setOrder]);
+
+    const moveUp = (idx: number) => {
+        if (idx === 0) return;
+        const next = [...order];
+        [next[idx - 1], next[idx]] = [next[idx], next[idx - 1]];
+        setOrder(next);
+    };
+
+    const moveDown = (idx: number) => {
+        if (idx === order.length - 1) return;
+        const next = [...order];
+        [next[idx], next[idx + 1]] = [next[idx + 1], next[idx]];
+        setOrder(next);
+    };
+
+    if (totalPages === 0) {
+        return <p className="text-sm text-muted-foreground">Upload a PDF to reorder its pages.</p>;
+    }
+
+    return (
+        <div className="space-y-3">
+            <Label>Page Order (drag or use arrows)</Label>
+            <div className="space-y-2 max-h-64 overflow-y-auto">
+                {order.map((pageNum, idx) => (
+                    <div key={idx} className="flex items-center gap-2 p-2 rounded-lg border border-border bg-card">
+                        <GripVertical className="w-4 h-4 text-muted-foreground flex-shrink-0" />
+                        <span className="text-sm flex-1">
+                            <span className="font-medium text-primary">Page {pageNum}</span>
+                            {pageNum !== idx + 1 && (
+                                <span className="text-muted-foreground text-xs ml-1">(was page {pageNum})</span>
+                            )}
+                        </span>
+                        <div className="flex gap-1">
+                            <Button variant="ghost" size="sm" onClick={() => moveUp(idx)} disabled={idx === 0} className="h-6 w-6 p-0">
+                                <ChevronRight className="w-3 h-3 rotate-[-90deg]" />
+                            </Button>
+                            <Button variant="ghost" size="sm" onClick={() => moveDown(idx)} disabled={idx === order.length - 1} className="h-6 w-6 p-0">
+                                <ChevronRight className="w-3 h-3 rotate-90" />
+                            </Button>
+                        </div>
+                    </div>
+                ))}
+            </div>
+        </div>
+    );
+}
+
+// ─── Main Component ────────────────────────────────────────────────────────────
+
+export function PDFToolsWorkspace() {
+    const { activeTool, uploadedFile, isProcessing, reset, setIsProcessing, setProgress } = useAppStore();
+
+    const [result, setResult] = useState<PDFResult | null>(null);
+    const [totalPages, setTotalPages] = useState(0);
+
+    // Rotate
+    const [angle, setAngle] = useState(90);
+    const [rotatePages, setRotatePages] = useState('all');
+
+    // Watermark
+    const [wmText, setWmText] = useState('CONFIDENTIAL');
+    const [wmOpacity, setWmOpacity] = useState(0.3);
+    const [wmColor, setWmColor] = useState('#808080');
+    const [wmFontSize, setWmFontSize] = useState(48);
+    const [wmPosition, setWmPosition] = useState('center');
+    const [wmRotation, setWmRotation] = useState(45);
+
+    // Protect / Unlock
+    const [password, setPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
+
+    // Delete pages
+    const [deletePages, setDeletePages] = useState('');
+
+    // Reorder
+    const [pageOrder, setPageOrder] = useState<number[]>([]);
+
+    // Get page count from uploaded PDF
+    useEffect(() => {
+        if (!uploadedFile || !uploadedFile.name.toLowerCase().endsWith('.pdf')) {
+            setTotalPages(0);
+            return;
+        }
+        // Read PDF page count using pdf-lib on client
+        (async () => {
+            try {
+                const { PDFDocument } = await import('pdf-lib');
+                const ab = await uploadedFile.arrayBuffer();
+                const pdf = await PDFDocument.load(new Uint8Array(ab), { ignoreEncryption: true });
+                setTotalPages(pdf.getPageCount());
+            } catch {
+                setTotalPages(0);
+            }
+        })();
+    }, [uploadedFile]);
+
+    const getApiEndpoint = () => {
+        const toolId = activeTool?.id || '';
+        if (toolId === 'pdf-rotate') return '/api/pdf/rotate';
+        if (toolId === 'pdf-watermark') return '/api/pdf/watermark';
+        if (toolId === 'pdf-protect') return '/api/pdf/protect';
+        if (toolId === 'pdf-unlock') return '/api/pdf/protect'; // same route, action=unlock
+        if (toolId === 'pdf-delete-pages') return '/api/pdf/delete-pages';
+        if (toolId === 'pdf-reorder') return '/api/pdf/reorder';
+        return '/api/pdf/rotate';
+    };
+
+    const buildFormData = (): FormData | null => {
+        if (!uploadedFile) return null;
+        const toolId = activeTool?.id || '';
+        const formData = new FormData();
+        formData.append('file', uploadedFile);
+
+        if (toolId === 'pdf-rotate') {
+            formData.append('angle', angle.toString());
+            formData.append('pages', rotatePages);
+        } else if (toolId === 'pdf-watermark') {
+            if (!wmText.trim()) { toast.error('Please enter watermark text'); return null; }
+            formData.append('text', wmText);
+            formData.append('opacity', wmOpacity.toString());
+            formData.append('color', wmColor);
+            formData.append('fontSize', wmFontSize.toString());
+            formData.append('position', wmPosition);
+            formData.append('rotation', wmRotation.toString());
+        } else if (toolId === 'pdf-protect') {
+            if (!password) { toast.error('Please enter a password'); return null; }
+            if (password !== confirmPassword) { toast.error('Passwords do not match'); return null; }
+            formData.append('password', password);
+            formData.append('action', 'protect');
+        } else if (toolId === 'pdf-unlock') {
+            formData.append('password', password);
+            formData.append('action', 'unlock');
+        } else if (toolId === 'pdf-delete-pages') {
+            if (!deletePages.trim()) { toast.error('Please select pages to delete'); return null; }
+            formData.append('pages', deletePages);
+        } else if (toolId === 'pdf-reorder') {
+            if (pageOrder.length === 0) { toast.error('No page order set'); return null; }
+            formData.append('order', JSON.stringify(pageOrder));
+        }
+
+        return formData;
+    };
+
+    const handleProcess = useCallback(async () => {
+        if (!uploadedFile) { toast.error('Please upload a PDF file'); return; }
+
+        const formData = buildFormData();
+        if (!formData) return;
+
+        setIsProcessing(true);
+        setProgress(0);
+        setResult(null);
+
+        try {
+            const progressInterval = setInterval(() => {
+                setProgress(prev => Math.min(prev + 8, 90));
+            }, 200);
+
+            const response = await fetch(getApiEndpoint(), { method: 'POST', body: formData });
+            clearInterval(progressInterval);
+            setProgress(100);
+
+            if (!response.ok) {
+                const err = await response.json();
+                throw new Error(err.error || 'Processing failed');
+            }
+
+            const data = await response.json();
+            setResult({ pdfUrl: data.pdfUrl, fileName: data.fileName, pageCount: data.pageCount });
+            toast.success('PDF processed successfully!');
+        } catch (error) {
+            toast.error(error instanceof Error ? error.message : 'Failed to process PDF');
+        } finally {
+            setIsProcessing(false);
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [uploadedFile, activeTool, angle, rotatePages, wmText, wmOpacity, wmColor, wmFontSize, wmPosition, wmRotation, password, confirmPassword, deletePages, pageOrder]);
+
+    const handleDownload = useCallback(() => {
+        if (!result) return;
+        const link = document.createElement('a');
+        link.href = result.pdfUrl;
+        link.download = result.fileName;
+        link.click();
+    }, [result]);
+
+    const handleReset = useCallback(() => {
+        reset();
+        setResult(null);
+        setPassword('');
+        setConfirmPassword('');
+        setDeletePages('');
+        setPageOrder([]);
+    }, [reset]);
+
+    const getToolIcon = () => {
+        const toolId = activeTool?.id || '';
+        if (toolId === 'pdf-rotate') return RotateCw;
+        if (toolId === 'pdf-watermark') return Stamp;
+        if (toolId === 'pdf-protect') return Shield;
+        if (toolId === 'pdf-unlock') return FileLock;
+        if (toolId === 'pdf-reorder') return Layers;
+        if (toolId === 'pdf-delete-pages') return Trash2;
+        return Sparkles;
+    };
+
+    const renderSettings = () => {
+        const toolId = activeTool?.id || '';
+        if (toolId === 'pdf-rotate') return <RotateSettings angle={angle} setAngle={setAngle} pages={rotatePages} setPages={setRotatePages} totalPages={totalPages} />;
+        if (toolId === 'pdf-watermark') return <WatermarkSettings text={wmText} setText={setWmText} opacity={wmOpacity} setOpacity={setWmOpacity} color={wmColor} setColor={setWmColor} fontSize={wmFontSize} setFontSize={setWmFontSize} position={wmPosition} setPosition={setWmPosition} rotation={wmRotation} setRotation={setWmRotation} />;
+        if (toolId === 'pdf-protect') return <ProtectSettings password={password} setPassword={setPassword} confirmPassword={confirmPassword} setConfirmPassword={setConfirmPassword} />;
+        if (toolId === 'pdf-unlock') return <UnlockSettings password={password} setPassword={setPassword} />;
+        if (toolId === 'pdf-delete-pages') return <DeletePagesSettings pages={deletePages} setPages={setDeletePages} totalPages={totalPages} />;
+        if (toolId === 'pdf-reorder') return <ReorderSettings order={pageOrder} setOrder={setPageOrder} totalPages={totalPages} />;
+        return null;
+    };
+
+    const getProcessLabel = () => {
+        const toolId = activeTool?.id || '';
+        if (toolId === 'pdf-rotate') return 'Rotate PDF';
+        if (toolId === 'pdf-watermark') return 'Add Watermark';
+        if (toolId === 'pdf-protect') return 'Protect PDF';
+        if (toolId === 'pdf-unlock') return 'Unlock PDF';
+        if (toolId === 'pdf-delete-pages') return 'Delete Pages';
+        if (toolId === 'pdf-reorder') return 'Reorder Pages';
+        return 'Process PDF';
+    };
+
+    const ToolIcon = getToolIcon();
+
+    if (!activeTool) return null;
+
+    return (
+        <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="container mx-auto px-4 lg:px-8 py-8"
+        >
+            {/* Header */}
+            <div className="flex items-center justify-between mb-8">
+                <div className="flex items-center gap-4">
+                    <Link
+                        href="/"
+                        onClick={() => reset()}
+                        className="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 hover:bg-accent hover:text-accent-foreground h-10 w-10"
+                        aria-label="Back to home"
+                    >
+                        <ArrowLeft className="w-5 h-5" />
+                    </Link>
+                    <div className="flex items-center gap-3">
+                        <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary to-primary/70 flex items-center justify-center shadow-lg shadow-primary/30">
+                            <ToolIcon className="w-6 h-6 text-primary-foreground" />
+                        </div>
+                        <div>
+                            <h1 className="text-2xl font-bold">{activeTool.name}</h1>
+                            <p className="text-sm text-muted-foreground">{activeTool.description}</p>
+                        </div>
+                    </div>
+                </div>
+
+                {result && (
+                    <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }}>
+                        <Button onClick={handleDownload} className="gap-2 btn-glow">
+                            <Download className="w-4 h-4" />
+                            Download PDF
+                        </Button>
+                    </motion.div>
+                )}
+            </div>
+
+            {/* Main Content */}
+            <div className="grid lg:grid-cols-3 gap-8">
+                {/* Left Panel */}
+                <div className="lg:col-span-2 space-y-6">
+                    <FileUpload accept=".pdf" />
+
+                    {/* Page Count Info */}
+                    {totalPages > 0 && (
+                        <motion.div
+                            initial={{ opacity: 0, y: 10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            className="flex items-center gap-3 p-4 rounded-2xl border border-border bg-card"
+                        >
+                            <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
+                                <Layers className="w-5 h-5 text-primary" />
+                            </div>
+                            <div>
+                                <p className="text-sm font-medium">PDF Loaded</p>
+                                <p className="text-sm text-muted-foreground">{totalPages} page{totalPages !== 1 ? 's' : ''}</p>
+                            </div>
+                            <Badge variant="secondary" className="ml-auto">Ready</Badge>
+                        </motion.div>
+                    )}
+
+                    {/* Result */}
+                    <AnimatePresence>
+                        {result && (
+                            <motion.div
+                                initial={{ opacity: 0, y: 20 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                exit={{ opacity: 0, y: -20 }}
+                                className="rounded-2xl border border-primary/30 bg-primary/5 p-6"
+                            >
+                                <div className="flex items-center gap-3 mb-4">
+                                    <div className="w-10 h-10 rounded-lg bg-green-500/10 flex items-center justify-center">
+                                        <Check className="w-5 h-5 text-green-500" />
+                                    </div>
+                                    <div>
+                                        <h3 className="font-semibold text-green-700 dark:text-green-400">Processing Complete!</h3>
+                                        <p className="text-sm text-muted-foreground">
+                                            {result.pageCount} page{result.pageCount !== 1 ? 's' : ''} · {result.fileName}
+                                        </p>
+                                    </div>
+                                </div>
+                                <Button onClick={handleDownload} className="w-full gap-2 btn-glow" size="lg">
+                                    <Download className="w-4 h-4" />
+                                    Download Processed PDF
+                                </Button>
+                            </motion.div>
+                        )}
+                    </AnimatePresence>
+                </div>
+
+                {/* Right Panel */}
+                <div className="space-y-6">
+                    <div className="rounded-2xl border border-border bg-card overflow-hidden">
+                        <div className="p-4 border-b border-border bg-gradient-to-r from-primary/5 to-transparent">
+                            <h3 className="font-semibold flex items-center gap-2">
+                                <ToolIcon className="w-4 h-4 text-primary" />
+                                {activeTool.name} Settings
+                            </h3>
+                        </div>
+
+                        <div className="p-4 space-y-6">
+                            {renderSettings()}
+
+                            {/* Action Buttons */}
+                            <div className="pt-4 space-y-3">
+                                <Button
+                                    className="w-full btn-glow"
+                                    onClick={handleProcess}
+                                    disabled={!uploadedFile || isProcessing}
+                                    size="lg"
+                                >
+                                    {isProcessing ? (
+                                        <>
+                                            <motion.div
+                                                animate={{ rotate: 360 }}
+                                                transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
+                                                className="w-4 h-4 border-2 border-primary-foreground border-t-transparent rounded-full mr-2"
+                                            />
+                                            Processing...
+                                        </>
+                                    ) : (
+                                        <>
+                                            <Sparkles className="w-4 h-4 mr-2" />
+                                            {getProcessLabel()}
+                                        </>
+                                    )}
+                                </Button>
+
+                                <Button variant="outline" className="w-full gap-2" onClick={handleReset}>
+                                    <RotateCcw className="w-4 h-4" />
+                                    Start Over
+                                </Button>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Tips Card */}
+                    <div className="rounded-2xl border border-border bg-gradient-to-br from-primary/5 to-transparent p-4 space-y-3">
+                        <h4 className="font-semibold flex items-center gap-2">
+                            <Sparkles className="w-4 h-4 text-primary" />
+                            Tips
+                        </h4>
+                        <ul className="text-sm text-muted-foreground space-y-2">
+                            <li className="flex items-start gap-2">
+                                <ChevronRight className="w-4 h-4 text-primary mt-0.5 flex-shrink-0" />
+                                <span>Your PDF is processed securely on our servers</span>
+                            </li>
+                            <li className="flex items-start gap-2">
+                                <ChevronRight className="w-4 h-4 text-primary mt-0.5 flex-shrink-0" />
+                                <span>Files are deleted immediately after processing</span>
+                            </li>
+                            <li className="flex items-start gap-2">
+                                <ChevronRight className="w-4 h-4 text-primary mt-0.5 flex-shrink-0" />
+                                <span>Supports PDFs up to 50MB</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </motion.div>
+    );
+}
