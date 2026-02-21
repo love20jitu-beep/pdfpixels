@@ -1,13 +1,13 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { ArrowLeft, Download, RotateCcw, Crop, Circle, Square, Scissors } from 'lucide-react';
-import Link from 'next/link';
+import { Download, RotateCcw, Crop, Circle, Square, Scissors, Settings } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { useAppStore } from '@/store/app-store';
 import { FileUpload } from './file-upload';
+import { ToolPageHeader } from './tool-page-header';
 import { useState, useCallback, useRef, useEffect } from 'react';
 import { toast } from 'sonner';
 import { Badge } from '@/components/ui/badge';
@@ -185,44 +185,51 @@ export function CropWorkspace() {
 
     return (
         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="container mx-auto px-4 lg:px-8 py-8">
-            <div className="flex items-center justify-between mb-8">
-                <div className="flex items-center gap-4">
-                    <Link href="/" onClick={() => reset()} className="inline-flex items-center justify-center rounded-md text-sm font-medium hover:bg-accent hover:text-accent-foreground h-10 w-10" aria-label="Back"><ArrowLeft className="w-5 h-5" /></Link>
-                    <div className="flex items-center gap-3">
-                        <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center">{modeIcons[cropMode]}</div>
-                        <div><h1 className="text-2xl font-bold">{activeTool.name}</h1><p className="text-sm text-muted-foreground">{activeTool.description}</p></div>
-                    </div>
-                </div>
-                {processedImage && <Button onClick={handleDownload} className="gap-2"><Download className="w-4 h-4" />Download</Button>}
-            </div>
+            <ToolPageHeader
+                title={activeTool.name}
+                description={activeTool.description}
+                icon={modeIcons[cropMode]}
+                onReset={handleReset}
+            >
+                {processedImage && (
+                    <Button onClick={handleDownload} className="gap-2 btn-premium rounded-xl">
+                        <Download className="w-4 h-4" />Download
+                    </Button>
+                )}
+            </ToolPageHeader>
 
             <div className="grid lg:grid-cols-3 gap-8">
                 <div className="lg:col-span-2 space-y-6">
                     {!uploadedFile ? <FileUpload /> : (
-                        <div className="rounded-2xl border border-border overflow-hidden bg-card">
-                            <div className="p-4 border-b border-border"><h3 className="font-medium">Adjust Crop Area</h3></div>
-                            <div className="p-4 flex justify-center bg-muted/30">
+                        <div className="rounded-2xl border border-border/40 overflow-hidden bg-card/60 backdrop-blur-sm shadow-lg">
+                            <div className="p-4 border-b border-border/40 bg-gradient-to-r from-primary/5 to-transparent"><h3 className="font-semibold">Adjust Crop Area</h3></div>
+                            <div className="p-4 flex justify-center bg-muted/20 dark:bg-zinc-900">
                                 <canvas ref={canvasRef} className="max-w-full cursor-crosshair rounded-lg" />
                             </div>
                         </div>
                     )}
                     {processedImage && (
-                        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="rounded-2xl border border-border overflow-hidden bg-card">
-                            <div className="p-4 border-b border-border flex items-center justify-between">
-                                <h3 className="font-medium">Cropped Result</h3>
-                                <Badge variant="secondary" className="bg-green-500/10 text-green-600">Done</Badge>
+                        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="rounded-2xl border border-primary/30 bg-primary/5 overflow-hidden shadow-lg">
+                            <div className="p-4 border-b border-primary/20 flex items-center justify-between">
+                                <h3 className="font-semibold text-foreground">Cropped Result</h3>
+                                <Badge variant="secondary" className="bg-green-500/10 text-green-600 dark:text-green-400 border-green-500/20">Done</Badge>
                             </div>
-                            <div className="p-4 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHJlY3Qgd2lkdGg9IjEwIiBoZWlnaHQ9IjEwIiBmaWxsPSIjZjBmMGYwIi8+PHJlY3QgeD0iMTAiIHk9IjEwIiB3aWR0aD0iMTAiIGhlaWdodD0iMTAiIGZpbGw9IiNmMGYwZjAiLz48L3N2Zz4=')] flex items-center justify-center min-h-[200px]">
-                                <img src={processedImage} alt="Cropped" className="max-w-full max-h-96 object-contain" />
+                            <div className="p-4 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHJlY3Qgd2lkdGg9IjEwIiBoZWlnaHQ9IjEwIiBmaWxsPSIjZjBmMGYwIi8+PHJlY3QgeD0iMTAiIHk9IjEwIiB3aWR0aD0iMTAiIGhlaWdodD0iMTAiIGZpbGw9IiNmMGYwZjAiLz48L3N2Zz4=')] dark:bg-zinc-900 flex items-center justify-center min-h-[200px]">
+                                <img src={processedImage} alt="Cropped" className="max-w-full max-h-96 object-contain rounded-lg" />
                             </div>
                         </motion.div>
                     )}
                 </div>
 
                 <div className="space-y-6">
-                    <div className="rounded-2xl border border-border bg-card overflow-hidden">
-                        <div className="p-4 border-b border-border"><h3 className="font-medium">Crop Settings</h3></div>
-                        <div className="p-4 space-y-4">
+                    <div className="rounded-2xl border border-border/40 bg-card/60 backdrop-blur-xl overflow-hidden shadow-premium">
+                        <div className="p-5 border-b border-border/40 bg-gradient-to-r from-primary/10 to-transparent">
+                            <h3 className="font-bold flex items-center gap-2.5 tracking-tight text-foreground">
+                                <Settings className="w-4 h-4 text-primary" />
+                                Crop Settings
+                            </h3>
+                        </div>
+                        <div className="p-5 space-y-4">
                             {cropMode === 'rect' && (
                                 <div className="space-y-2">
                                     <Label>Aspect Ratio</Label>
@@ -266,10 +273,17 @@ export function CropWorkspace() {
                             </div>
 
                             <div className="pt-2 space-y-3">
-                                <Button className="w-full" onClick={handleCrop} disabled={!uploadedFile || isProcessing}>
-                                    {isProcessing ? 'Cropping...' : 'Crop Image'}
+                                <Button
+                                    className="w-full btn-premium py-6 rounded-xl font-bold shadow-xl shadow-primary/20 hover:shadow-primary/40 transition-all"
+                                    onClick={handleCrop}
+                                    disabled={!uploadedFile || isProcessing}
+                                    size="lg"
+                                >
+                                    {isProcessing ? 'Cropping...' : '✂️ Crop Image'}
                                 </Button>
-                                <Button variant="outline" className="w-full gap-2" onClick={handleReset}><RotateCcw className="w-4 h-4" />Start Over</Button>
+                                <Button variant="outline" className="w-full gap-2 rounded-xl py-6 hover:bg-destructive/5 hover:text-destructive hover:border-destructive/30 transition-colors bg-background/50" onClick={handleReset}>
+                                    <RotateCcw className="w-4 h-4" />Start Over
+                                </Button>
                             </div>
                         </div>
                     </div>

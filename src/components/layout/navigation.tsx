@@ -81,16 +81,16 @@ export function Navigation() {
   return (
     <>
       <header
-        className={`sticky top-0 z-50 w-full transition-all duration-300 ${scrolled ? 'glass border-b border-border/25 shadow-soft' : 'bg-background/80 backdrop-blur-sm'
+        className={`sticky top-0 z-50 w-full transition-all duration-400 ${scrolled ? 'bg-background/70 backdrop-blur-xl border-b border-border/40 shadow-sm' : 'bg-background/40 backdrop-blur-md'
           }`}
       >
         <nav className="container mx-auto px-4 lg:px-8">
-          <div className="flex h-14 items-center justify-between gap-4">
+          <div className="flex h-16 items-center justify-between gap-4">
 
             {/* ── Logo ── */}
             <Link
               href="/"
-              className="flex items-center gap-2 group shrink-0"
+              className="flex items-center gap-2.5 group shrink-0"
               onClick={(e) => {
                 if (window.location.pathname === '/') {
                   e.preventDefault();
@@ -99,11 +99,11 @@ export function Navigation() {
                 }
               }}
             >
-              <div className="relative w-8 h-8 rounded-lg bg-gradient-to-br from-primary to-primary/80 flex items-center justify-center shadow-sm group-hover:shadow-primary/30 transition-shadow">
-                <ImageIcon className="w-4 h-4 text-primary-foreground" />
+              <div className="relative w-9 h-9 rounded-xl bg-gradient-to-br from-indigo-500 via-fuchsia-500 to-cyan-500 flex items-center justify-center shadow-lg shadow-violet-500/25 group-hover:scale-105 transition-all duration-300">
+                <ImageIcon className="w-5 h-5 text-white" />
               </div>
-              <span className="text-base font-bold tracking-tight hidden sm:block">
-                <span className="gradient-text">Pdf</span>Pixels
+              <span className="text-xl font-extrabold tracking-tight hidden sm:block">
+                <span className="text-shimmer">Pdf</span>Pixels
               </span>
             </Link>
 
@@ -137,15 +137,15 @@ export function Navigation() {
               <Button
                 variant="ghost"
                 size="sm"
-                className="h-8 gap-2 text-muted-foreground hover:text-foreground text-xs font-medium px-3 rounded-lg bg-muted/40 hover:bg-muted/70 border border-transparent hover:border-border/30"
+                className="h-9 gap-2 text-muted-foreground hover:text-foreground text-sm font-medium px-4 rounded-xl bg-muted/40 hover:bg-muted/60 border border-transparent hover:border-border/50 transition-all"
                 onClick={() => {
                   setSearchOpen(true);
                   setTimeout(() => searchRef.current?.focus(), 50);
                 }}
               >
-                <Search className="w-3.5 h-3.5" />
+                <Search className="w-4 h-4" />
                 <span className="hidden md:inline">Search tools...</span>
-                <kbd className="hidden md:inline-flex h-5 items-center gap-0.5 rounded border border-border/40 bg-muted/60 px-1.5 text-[10px] font-mono text-muted-foreground">
+                <kbd className="hidden md:inline-flex h-5 items-center gap-0.5 rounded border border-border/60 bg-background/50 px-1.5 text-[10px] font-mono text-muted-foreground font-bold">
                   ⌘K
                 </kbd>
               </Button>
@@ -234,21 +234,21 @@ export function Navigation() {
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: -10, scale: 0.97 }}
               transition={{ duration: 0.2 }}
-              className="relative w-full max-w-lg bg-card border border-border/40 rounded-2xl shadow-premium overflow-hidden"
+              className="relative w-full max-w-lg bg-card/90 backdrop-blur-xl border border-border/60 rounded-3xl shadow-premium overflow-hidden rainbow-border"
             >
               {/* Search input */}
-              <div className="flex items-center gap-3 px-4 py-3 border-b border-border/20">
-                <Search className="w-4 h-4 text-muted-foreground shrink-0" />
+              <div className="flex items-center gap-3 px-5 py-4 border-b border-border/30 bg-background/50">
+                <Search className="w-5 h-5 text-primary shrink-0" />
                 <input
                   ref={searchRef}
                   type="text"
                   value={searchQuery}
                   onChange={(e) => handleSearch(e.target.value)}
                   placeholder="Search all tools..."
-                  className="flex-1 bg-transparent text-sm font-medium outline-none placeholder:text-muted-foreground/50"
+                  className="flex-1 bg-transparent text-base font-semibold outline-none placeholder:text-muted-foreground/60 focus:ring-0 border-none"
                   autoFocus
                 />
-                <kbd className="hidden sm:inline-flex h-5 items-center rounded border border-border/40 bg-muted/50 px-1.5 text-[10px] font-mono text-muted-foreground">
+                <kbd className="hidden sm:inline-flex h-6 items-center rounded-md border border-border/60 bg-card px-2 text-[10px] font-mono text-muted-foreground font-bold shadow-sm">
                   ESC
                 </kbd>
               </div>

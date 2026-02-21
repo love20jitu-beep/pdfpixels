@@ -1,5 +1,6 @@
 import { MetadataRoute } from 'next';
 import { allTools } from '@/lib/tools-data';
+import { getAllBlogPosts } from '@/config/blog';
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = 'https://www.pdfpixels.com';
@@ -121,5 +122,22 @@ export default function sitemap(): MetadataRoute.Sitemap {
     },
   ];
 
-  return [...corePages, ...directToolPages, ...toolPages, ...legalPages];
+  // Blog pages
+  const blogPosts = getAllBlogPosts();
+  const blogPages: MetadataRoute.Sitemap = [
+    {
+      url: `${baseUrl}/blog`,
+      lastModified: now,
+      changeFrequency: 'daily',
+      priority: 0.8,
+    },
+    ...blogPosts.map((post) => ({
+      url: `${baseUrl}/blog/${post.slug}`,
+      lastModified: now,
+      changeFrequency: 'weekly' as const,
+      priority: 0.7,
+    })),
+  ];
+
+  return [...corePages, ...directToolPages, ...toolPages, ...blogPages, ...legalPages];
 }

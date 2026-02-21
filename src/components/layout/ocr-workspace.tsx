@@ -1,11 +1,11 @@
 'use client';
 
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowLeft, Copy, Download, FileText, RotateCcw, Sparkles, ChevronRight, Check } from 'lucide-react';
-import Link from 'next/link';
+import { Copy, Download, FileText, RotateCcw, Sparkles, ChevronRight, Check } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useAppStore } from '@/store/app-store';
 import { FileUpload } from './file-upload';
+import { ToolPageHeader } from './tool-page-header';
 import { useState, useCallback } from 'react';
 import { toast } from 'sonner';
 import {
@@ -152,41 +152,25 @@ export function OCRWorkspace() {
             animate={{ opacity: 1 }}
             className="container mx-auto px-4 lg:px-8 py-8"
         >
-            {/* Header */}
-            <div className="flex items-center justify-between mb-8">
-                <div className="flex items-center gap-4">
-                    <Link
-                        href="/"
-                        onClick={() => reset()}
-                        className="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 hover:bg-accent hover:text-accent-foreground h-10 w-10"
-                        aria-label="Back to home"
-                    >
-                        <ArrowLeft className="w-5 h-5" />
-                    </Link>
-                    <div className="flex items-center gap-3">
-                        <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary to-primary/70 flex items-center justify-center shadow-lg shadow-primary/30">
-                            <FileText className="w-6 h-6 text-primary-foreground" />
-                        </div>
-                        <div>
-                            <h1 className="text-2xl font-bold">{activeTool.name}</h1>
-                            <p className="text-sm text-muted-foreground">{activeTool.description}</p>
-                        </div>
-                    </div>
-                </div>
-
+            <ToolPageHeader
+                title={activeTool.name}
+                description={activeTool.description}
+                icon={FileText}
+                onReset={handleReset}
+            >
                 {extractedText && (
-                    <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} className="flex gap-2">
-                        <Button variant="outline" onClick={handleCopy} className="gap-2">
+                    <div className="flex gap-2">
+                        <Button variant="outline" onClick={handleCopy} className="gap-2 rounded-xl">
                             {copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
                             {copied ? 'Copied!' : 'Copy Text'}
                         </Button>
-                        <Button onClick={handleDownloadText} className="gap-2 btn-glow">
+                        <Button onClick={handleDownloadText} className="gap-2 btn-premium rounded-xl">
                             <Download className="w-4 h-4" />
                             Download .txt
                         </Button>
-                    </motion.div>
+                    </div>
                 )}
-            </div>
+            </ToolPageHeader>
 
             {/* Main Content */}
             <div className="grid lg:grid-cols-3 gap-8">
@@ -201,16 +185,16 @@ export function OCRWorkspace() {
                                 initial={{ opacity: 0, y: 20 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 exit={{ opacity: 0, y: -20 }}
-                                className="rounded-2xl border border-border bg-card overflow-hidden"
+                                className="rounded-2xl border border-primary/30 bg-primary/5 overflow-hidden shadow-lg"
                             >
-                                <div className="p-4 border-b border-border flex items-center justify-between">
-                                    <h3 className="font-medium flex items-center gap-2">
+                                <div className="p-4 border-b border-primary/20 flex items-center justify-between">
+                                    <h3 className="font-semibold flex items-center gap-2 text-foreground">
                                         <FileText className="w-4 h-4 text-primary" />
                                         Extracted Text
                                     </h3>
                                     <div className="flex items-center gap-2">
-                                        <Badge variant="secondary">{charCount.toLocaleString()} chars</Badge>
-                                        <Badge className="bg-green-500/10 text-green-600 dark:text-green-400 hover:bg-green-500/20">
+                                        <Badge variant="secondary" className="bg-primary/10 text-primary border-primary/20">{charCount.toLocaleString()} chars</Badge>
+                                        <Badge className="bg-green-500/10 text-green-600 dark:text-green-400 border-green-500/20 hover:bg-green-500/20">
                                             Complete
                                         </Badge>
                                     </div>
@@ -239,15 +223,15 @@ export function OCRWorkspace() {
 
                 {/* Right Panel */}
                 <div className="space-y-6">
-                    <div className="rounded-2xl border border-border bg-card overflow-hidden">
-                        <div className="p-4 border-b border-border bg-gradient-to-r from-primary/5 to-transparent">
-                            <h3 className="font-semibold flex items-center gap-2">
+                    <div className="rounded-2xl border border-border/40 bg-card/60 backdrop-blur-xl overflow-hidden shadow-premium">
+                        <div className="p-5 border-b border-border/40 bg-gradient-to-r from-primary/10 to-transparent">
+                            <h3 className="font-bold flex items-center gap-2.5 tracking-tight text-foreground">
                                 <Sparkles className="w-4 h-4 text-primary" />
                                 OCR Settings
                             </h3>
                         </div>
 
-                        <div className="p-4 space-y-6">
+                        <div className="p-5 space-y-6">
                             <div className="space-y-2">
                                 <Label>Document Language</Label>
                                 <Select value={language} onValueChange={setLanguage}>
@@ -288,10 +272,9 @@ export function OCRWorkspace() {
                                 </p>
                             </div>
 
-                            {/* Action Buttons */}
                             <div className="pt-2 space-y-3">
                                 <Button
-                                    className="w-full btn-glow"
+                                    className="w-full btn-premium py-6 rounded-xl font-bold shadow-xl shadow-primary/20 hover:shadow-primary/40 transition-all"
                                     onClick={handleProcess}
                                     disabled={!uploadedFile || isProcessing}
                                     size="lg"
@@ -301,19 +284,19 @@ export function OCRWorkspace() {
                                             <motion.div
                                                 animate={{ rotate: 360 }}
                                                 transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
-                                                className="w-4 h-4 border-2 border-primary-foreground border-t-transparent rounded-full mr-2"
+                                                className="w-5 h-5 border-2 border-primary-foreground/30 border-t-primary-foreground rounded-full mr-3"
                                             />
                                             Extracting Text...
                                         </>
                                     ) : (
                                         <>
-                                            <FileText className="w-4 h-4 mr-2" />
+                                            <FileText className="w-5 h-5 mr-3" />
                                             Extract Text (OCR)
                                         </>
                                     )}
                                 </Button>
 
-                                <Button variant="outline" className="w-full gap-2" onClick={handleReset}>
+                                <Button variant="outline" className="w-full gap-2 rounded-xl py-6 hover:bg-destructive/5 hover:text-destructive hover:border-destructive/30 transition-colors bg-background/50" onClick={handleReset}>
                                     <RotateCcw className="w-4 h-4" />
                                     Start Over
                                 </Button>
@@ -321,8 +304,7 @@ export function OCRWorkspace() {
                         </div>
                     </div>
 
-                    {/* Tips Card */}
-                    <div className="rounded-2xl border border-border bg-gradient-to-br from-primary/5 to-transparent p-4 space-y-3">
+                    <div className="rounded-2xl border border-border/40 bg-gradient-to-br from-primary/5 to-transparent p-5 space-y-3">
                         <h4 className="font-semibold flex items-center gap-2">
                             <Sparkles className="w-4 h-4 text-primary" />
                             Tips for Best Results

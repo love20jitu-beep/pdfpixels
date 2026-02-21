@@ -102,24 +102,25 @@ export function FileUpload({ accept = 'image/*' }: FileUploadProps) {
             onDragOver={(e) => { e.preventDefault(); setDragOver(true); }}
             onDragLeave={() => setDragOver(false)}
             onDrop={handleDrop}
-            className={`drop-zone relative flex flex-col items-center justify-center p-8 md:p-12 rounded-2xl cursor-pointer overflow-hidden
-              ${dragOver ? 'drag-over' : ''}`}
+            className={`relative flex flex-col items-center justify-center p-8 md:p-16 rounded-[2rem] cursor-pointer overflow-hidden border-2 border-dashed transition-all duration-300
+              ${dragOver
+                ? 'border-primary bg-primary/5 shadow-2xl shadow-primary/20 scale-[1.02]'
+                : 'border-border/60 hover:border-primary/50 bg-card/40 hover:bg-card/60 backdrop-blur-xl shadow-lg'}`}
           >
             <input
               ref={inputRef}
               type="file"
               accept={accept}
               onChange={handleFileSelect}
-              className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+              className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-50"
             />
 
-            {/* Background Animation */}
+            {/* Aurora Background Hint on Drag Over */}
             <motion.div
               animate={{
-                scale: dragOver ? 1.2 : 1,
-                opacity: dragOver ? 0.1 : 0.05
+                opacity: dragOver ? 1 : 0,
               }}
-              className="absolute inset-0 bg-primary"
+              className="absolute inset-0 bg-gradient-to-br from-indigo-500/10 via-purple-500/10 to-pink-500/10 pointer-events-none"
             />
 
             <motion.div
@@ -129,42 +130,44 @@ export function FileUpload({ accept = 'image/*' }: FileUploadProps) {
             >
               <motion.div
                 animate={{
-                  scale: dragOver ? 1.1 : 1,
-                  rotate: dragOver ? [0, -5, 5, 0] : 0
+                  scale: dragOver ? 1.15 : 1,
+                  rotate: dragOver ? [0, -5, 5, 0] : 0,
+                  y: dragOver ? -10 : 0
                 }}
-                transition={{ duration: 0.3 }}
-                className="w-20 h-20 rounded-2xl bg-primary/5 flex items-center justify-center border border-primary/10"
+                transition={{ duration: 0.4 }}
+                className={`w-24 h-24 rounded-3xl flex items-center justify-center shadow-xl transition-colors duration-300
+                  ${dragOver ? 'bg-gradient-to-br from-indigo-500 to-purple-600' : 'bg-gradient-to-br from-card to-muted border border-border/50 shadow-sm'}`}
               >
                 {isPDFAccept && !isImageAccept ? (
-                  <FileText className="w-10 h-10 text-primary" />
+                  <FileText className={`w-10 h-10 ${dragOver ? 'text-white' : 'text-primary/70'}`} />
                 ) : (
-                  <Upload className="w-10 h-10 text-primary" />
+                  <Upload className={`w-10 h-10 ${dragOver ? 'text-white' : 'text-primary/70'}`} />
                 )}
               </motion.div>
 
-              <div className="text-center">
-                <p className="text-lg font-semibold">
+              <div className="text-center mt-2 z-10 pointer-events-none">
+                <p className="text-2xl font-bold tracking-tight text-foreground">
                   {dragOver ? `Drop your ${isPDFAccept && !isImageAccept ? 'PDF' : 'file'} here` : `Drag & drop your ${isPDFAccept && !isImageAccept ? 'PDF' : 'file'}`}
                 </p>
-                <p className="text-sm text-muted-foreground mt-1">
+                <p className="text-base text-muted-foreground mt-2 font-medium">
                   or click to browse from your device
                 </p>
               </div>
 
-              <div className="flex items-center gap-3 text-xs text-muted-foreground">
-                {isPDFAccept && <Badge variant="secondary" className="font-normal">PDF</Badge>}
+              <div className="flex items-center gap-3 text-sm font-medium text-muted-foreground z-10 pointer-events-none mt-2">
+                {isPDFAccept && <Badge variant="secondary" className="font-normal px-3 py-1 bg-background/50 backdrop-blur-sm">PDF</Badge>}
                 {isImageAccept && (
                   <>
-                    <Badge variant="secondary" className="font-normal">JPG</Badge>
-                    <Badge variant="secondary" className="font-normal">PNG</Badge>
-                    <Badge variant="secondary" className="font-normal">WebP</Badge>
+                    <Badge variant="secondary" className="font-normal px-3 py-1 bg-background/50 backdrop-blur-sm">JPG</Badge>
+                    <Badge variant="secondary" className="font-normal px-3 py-1 bg-background/50 backdrop-blur-sm">PNG</Badge>
+                    <Badge variant="secondary" className="font-normal px-3 py-1 bg-background/50 backdrop-blur-sm">WebP</Badge>
                   </>
                 )}
               </div>
 
-              <Button size="lg" className="mt-2 gap-2" type="button" onClick={(e) => { e.stopPropagation(); inputRef.current?.click(); }}>
-                <Upload className="w-4 h-4" />
-                Select {isPDFAccept && !isImageAccept ? 'PDF' : 'File'}
+              <Button size="lg" className="mt-6 gap-2 btn-premium rounded-xl px-10 py-6 font-bold z-10 pointer-events-none" type="button">
+                <Upload className="w-5 h-5 relative z-10" />
+                <span className="relative z-10">Select {isPDFAccept && !isImageAccept ? 'PDF' : 'File'}</span>
               </Button>
             </motion.div>
           </motion.div>
@@ -174,10 +177,10 @@ export function FileUpload({ accept = 'image/*' }: FileUploadProps) {
             initial={{ opacity: 0, scale: 0.98 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.98 }}
-            className="relative w-full max-w-2xl mx-auto border-2 border-dashed border-primary/40 rounded-xl p-4 md:p-8 flex items-center justify-center min-h-[300px] bg-transparent"
+            className="relative w-full max-w-2xl mx-auto border-2 border-dashed border-primary/40 rounded-2xl p-4 md:p-8 flex items-center justify-center min-h-[300px] bg-card/30 backdrop-blur-sm"
           >
             {/* Image/File Preview */}
-            <div className="relative inline-block max-w-full rounded-md shadow-sm border border-border overflow-hidden bg-white min-w-[200px]">
+            <div className="relative inline-block max-w-full rounded-2xl shadow-lg border border-border/50 overflow-hidden bg-white dark:bg-card min-w-[200px]">
               {isPDF ? (
                 <div className="flex flex-col items-center justify-center p-12 bg-muted/10">
                   <FileText className="w-16 h-16 text-red-500 mb-2" />
@@ -195,31 +198,31 @@ export function FileUpload({ accept = 'image/*' }: FileUploadProps) {
               <button
                 onClick={handleRemove}
                 disabled={isProcessing}
-                className="absolute top-2 right-2 p-1.5 bg-white/90 hover:bg-destructive hover:text-white rounded-md shadow-sm transition-colors z-10"
+                className="absolute top-2 right-2 p-1.5 bg-white/90 dark:bg-card/90 hover:bg-destructive hover:text-white rounded-xl shadow-md border border-border/30 transition-all z-10"
               >
                 <X className="w-4 h-4" />
               </button>
 
-              {/* Change Button Top Left (Simulating "Resize Pixel / Crop" location on Pi7) */}
+              {/* Change Button Top Left */}
               <div className="absolute top-2 left-2 flex flex-col gap-1 z-10">
                 <button
                   onClick={() => inputRef.current?.click()}
                   disabled={isProcessing}
-                  className="px-2 py-1 bg-primary/80 hover:bg-primary text-white text-[10px] font-medium rounded-sm shadow-sm flex items-center gap-1 transition-colors"
+                  className="px-2.5 py-1.5 bg-primary/90 hover:bg-primary text-white text-[10px] font-bold rounded-lg shadow-md flex items-center gap-1 transition-all backdrop-blur-sm"
                 >
                   <Upload className="w-3 h-3" />
                   Change
                 </button>
               </div>
 
-              {/* Info Box Bottom */}
-              <div className="bg-[#467599] text-white text-xs p-2.5 w-full mt-0">
-                <div className="font-semibold truncate mb-1 text-[11px]">{uploadedFile.name}</div>
-                <div className="opacity-90 leading-tight">Size:- {formatFileSize(uploadedFile.size)}</div>
+              {/* Info Box Bottom — Premium Gradient */}
+              <div className="bg-gradient-to-r from-primary/85 to-violet-600/85 backdrop-blur-md text-white text-xs p-3 w-full">
+                <div className="font-bold truncate mb-1 text-[11px] tracking-wide">{uploadedFile.name}</div>
+                <div className="opacity-90 leading-tight font-medium">Size: {formatFileSize(uploadedFile.size)}</div>
                 {imageInfo && (
                   <>
-                    <div className="opacity-90 leading-tight">Width:- {imageInfo.width} PX</div>
-                    <div className="opacity-90 leading-tight">Height:- {imageInfo.height} PX</div>
+                    <div className="opacity-90 leading-tight font-medium">Width: {imageInfo.width} PX</div>
+                    <div className="opacity-90 leading-tight font-medium">Height: {imageInfo.height} PX</div>
                   </>
                 )}
               </div>

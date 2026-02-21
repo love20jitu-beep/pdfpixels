@@ -1,12 +1,12 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { ArrowLeft, Download, RotateCcw, PenTool, Type, Upload, Trash2 } from 'lucide-react';
-import Link from 'next/link';
+import { Download, RotateCcw, PenTool, Type, Upload, Trash2, ChevronRight, Sparkles } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { useAppStore } from '@/store/app-store';
+import { ToolPageHeader } from './tool-page-header';
 import { useState, useCallback, useRef, useEffect } from 'react';
 import { toast } from 'sonner';
 import { Badge } from '@/components/ui/badge';
@@ -146,37 +146,31 @@ export function SignatureWorkspace() {
 
     return (
         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="container mx-auto px-4 lg:px-8 py-8">
-            {/* Header */}
-            <div className="flex items-center justify-between mb-8">
-                <div className="flex items-center gap-4">
-                    <Link href="/" onClick={() => reset()} className="inline-flex items-center justify-center rounded-md text-sm font-medium hover:bg-accent hover:text-accent-foreground h-10 w-10" aria-label="Back to home">
-                        <ArrowLeft className="w-5 h-5" />
-                    </Link>
-                    <div className="flex items-center gap-3">
-                        <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center"><PenTool className="w-6 h-6 text-primary" /></div>
-                        <div>
-                            <h1 className="text-2xl font-bold">{activeTool.name}</h1>
-                            <p className="text-sm text-muted-foreground">{activeTool.description}</p>
-                        </div>
-                    </div>
-                </div>
+            <ToolPageHeader
+                title={activeTool.name}
+                description={activeTool.description}
+                icon={PenTool}
+                onReset={handleReset}
+            >
                 {signatureData && (
-                    <Button onClick={handleDownload} className="gap-2"><Download className="w-4 h-4" />Download PNG</Button>
+                    <Button onClick={handleDownload} className="gap-2 btn-premium rounded-xl">
+                        <Download className="w-4 h-4" />Download PNG
+                    </Button>
                 )}
-            </div>
+            </ToolPageHeader>
 
             <div className="grid lg:grid-cols-3 gap-8">
                 {/* Canvas */}
                 <div className="lg:col-span-2 space-y-6">
-                    <div className="rounded-2xl border border-border overflow-hidden bg-card">
-                        <div className="p-4 border-b border-border flex items-center justify-between">
-                            <h3 className="font-medium">Draw Your Signature</h3>
-                            <Button variant="ghost" size="sm" onClick={clearCanvas}><Trash2 className="w-4 h-4 mr-1" />Clear</Button>
+                    <div className="rounded-2xl border border-border/40 overflow-hidden bg-card/60 backdrop-blur-sm shadow-lg">
+                        <div className="p-4 border-b border-border/40 flex items-center justify-between bg-gradient-to-r from-primary/5 to-transparent">
+                            <h3 className="font-semibold">Draw Your Signature</h3>
+                            <Button variant="ghost" size="sm" onClick={clearCanvas} className="hover:bg-destructive/10 hover:text-destructive"><Trash2 className="w-4 h-4 mr-1" />Clear</Button>
                         </div>
-                        <div className="bg-white dark:bg-gray-50 p-2">
+                        <div className="bg-white dark:bg-gray-50 p-3">
                             <canvas
                                 ref={canvasRef}
-                                className="w-full cursor-crosshair border-2 border-dashed border-gray-200 rounded-lg"
+                                className="w-full cursor-crosshair border-2 border-dashed border-gray-200 dark:border-gray-300 rounded-xl"
                                 style={{ touchAction: 'none', aspectRatio: '3/1' }}
                                 onMouseDown={startDraw}
                                 onMouseMove={draw}
@@ -187,16 +181,16 @@ export function SignatureWorkspace() {
                                 onTouchEnd={stopDraw}
                             />
                         </div>
-                        <div className="p-3 border-t border-border flex justify-center">
-                            <Button onClick={saveSignature} className="gap-2"><PenTool className="w-4 h-4" />Save Signature</Button>
+                        <div className="p-3 border-t border-border/40 flex justify-center">
+                            <Button onClick={saveSignature} className="gap-2 btn-premium rounded-xl"><PenTool className="w-4 h-4" />Save Signature</Button>
                         </div>
                     </div>
 
                     {signatureData && (
-                        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="rounded-2xl border border-border overflow-hidden bg-card">
-                            <div className="p-4 border-b border-border flex items-center justify-between">
-                                <h3 className="font-medium">Preview</h3>
-                                <Badge variant="secondary" className="bg-green-500/10 text-green-600">Ready</Badge>
+                        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="rounded-2xl border border-primary/30 bg-primary/5 overflow-hidden shadow-lg">
+                            <div className="p-4 border-b border-primary/20 flex items-center justify-between">
+                                <h3 className="font-semibold text-foreground">Preview</h3>
+                                <Badge variant="secondary" className="bg-green-500/10 text-green-600 dark:text-green-400 border-green-500/20">Ready</Badge>
                             </div>
                             <div className="p-6 bg-white dark:bg-gray-50 flex items-center justify-center">
                                 <img src={signatureData} alt="Signature" className="max-w-full max-h-32 object-contain" />
@@ -207,32 +201,32 @@ export function SignatureWorkspace() {
 
                 {/* Settings */}
                 <div className="space-y-6">
-                    <Tabs defaultValue="draw">
-                        <TabsList className="w-full">
-                            <TabsTrigger value="draw" className="flex-1"><PenTool className="w-3 h-3 mr-1" />Draw</TabsTrigger>
-                            <TabsTrigger value="type" className="flex-1"><Type className="w-3 h-3 mr-1" />Type</TabsTrigger>
-                        </TabsList>
+                    <div className="rounded-2xl border border-border/40 bg-card/60 backdrop-blur-xl overflow-hidden shadow-premium">
+                        <Tabs defaultValue="draw">
+                            <div className="p-4 border-b border-border/40">
+                                <TabsList className="w-full">
+                                    <TabsTrigger value="draw" className="flex-1"><PenTool className="w-3 h-3 mr-1" />Draw</TabsTrigger>
+                                    <TabsTrigger value="type" className="flex-1"><Type className="w-3 h-3 mr-1" />Type</TabsTrigger>
+                                </TabsList>
+                            </div>
 
-                        <TabsContent value="draw" className="space-y-4 mt-4">
-                            <div className="rounded-2xl border border-border bg-card p-4 space-y-4">
+                            <TabsContent value="draw" className="p-5 space-y-4">
                                 <div className="space-y-2">
                                     <Label>Pen Color</Label>
                                     <div className="flex gap-2">
                                         {['#000000', '#1e40af', '#dc2626', '#059669', '#7c3aed'].map(c => (
-                                            <button key={c} onClick={() => setPenColor(c)} className={`w-8 h-8 rounded-full border-2 ${penColor === c ? 'border-primary ring-2 ring-primary/30' : 'border-gray-200'}`} style={{ backgroundColor: c }} />
+                                            <button key={c} onClick={() => setPenColor(c)} className={`w-8 h-8 rounded-full border-2 transition-all ${penColor === c ? 'border-primary ring-2 ring-primary/30 scale-110' : 'border-gray-200 hover:scale-105'}`} style={{ backgroundColor: c }} />
                                         ))}
                                         <input type="color" value={penColor} onChange={(e) => setPenColor(e.target.value)} className="w-8 h-8 rounded-full cursor-pointer" />
                                     </div>
                                 </div>
                                 <div className="space-y-2">
-                                    <div className="flex justify-between"><Label>Pen Size</Label><span className="text-sm font-mono text-primary">{penSize}px</span></div>
+                                    <div className="flex justify-between"><Label>Pen Size</Label><span className="text-sm font-mono font-bold text-primary bg-primary/10 px-2.5 py-0.5 rounded-lg">{penSize}px</span></div>
                                     <Slider value={[penSize]} onValueChange={([v]) => setPenSize(v)} min={1} max={10} step={1} />
                                 </div>
-                            </div>
-                        </TabsContent>
+                            </TabsContent>
 
-                        <TabsContent value="type" className="space-y-4 mt-4">
-                            <div className="rounded-2xl border border-border bg-card p-4 space-y-4">
+                            <TabsContent value="type" className="p-5 space-y-4">
                                 <div className="space-y-2">
                                     <Label>Your Name</Label>
                                     <Input value={typedText} onChange={(e) => setTypedText(e.target.value)} placeholder="Type your name..." />
@@ -247,25 +241,27 @@ export function SignatureWorkspace() {
                                     </Select>
                                 </div>
                                 <div className="space-y-2">
-                                    <div className="flex justify-between"><Label>Font Size</Label><span className="text-sm font-mono text-primary">{fontSize}px</span></div>
+                                    <div className="flex justify-between"><Label>Font Size</Label><span className="text-sm font-mono font-bold text-primary bg-primary/10 px-2.5 py-0.5 rounded-lg">{fontSize}px</span></div>
                                     <Slider value={[fontSize]} onValueChange={([v]) => setFontSize(v)} min={20} max={80} step={2} />
                                 </div>
-                                <Button onClick={generateFromText} className="w-full"><Type className="w-4 h-4 mr-2" />Generate Signature</Button>
-                            </div>
-                        </TabsContent>
-                    </Tabs>
-
-                    <div className="pt-2">
-                        <Button variant="outline" className="w-full gap-2" onClick={handleReset}><RotateCcw className="w-4 h-4" />Start Over</Button>
+                                <Button onClick={generateFromText} className="w-full btn-premium rounded-xl"><Type className="w-4 h-4 mr-2" />Generate Signature</Button>
+                            </TabsContent>
+                        </Tabs>
                     </div>
 
-                    <div className="rounded-2xl border border-border bg-gradient-to-br from-primary/5 to-transparent p-4">
-                        <h4 className="font-medium mb-2">How to use</h4>
-                        <ul className="text-sm text-muted-foreground space-y-1">
-                            <li>• Draw or type your signature</li>
-                            <li>• Customize color and style</li>
-                            <li>• Click Save Signature</li>
-                            <li>• Download as transparent PNG</li>
+                    <Button variant="outline" className="w-full gap-2 rounded-xl py-6 hover:bg-destructive/5 hover:text-destructive hover:border-destructive/30 transition-colors bg-background/50" onClick={handleReset}>
+                        <RotateCcw className="w-4 h-4" />Start Over
+                    </Button>
+
+                    <div className="rounded-2xl border border-border/40 bg-gradient-to-br from-primary/5 to-transparent p-5 space-y-3">
+                        <h4 className="font-semibold flex items-center gap-2">
+                            <Sparkles className="w-4 h-4 text-primary" />How to use
+                        </h4>
+                        <ul className="text-sm text-muted-foreground space-y-2">
+                            <li className="flex items-start gap-2"><ChevronRight className="w-4 h-4 text-primary mt-0.5 flex-shrink-0" /><span>Draw or type your signature</span></li>
+                            <li className="flex items-start gap-2"><ChevronRight className="w-4 h-4 text-primary mt-0.5 flex-shrink-0" /><span>Customize color and style</span></li>
+                            <li className="flex items-start gap-2"><ChevronRight className="w-4 h-4 text-primary mt-0.5 flex-shrink-0" /><span>Click Save Signature</span></li>
+                            <li className="flex items-start gap-2"><ChevronRight className="w-4 h-4 text-primary mt-0.5 flex-shrink-0" /><span>Download as transparent PNG</span></li>
                         </ul>
                     </div>
                 </div>

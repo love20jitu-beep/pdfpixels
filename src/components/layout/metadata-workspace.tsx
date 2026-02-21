@@ -1,11 +1,11 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { ArrowLeft, Download, RotateCcw, Eye, Trash2, Pencil } from 'lucide-react';
-import Link from 'next/link';
+import { Download, RotateCcw, Eye, Trash2, Sparkles, ChevronRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useAppStore } from '@/store/app-store';
 import { FileUpload } from './file-upload';
+import { ToolPageHeader } from './tool-page-header';
 import { useState, useCallback } from 'react';
 import { toast } from 'sonner';
 import { Badge } from '@/components/ui/badge';
@@ -148,27 +148,28 @@ export function MetadataWorkspace() {
 
     return (
         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="container mx-auto px-4 lg:px-8 py-8">
-            <div className="flex items-center justify-between mb-8">
-                <div className="flex items-center gap-4">
-                    <Link href="/" onClick={() => reset()} className="inline-flex items-center justify-center rounded-md text-sm font-medium hover:bg-accent hover:text-accent-foreground h-10 w-10" aria-label="Back">
-                        <ArrowLeft className="w-5 h-5" />
-                    </Link>
-                    <div className="flex items-center gap-3">
-                        <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center text-2xl">{toolIcon}</div>
-                        <div><h1 className="text-2xl font-bold">{activeTool.name}</h1><p className="text-sm text-muted-foreground">{activeTool.description}</p></div>
-                    </div>
-                </div>
-                {processedImage && <Button onClick={handleDownload} className="gap-2"><Download className="w-4 h-4" />Download Clean Image</Button>}
-            </div>
+            <ToolPageHeader
+                title={activeTool.name}
+                description={activeTool.description}
+                emoji={toolIcon}
+                icon={null}
+                onReset={handleReset}
+            >
+                {processedImage && (
+                    <Button onClick={handleDownload} className="gap-2 btn-premium rounded-xl">
+                        <Download className="w-4 h-4" />Download Clean Image
+                    </Button>
+                )}
+            </ToolPageHeader>
 
             <div className="grid lg:grid-cols-3 gap-8">
                 <div className="lg:col-span-2 space-y-6">
                     <FileUpload />
                     {metadata.length > 0 && (
-                        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="rounded-2xl border border-border bg-card overflow-hidden">
-                            <div className="p-4 border-b border-border flex items-center justify-between">
-                                <h3 className="font-medium">Image Metadata</h3>
-                                <Badge variant="secondary">{metadata.length} entries</Badge>
+                        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="rounded-2xl border border-border/40 bg-card/60 backdrop-blur-sm overflow-hidden shadow-lg">
+                            <div className="p-4 border-b border-border/40 flex items-center justify-between bg-gradient-to-r from-primary/5 to-transparent">
+                                <h3 className="font-semibold">Image Metadata</h3>
+                                <Badge variant="secondary" className="bg-primary/10 text-primary border-primary/20">{metadata.length} entries</Badge>
                             </div>
                             <div className="divide-y divide-border">
                                 {categories.map(cat => (
@@ -188,23 +189,37 @@ export function MetadataWorkspace() {
                 </div>
 
                 <div className="space-y-6">
-                    <div className="rounded-2xl border border-border bg-card overflow-hidden">
-                        <div className="p-4 border-b border-border"><h3 className="font-medium">Actions</h3></div>
-                        <div className="p-4 space-y-3">
-                            <Button className="w-full gap-2" onClick={handleAnalyze} disabled={!uploadedFile || isLoading}>
-                                <Eye className="w-4 h-4" />{isLoading ? 'Analyzing...' : 'View Metadata'}
+                    <div className="rounded-2xl border border-border/40 bg-card/60 backdrop-blur-xl overflow-hidden shadow-premium">
+                        <div className="p-5 border-b border-border/40 bg-gradient-to-r from-primary/10 to-transparent">
+                            <h3 className="font-bold flex items-center gap-2.5 tracking-tight text-foreground">
+                                <Sparkles className="w-4 h-4 text-primary" />
+                                Actions
+                            </h3>
+                        </div>
+                        <div className="p-5 space-y-3">
+                            <Button
+                                className="w-full btn-premium py-6 rounded-xl font-bold shadow-xl shadow-primary/20 hover:shadow-primary/40 transition-all"
+                                onClick={handleAnalyze}
+                                disabled={!uploadedFile || isLoading}
+                                size="lg"
+                            >
+                                <Eye className="w-5 h-5 mr-3" />{isLoading ? 'Analyzing...' : 'View Metadata'}
                             </Button>
                             {activeTool.id !== 'view-metadata' && (
-                                <Button variant="secondary" className="w-full gap-2" onClick={handleRemoveMetadata} disabled={!uploadedFile}>
+                                <Button variant="secondary" className="w-full gap-2 rounded-xl py-5" onClick={handleRemoveMetadata} disabled={!uploadedFile}>
                                     <Trash2 className="w-4 h-4" />Remove All Metadata
                                 </Button>
                             )}
-                            <Button variant="outline" className="w-full gap-2" onClick={handleReset}><RotateCcw className="w-4 h-4" />Start Over</Button>
+                            <Button variant="outline" className="w-full gap-2 rounded-xl py-5 hover:bg-destructive/5 hover:text-destructive hover:border-destructive/30 transition-colors bg-background/50" onClick={handleReset}>
+                                <RotateCcw className="w-4 h-4" />Start Over
+                            </Button>
                         </div>
                     </div>
-                    <div className="rounded-2xl border border-border bg-gradient-to-br from-primary/5 to-transparent p-4">
-                        <h4 className="font-medium mb-2">About Metadata</h4>
-                        <p className="text-sm text-muted-foreground">Image metadata (EXIF) contains information about your camera, location, date, and more. Remove it to protect your privacy before sharing images online.</p>
+                    <div className="rounded-2xl border border-border/40 bg-gradient-to-br from-primary/5 to-transparent p-5 space-y-3">
+                        <h4 className="font-semibold flex items-center gap-2">
+                            <Sparkles className="w-4 h-4 text-primary" />About Metadata
+                        </h4>
+                        <p className="text-sm text-muted-foreground leading-relaxed">Image metadata (EXIF) contains information about your camera, location, date, and more. Remove it to protect your privacy before sharing images online.</p>
                     </div>
                 </div>
             </div>

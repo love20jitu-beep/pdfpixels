@@ -1,14 +1,14 @@
 'use client';
 
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowLeft, Download, RotateCcw, Settings, Sparkles, ChevronRight, RotateCw, FlipHorizontal, FlipVertical, Crop, Type, Stamp } from 'lucide-react';
-import Link from 'next/link';
+import { Download, RotateCcw, Settings, Sparkles, ChevronRight, RotateCw, FlipHorizontal, FlipVertical, Crop, Type, Stamp } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Slider } from '@/components/ui/slider';
 import { useAppStore } from '@/store/app-store';
 import { FileUpload } from './file-upload';
+import { ToolPageHeader } from './tool-page-header';
 import { useState, useCallback, useEffect } from 'react';
 import { toast } from 'sonner';
 import { Badge } from '@/components/ui/badge';
@@ -20,6 +20,7 @@ import {
   SelectValue
 } from '@/components/ui/select';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { SpotlightCard } from '@/components/ui/spotlight-card';
 
 export function ToolWorkspace() {
   const { activeTool, uploadedFile, processedImage, isProcessing, reset, setIsProcessing, setProcessedImage, setProgress } = useAppStore();
@@ -130,40 +131,19 @@ export function ToolWorkspace() {
       animate={{ opacity: 1 }}
       className="container mx-auto px-4 lg:px-8 py-8"
     >
-      {/* Header */}
-      <div className="flex items-center justify-between mb-8">
-        <div className="flex items-center gap-4">
-          <Link 
-            href="/" 
-            onClick={() => reset()}
-            className="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 hover:bg-accent hover:text-accent-foreground h-10 w-10"
-            aria-label="Back to home"
-          >
-            <ArrowLeft className="w-5 h-5" />
-          </Link>
-          <div className="flex items-center gap-3">
-            <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary to-primary/70 flex items-center justify-center shadow-lg shadow-primary/30">
-              <ToolIcon className="w-6 h-6 text-primary-foreground" />
-            </div>
-            <div>
-              <h1 className="text-2xl font-bold">{activeTool.name}</h1>
-              <p className="text-sm text-muted-foreground">{activeTool.description}</p>
-            </div>
-          </div>
-        </div>
-
+      <ToolPageHeader
+        title={activeTool.name}
+        description={activeTool.description}
+        icon={<ToolIcon className="w-7 h-7 text-white" />}
+        onReset={handleReset}
+      >
         {processedImage && (
-          <motion.div
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-          >
-            <Button onClick={handleDownload} className="gap-2 btn-glow">
-              <Download className="w-4 h-4" />
-              Download
-            </Button>
-          </motion.div>
+          <Button onClick={handleDownload} className="gap-2 btn-premium rounded-xl">
+            <Download className="w-4 h-4" />
+            Download
+          </Button>
         )}
-      </div>
+      </ToolPageHeader>
 
       {/* Main Content */}
       <div className="grid lg:grid-cols-3 gap-8">
@@ -240,9 +220,9 @@ export function ToolWorkspace() {
 
         {/* Right Panel - Settings */}
         <div className="space-y-6">
-          <div className="rounded-2xl border border-border bg-card overflow-hidden">
-            <div className="p-4 border-b border-border bg-gradient-to-r from-primary/5 to-transparent">
-              <h3 className="font-semibold flex items-center gap-2">
+          <SpotlightCard className="h-full rounded-2xl border border-border/40 bg-card/60 backdrop-blur-xl overflow-hidden shadow-2xl">
+            <div className="p-5 border-b border-border/40 bg-gradient-to-r from-primary/10 to-transparent">
+              <h3 className="font-bold flex items-center gap-2.5 tracking-tight text-foreground">
                 <Settings className="w-4 h-4 text-primary" />
                 Tool Settings
               </h3>
@@ -366,9 +346,9 @@ export function ToolWorkspace() {
               </Tabs>
 
               {/* Action Buttons */}
-              <div className="pt-4 space-y-3">
+              <div className="pt-6 space-y-4">
                 <Button
-                  className="w-full btn-glow"
+                  className="w-full btn-premium py-6 rounded-xl font-bold shadow-xl shadow-primary/20 hover:shadow-primary/40 transition-all"
                   onClick={handleProcess}
                   disabled={!uploadedFile || isProcessing}
                   size="lg"
@@ -378,13 +358,13 @@ export function ToolWorkspace() {
                       <motion.div
                         animate={{ rotate: 360 }}
                         transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
-                        className="w-4 h-4 border-2 border-primary-foreground border-t-transparent rounded-full mr-2"
+                        className="w-5 h-5 border-2 border-primary-foreground/30 border-t-primary-foreground rounded-full mr-3"
                       />
                       Processing...
                     </>
                   ) : (
                     <>
-                      <Sparkles className="w-4 h-4 mr-2" />
+                      <Sparkles className="w-5 h-5 mr-3" />
                       Apply Changes
                     </>
                   )}
@@ -392,7 +372,7 @@ export function ToolWorkspace() {
 
                 <Button
                   variant="outline"
-                  className="w-full gap-2"
+                  className="w-full gap-2 rounded-xl py-6 hover:bg-destructive/5 hover:text-destructive hover:border-destructive/30 transition-colors bg-background/50"
                   onClick={handleReset}
                 >
                   <RotateCcw className="w-4 h-4" />
@@ -400,7 +380,7 @@ export function ToolWorkspace() {
                 </Button>
               </div>
             </div>
-          </div>
+          </SpotlightCard>
 
           {/* Info Card */}
           <div className="rounded-2xl border border-border bg-gradient-to-br from-primary/5 to-transparent p-4 space-y-3">

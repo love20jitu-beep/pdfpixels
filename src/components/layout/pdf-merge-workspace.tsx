@@ -1,10 +1,10 @@
 'use client';
 
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowLeft, Download, RotateCcw, Merge, FileText, Plus, X, ChevronDown, ChevronUp, Trash2, GripVertical } from 'lucide-react';
-import Link from 'next/link';
+import { Download, RotateCcw, Merge, FileText, Plus, X, ChevronDown, ChevronUp, Trash2, GripVertical, Sparkles, ChevronRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useAppStore } from '@/store/app-store';
+import { ToolPageHeader } from './tool-page-header';
 import { useState, useCallback } from 'react';
 import { toast } from 'sonner';
 import { Badge } from '@/components/ui/badge';
@@ -146,40 +146,19 @@ export function PDFMergeWorkspace() {
       animate={{ opacity: 1 }}
       className="container mx-auto px-4 lg:px-8 py-8"
     >
-      {/* Header */}
-      <div className="flex items-center justify-between mb-8">
-        <div className="flex items-center gap-4">
-          <Link 
-            href="/" 
-            onClick={() => reset()}
-            className="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 hover:bg-accent hover:text-accent-foreground h-10 w-10"
-            aria-label="Back to home"
-          >
-            <ArrowLeft className="w-5 h-5" />
-          </Link>
-          <div className="flex items-center gap-3">
-            <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary to-primary/70 flex items-center justify-center shadow-lg shadow-primary/30">
-              <Merge className="w-6 h-6 text-primary-foreground" />
-            </div>
-            <div>
-              <h1 className="text-2xl font-bold">{activeTool.name}</h1>
-              <p className="text-sm text-muted-foreground">{activeTool.description}</p>
-            </div>
-          </div>
-        </div>
-
+      <ToolPageHeader
+        title={activeTool.name}
+        description={activeTool.description}
+        icon={Merge}
+        onReset={handleReset}
+      >
         {result && (
-          <motion.div
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-          >
-            <Button onClick={handleDownload} className="gap-2 btn-glow">
-              <Download className="w-4 h-4" />
-              Download PDF
-            </Button>
-          </motion.div>
+          <Button onClick={handleDownload} className="gap-2 btn-premium rounded-xl">
+            <Download className="w-4 h-4" />
+            Download PDF
+          </Button>
         )}
-      </div>
+      </ToolPageHeader>
 
       {/* Main Content */}
       <div className="grid lg:grid-cols-3 gap-8">
@@ -216,7 +195,7 @@ export function PDFMergeWorkspace() {
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              className="rounded-2xl border border-border bg-card overflow-hidden"
+              className="rounded-2xl border border-border/40 bg-card/60 backdrop-blur-sm overflow-hidden shadow-lg"
             >
               <div className="p-4 border-b border-border">
                 <h3 className="font-medium flex items-center gap-2">
@@ -314,12 +293,15 @@ export function PDFMergeWorkspace() {
 
         {/* Right Panel - Settings */}
         <div className="space-y-6">
-          <div className="rounded-2xl border border-border bg-card overflow-hidden">
-            <div className="p-4 border-b border-border bg-gradient-to-r from-primary/5 to-transparent">
-              <h3 className="font-semibold">Merge Settings</h3>
+          <div className="rounded-2xl border border-border/40 bg-card/60 backdrop-blur-xl overflow-hidden shadow-premium">
+            <div className="p-5 border-b border-border/40 bg-gradient-to-r from-primary/10 to-transparent">
+              <h3 className="font-bold flex items-center gap-2.5 tracking-tight text-foreground">
+                <Sparkles className="w-4 h-4 text-primary" />
+                Merge Settings
+              </h3>
             </div>
 
-            <div className="p-4 space-y-4">
+            <div className="p-5 space-y-4">
               <div className="p-4 rounded-xl bg-muted/50">
                 <div className="flex items-center justify-between mb-2">
                   <span className="text-sm font-medium">Total Files</span>
@@ -340,7 +322,7 @@ export function PDFMergeWorkspace() {
               {/* Action Buttons */}
               <div className="pt-4 space-y-3">
                 <Button
-                  className="w-full btn-glow"
+                  className="w-full btn-premium py-6 rounded-xl font-bold shadow-xl shadow-primary/20 hover:shadow-primary/40 transition-all"
                   onClick={handleProcess}
                   disabled={files.length < 2 || isProcessing}
                   size="lg"
@@ -350,13 +332,13 @@ export function PDFMergeWorkspace() {
                       <motion.div
                         animate={{ rotate: 360 }}
                         transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
-                        className="w-4 h-4 border-2 border-primary-foreground border-t-transparent rounded-full mr-2"
+                        className="w-5 h-5 border-2 border-primary-foreground/30 border-t-primary-foreground rounded-full mr-3"
                       />
                       Merging...
                     </>
                   ) : (
                     <>
-                      <Merge className="w-4 h-4 mr-2" />
+                      <Merge className="w-5 h-5 mr-3" />
                       Merge {files.length} PDFs
                     </>
                   )}
@@ -364,7 +346,7 @@ export function PDFMergeWorkspace() {
 
                 <Button
                   variant="outline"
-                  className="w-full gap-2"
+                  className="w-full gap-2 rounded-xl py-6 hover:bg-destructive/5 hover:text-destructive hover:border-destructive/30 transition-colors bg-background/50"
                   onClick={handleReset}
                 >
                   <RotateCcw className="w-4 h-4" />
@@ -374,30 +356,32 @@ export function PDFMergeWorkspace() {
             </div>
           </div>
 
-          {/* Info Card */}
-          <div className="rounded-2xl border border-border bg-gradient-to-br from-primary/5 to-transparent p-4 space-y-3">
-            <h4 className="font-semibold">How to Use</h4>
+          <div className="rounded-2xl border border-border/40 bg-gradient-to-br from-primary/5 to-transparent p-5 space-y-3">
+            <h4 className="font-semibold flex items-center gap-2">
+              <Sparkles className="w-4 h-4 text-primary" />
+              How to Use
+            </h4>
             <ul className="text-sm text-muted-foreground space-y-2">
               <li className="flex items-start gap-2">
-                <span className="text-primary">1.</span>
+                <ChevronRight className="w-4 h-4 text-primary mt-0.5 flex-shrink-0" />
                 <span>Add two or more PDF files</span>
               </li>
               <li className="flex items-start gap-2">
-                <span className="text-primary">2.</span>
+                <ChevronRight className="w-4 h-4 text-primary mt-0.5 flex-shrink-0" />
                 <span>Drag to reorder the files</span>
               </li>
               <li className="flex items-start gap-2">
-                <span className="text-primary">3.</span>
+                <ChevronRight className="w-4 h-4 text-primary mt-0.5 flex-shrink-0" />
                 <span>Click Merge to combine</span>
               </li>
               <li className="flex items-start gap-2">
-                <span className="text-primary">4.</span>
+                <ChevronRight className="w-4 h-4 text-primary mt-0.5 flex-shrink-0" />
                 <span>Download your merged PDF</span>
               </li>
             </ul>
           </div>
         </div>
       </div>
-    </motion.div>
+    </motion.div >
   );
 }

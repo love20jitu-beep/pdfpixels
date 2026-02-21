@@ -1,12 +1,12 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { ArrowLeft, Download, RotateCcw } from 'lucide-react';
-import Link from 'next/link';
+import { Download, RotateCcw, Sparkles, ChevronRight, Settings } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { useAppStore } from '@/store/app-store';
 import { FileUpload } from './file-upload';
+import { ToolPageHeader } from './tool-page-header';
 import { useState, useCallback } from 'react';
 import { toast } from 'sonner';
 import { Badge } from '@/components/ui/badge';
@@ -179,45 +179,53 @@ export function EffectWorkspace() {
 
   return (
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="container mx-auto px-4 lg:px-8 py-8">
-      <div className="flex items-center justify-between mb-8">
-        <div className="flex items-center gap-4">
-          <Link href="/" onClick={() => reset()} className="inline-flex items-center justify-center rounded-md text-sm font-medium hover:bg-accent hover:text-accent-foreground h-10 w-10" aria-label="Back"><ArrowLeft className="w-5 h-5" /></Link>
-          <div className="flex items-center gap-3">
-            <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center text-2xl">{config.emoji}</div>
-            <div><h1 className="text-2xl font-bold">{activeTool.name}</h1><p className="text-sm text-muted-foreground">{activeTool.description}</p></div>
-          </div>
-        </div>
-        {processedImage && <Button onClick={handleDownload} className="gap-2"><Download className="w-4 h-4" />Download</Button>}
-      </div>
+      <ToolPageHeader
+        title={activeTool.name}
+        description={activeTool.description}
+        emoji={config.emoji}
+        icon={null}
+        onReset={handleReset}
+      >
+        {processedImage && (
+          <Button onClick={handleDownload} className="gap-2 btn-premium rounded-xl">
+            <Download className="w-4 h-4" />Download
+          </Button>
+        )}
+      </ToolPageHeader>
 
       <div className="grid lg:grid-cols-3 gap-8">
         <div className="lg:col-span-2 space-y-6">
           <FileUpload />
           {processedImage && (
-            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="rounded-2xl border border-border overflow-hidden bg-card">
-              <div className="p-4 border-b border-border flex items-center justify-between">
-                <h3 className="font-medium">Result</h3>
-                <Badge variant="secondary" className="bg-green-500/10 text-green-600">Applied</Badge>
+            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="rounded-2xl border border-primary/30 bg-primary/5 overflow-hidden shadow-lg">
+              <div className="p-4 border-b border-primary/20 flex items-center justify-between">
+                <h3 className="font-semibold text-foreground">Result</h3>
+                <Badge variant="secondary" className="bg-green-500/10 text-green-600 dark:text-green-400 border-green-500/20">Applied</Badge>
               </div>
-              <div className="aspect-video bg-muted/50 flex items-center justify-center">
-                <img src={processedImage} alt="Processed" className="max-w-full max-h-full object-contain" />
+              <div className="aspect-video bg-muted/30 dark:bg-zinc-900 flex items-center justify-center p-4">
+                <img src={processedImage} alt="Processed" className="max-w-full max-h-full object-contain rounded-lg" />
               </div>
             </motion.div>
           )}
         </div>
 
         <div className="space-y-6">
-          <div className="rounded-2xl border border-border bg-card overflow-hidden">
-            <div className="p-4 border-b border-border"><h3 className="font-medium">Effect Settings</h3></div>
-            <div className="p-4 space-y-6">
+          <div className="rounded-2xl border border-border/40 bg-card/60 backdrop-blur-xl overflow-hidden shadow-premium">
+            <div className="p-5 border-b border-border/40 bg-gradient-to-r from-primary/10 to-transparent">
+              <h3 className="font-bold flex items-center gap-2.5 tracking-tight text-foreground">
+                <Settings className="w-4 h-4 text-primary" />
+                Effect Settings
+              </h3>
+            </div>
+            <div className="p-5 space-y-6">
               {config.hasIntensity && (
                 <div className="space-y-3">
                   <div className="flex items-center justify-between">
                     <Label>{config.label}</Label>
-                    <span className="text-sm font-mono text-primary">{intensity}%</span>
+                    <span className="text-sm font-mono font-bold text-primary bg-primary/10 px-2.5 py-0.5 rounded-lg">{intensity}%</span>
                   </div>
                   <Slider value={[intensity]} onValueChange={([v]) => setIntensity(v)} min={1} max={100} step={1} />
-                  <div className="flex justify-between text-xs text-muted-foreground"><span>Subtle</span><span>Strong</span></div>
+                  <div className="flex justify-between text-xs text-muted-foreground font-medium"><span>Subtle</span><span>Strong</span></div>
                 </div>
               )}
 
@@ -225,19 +233,66 @@ export function EffectWorkspace() {
                 <div className="space-y-3">
                   <div className="flex items-center justify-between">
                     <Label>Direction</Label>
-                    <span className="text-sm font-mono text-primary">{angle}°</span>
+                    <span className="text-sm font-mono font-bold text-primary bg-primary/10 px-2.5 py-0.5 rounded-lg">{angle}°</span>
                   </div>
                   <Slider value={[angle]} onValueChange={([v]) => setAngle(v)} min={0} max={360} step={15} />
                 </div>
               )}
 
               <div className="pt-2 space-y-3">
-                <Button className="w-full" onClick={handleProcess} disabled={!uploadedFile || isProcessing}>
-                  {isProcessing ? 'Processing...' : 'Apply Effect'}
+                <Button
+                  className="w-full btn-premium py-6 rounded-xl font-bold shadow-xl shadow-primary/20 hover:shadow-primary/40 transition-all"
+                  onClick={handleProcess}
+                  disabled={!uploadedFile || isProcessing}
+                  size="lg"
+                >
+                  {isProcessing ? (
+                    <>
+                      <motion.div
+                        animate={{ rotate: 360 }}
+                        transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
+                        className="w-5 h-5 border-2 border-primary-foreground/30 border-t-primary-foreground rounded-full mr-3"
+                      />
+                      Processing...
+                    </>
+                  ) : (
+                    <>
+                      <Sparkles className="w-5 h-5 mr-3" />
+                      Apply Effect
+                    </>
+                  )}
                 </Button>
-                <Button variant="outline" className="w-full gap-2" onClick={handleReset}><RotateCcw className="w-4 h-4" />Start Over</Button>
+                <Button
+                  variant="outline"
+                  className="w-full gap-2 rounded-xl py-6 hover:bg-destructive/5 hover:text-destructive hover:border-destructive/30 transition-colors bg-background/50"
+                  onClick={handleReset}
+                >
+                  <RotateCcw className="w-4 h-4" />
+                  Start Over
+                </Button>
               </div>
             </div>
+          </div>
+
+          {/* Tips Card */}
+          <div className="rounded-2xl border border-border/40 bg-gradient-to-br from-primary/5 to-transparent p-5 space-y-3">
+            <h4 className="font-semibold flex items-center gap-2">
+              <Sparkles className="w-4 h-4 text-primary" />Tips
+            </h4>
+            <ul className="text-sm text-muted-foreground space-y-2">
+              <li className="flex items-start gap-2">
+                <ChevronRight className="w-4 h-4 text-primary mt-0.5 flex-shrink-0" />
+                <span>All effects are processed locally in your browser</span>
+              </li>
+              <li className="flex items-start gap-2">
+                <ChevronRight className="w-4 h-4 text-primary mt-0.5 flex-shrink-0" />
+                <span>Adjust intensity slider before applying</span>
+              </li>
+              <li className="flex items-start gap-2">
+                <ChevronRight className="w-4 h-4 text-primary mt-0.5 flex-shrink-0" />
+                <span>Supports JPG, PNG, WebP, HEIC formats</span>
+              </li>
+            </ul>
           </div>
         </div>
       </div>

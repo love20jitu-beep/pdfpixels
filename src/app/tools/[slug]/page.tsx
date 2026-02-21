@@ -4,6 +4,8 @@ import { allTools, getToolBySlug } from '@/lib/tools-data';
 import { siteConfig } from '@/lib/seo-config';
 import { Suspense } from 'react';
 import { ToolPageClient } from '@/components/layout/tool-page-client';
+import { ToolContentSection } from '@/components/layout/tool-content-section';
+import { toolContentMap } from '@/lib/tool-content-data';
 
 function WorkspaceLoading() {
   return (
@@ -163,36 +165,31 @@ function getToolJsonLd(tool: ReturnType<typeof getToolBySlug>) {
     },
   });
 
-  // FAQPage schema — AEO optimization
+  // FAQPage schema — AEO optimization (uses tool-specific FAQs when available)
+  const contentData = toolContentMap[tool.slug];
+  const faqEntities = contentData?.faqs?.length
+    ? contentData.faqs.map(faq => ({
+      '@type': 'Question' as const,
+      name: faq.question,
+      acceptedAnswer: { '@type': 'Answer' as const, text: faq.answer },
+    }))
+    : [
+      {
+        '@type': 'Question' as const,
+        name: `Is ${tool.name} free to use?`,
+        acceptedAnswer: { '@type': 'Answer' as const, text: `Yes, ${tool.name} on PdfPixels is completely free to use with no registration required.` },
+      },
+      {
+        '@type': 'Question' as const,
+        name: `Is my data safe when using ${tool.name}?`,
+        acceptedAnswer: { '@type': 'Answer' as const, text: `Absolutely. ${tool.processing === 'client' ? 'Your files are processed entirely in your browser and never leave your device.' : 'Your files are processed securely on our servers and automatically deleted.'}` },
+      },
+    ];
+
   schemas.push({
     '@context': 'https://schema.org',
     '@type': 'FAQPage',
-    mainEntity: [
-      {
-        '@type': 'Question',
-        name: `Is ${tool.name} free to use?`,
-        acceptedAnswer: {
-          '@type': 'Answer',
-          text: `Yes, ${tool.name} on PdfPixels is completely free to use with no registration required. There are no limits on usage.`,
-        },
-      },
-      {
-        '@type': 'Question',
-        name: `Is my data safe when using ${tool.name}?`,
-        acceptedAnswer: {
-          '@type': 'Answer',
-          text: `Absolutely. ${tool.processing === 'client' ? 'Your files are processed entirely in your browser and never leave your device.' : 'Your files are processed securely on our servers and automatically deleted after processing. We never store your data.'}`,
-        },
-      },
-      {
-        '@type': 'Question',
-        name: `What formats does ${tool.name} support?`,
-        acceptedAnswer: {
-          '@type': 'Answer',
-          text: `${tool.name} supports all major image formats including JPG, JPEG, PNG, WebP, HEIC, GIF, and BMP. Output is available in multiple formats.`,
-        },
-      },
-    ],
+    mainEntity: faqEntities,
   });
 
   return schemas;
@@ -227,33 +224,13 @@ export default async function ToolPage({ params }: { params: Promise<{ slug: str
         />
       </Suspense>
 
-      {/* AI-Search-Friendly Content Section */}
-      <section className="container mx-auto px-4 lg:px-8 py-12 border-t border-border/30">
-        <div className="max-w-3xl mx-auto prose prose-sm dark:prose-invert">
-          <h2 className="text-xl font-bold mb-4">About {tool.name}</h2>
-          <p className="text-muted-foreground leading-relaxed">
-            {tool.description} This tool is part of PdfPixels&apos; free online toolkit.
-            {tool.isAI && ' Powered by advanced AI technology from OpenAI for professional-quality results.'}
-            {tool.processing === 'client' && ' All processing happens directly in your browser — your files never leave your device, ensuring complete privacy and security.'}
-            {tool.processing === 'server' && ' Files are processed securely on our servers and automatically deleted after processing.'}
-          </p>
-          <h3 className="text-lg font-semibold mt-6 mb-3">How to use {tool.name}</h3>
-          <ol className="text-muted-foreground space-y-2">
-            <li><strong>Upload:</strong> Drag and drop your file or click to browse. Supports JPG, PNG, WebP, HEIC, and more.</li>
-            <li><strong>Configure:</strong> Adjust settings like quality, size, effects, or format to match your needs.</li>
-            <li><strong>Download:</strong> Click process and download your result instantly. {tool.isAI ? 'AI processing takes 10-30 seconds.' : 'Results are instant.'}</li>
-          </ol>
-          <h3 className="text-lg font-semibold mt-6 mb-3">Why use PdfPixels?</h3>
-          <ul className="text-muted-foreground space-y-1">
-            <li>✅ 100% free — no hidden costs or subscriptions</li>
-            <li>✅ No registration or signup required</li>
-            <li>✅ {tool.processing === 'client' ? 'Client-side processing — files never leave your device' : 'Secure server processing with automatic file deletion'}</li>
-            <li>✅ Works on all devices — desktop, tablet, and mobile</li>
-            <li>✅ Supports all major image formats</li>
-            {tool.isAI && <li>✅ Powered by OpenAI for professional-quality results</li>}
-          </ul>
-        </div>
-      </section>
+      {/* Rich SEO/AEO/GEO Content Section */}
+      <ToolContentSection
+        toolSlug={tool.slug}
+        toolName={tool.name}
+        isAI={tool.isAI}
+        processing={tool.processing}
+      />
     </>
   );
 }

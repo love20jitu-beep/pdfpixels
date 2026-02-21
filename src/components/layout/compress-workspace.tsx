@@ -1,11 +1,10 @@
 'use client';
 
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowLeft, Download, RotateCcw, Minimize2 } from 'lucide-react';
+import { ArrowLeft, Download, Minimize2, Sparkles, ArrowRight, RefreshCw, Zap } from 'lucide-react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 import { useAppStore } from '@/store/app-store';
 import { FileUpload } from './file-upload';
 import { useState, useCallback, useEffect } from 'react';
@@ -19,6 +18,14 @@ interface CompressionResult {
   savedPercent: number;
   format?: string;
 }
+
+const PRESETS = [
+  { label: '50 KB', value: '50' },
+  { label: '100 KB', value: '100' },
+  { label: '200 KB', value: '200' },
+  { label: '500 KB', value: '500' },
+  { label: '1 MB', value: '1024' },
+];
 
 export function CompressWorkspace() {
   const { activeTool, uploadedFile, processedImage, isProcessing, reset, setIsProcessing, setProcessedImage, setProgress } = useAppStore();
@@ -152,75 +159,157 @@ export function CompressWorkspace() {
       <div className="space-y-6">
         <FileUpload accept={activeTool?.id.includes('pdf') ? '.pdf' : 'image/*'} />
 
-        {/* Action Row */}
-        {uploadedFile && (
+        {/* Action Row — shown when file is uploaded */}
+        {uploadedFile && !result && (
           <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="flex flex-col items-center gap-4 mt-8 mb-4 max-w-2xl mx-auto"
+            initial={{ opacity: 0, scale: 0.95, y: 10 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            className="flex flex-col items-center gap-5 mt-8 mb-2 max-w-2xl mx-auto"
           >
-            <div className="flex items-center justify-center gap-2">
-              <span className="text-[15px] font-medium text-foreground mr-1">Size:</span>
-              <Input
-                id="targetSize"
-                type="number"
-                min="5"
-                max="50000"
-                value={targetSize}
-                onChange={(e) => setTargetSize(e.target.value)}
-                className="h-[38px] w-20 text-center text-[15px] bg-white rounded-sm border-gray-300 focus-visible:ring-primary shadow-none"
-              />
-              <div className="h-[38px] bg-gray-500 text-white flex items-center justify-center px-2 text-sm font-medium rounded-sm">Kb</div>
+            {/* Target size pill */}
+            <div className="w-full bg-card/60 backdrop-blur-xl border border-border/60 shadow-xl shadow-primary/5 rounded-2xl p-4 space-y-4">
+              {/* KB Input row */}
+              <div className="flex items-center justify-center gap-3">
+                <span className="text-sm font-bold text-muted-foreground uppercase tracking-wider">Target Size</span>
+                <div className="flex items-center gap-1.5 bg-background/70 border border-border/60 rounded-xl px-3 py-1.5 shadow-inner">
+                  <Input
+                    id="targetSize"
+                    type="number"
+                    min="5"
+                    max="50000"
+                    value={targetSize}
+                    onChange={(e) => setTargetSize(e.target.value)}
+                    className="h-9 w-20 text-center text-lg font-mono font-bold bg-transparent border-none focus-visible:ring-0 px-0 shadow-none text-foreground"
+                  />
+                  <span className="text-sm font-bold text-primary">KB</span>
+                </div>
+              </div>
 
-              <Button
-                className="bg-[#5c5cb3] hover:bg-[#4d4d99] text-white h-[38px] px-5 rounded-sm ml-3 font-medium text-[15px] shadow-none"
-                onClick={handleProcess}
-                disabled={isProcessing}
-              >
-                {isProcessing ? 'Compressing...' : 'Reduce Size'}
-              </Button>
+              {/* Preset chips */}
+              <div className="flex flex-wrap items-center justify-center gap-2">
+                {PRESETS.map((p) => (
+                  <button
+                    key={p.value}
+                    onClick={() => setTargetSize(p.value)}
+                    className={`px-3 py-1.5 rounded-lg text-xs font-bold border transition-all duration-200 ${targetSize === p.value
+                        ? 'bg-primary text-primary-foreground border-primary shadow-md shadow-primary/25 scale-105'
+                        : 'bg-background/50 text-muted-foreground border-border/60 hover:border-primary/50 hover:text-primary hover:bg-primary/5'
+                      }`}
+                  >
+                    {p.label}
+                  </button>
+                ))}
+              </div>
             </div>
 
-            <p className="text-[13px] font-semibold text-indigo-800/80 tracking-wide mt-2">
-              Note:- You Can Compress Image Directly by Kb Target
+            {/* Compress button */}
+            <Button
+              className="btn-premium h-14 px-12 rounded-2xl font-bold text-base shadow-lg shadow-violet-500/25 transition-all group w-full max-w-xs"
+              onClick={handleProcess}
+              disabled={isProcessing}
+            >
+              {isProcessing ? (
+                <motion.div
+                  animate={{ rotate: 360 }}
+                  transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
+                  className="w-5 h-5 border-2 border-primary-foreground/30 border-t-primary-foreground rounded-full"
+                />
+              ) : (
+                <>
+                  <Zap className="w-5 h-5 mr-2 group-hover:scale-110 transition-transform" />
+                  Compress Image
+                </>
+              )}
+            </Button>
+
+            <p className="text-sm font-medium text-muted-foreground flex items-center gap-2">
+              <Sparkles className="w-4 h-4 text-primary animate-pulse-soft" />
+              Smart compression targets your exact KB size
             </p>
           </motion.div>
         )}
 
-        {/* Result Tracking */}
+        {/* Result */}
         <AnimatePresence>
-          {result && (
+          {result && processedImage && uploadedFile && (
             <motion.div
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 24 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
-              className="space-y-4 pt-2"
+              className="space-y-6 pt-2"
             >
+              {/* Savings headline */}
+              <div className="text-center space-y-1">
+                <motion.div
+                  initial={{ scale: 0.8, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  transition={{ delay: 0.15, type: 'spring', stiffness: 300 }}
+                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-green-500/10 border border-green-500/25 text-green-600 dark:text-green-400 font-bold text-lg shadow-sm"
+                >
+                  <span>↓ {result.savedPercent}% smaller</span>
+                  <Badge className="bg-green-500/20 text-green-700 dark:text-green-400 hover:bg-green-500/25 text-sm py-0.5">
+                    Saved {formatSize(result.originalSize - result.processedSize)}
+                  </Badge>
+                </motion.div>
+                <p className="text-sm text-muted-foreground font-medium flex items-center justify-center gap-2 pt-1">
+                  <span className="font-semibold text-foreground">{formatSize(result.originalSize)}</span>
+                  <ArrowRight className="w-3.5 h-3.5 text-primary" />
+                  <span className="font-semibold text-primary">{formatSize(result.processedSize)}</span>
+                </p>
+              </div>
+
+              {/* Before / After preview */}
               <div className="grid md:grid-cols-2 gap-4">
-                {/* Original */}
-                <div className="p-5 rounded-2xl border border-border bg-card/80 flex items-center justify-between">
-                  <div>
-                    <div className="text-sm font-medium text-muted-foreground mb-1">Original Size</div>
-                    <div className="text-2xl font-bold">{formatSize(result.originalSize)}</div>
+                {/* Before */}
+                <div className="rounded-2xl border border-border bg-card/60 overflow-hidden">
+                  <div className="px-4 py-2.5 border-b border-border/60 flex items-center justify-between">
+                    <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Before</span>
+                    <span className="text-xs font-bold text-muted-foreground bg-muted/60 px-2 py-0.5 rounded-md">{formatSize(result.originalSize)}</span>
+                  </div>
+                  <div className="p-3 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHJlY3Qgd2lkdGg9IjEwIiBoZWlnaHQ9IjEwIiBmaWxsPSIjZjBmMGYwIi8+PHJlY3QgeD0iMTAiIHk9IjEwIiB3aWR0aD0iMTAiIGhlaWdodD0iMTAiIGZpbGw9IiNmMGYwZjAiLz48L3N2Zz4=')] dark:bg-zinc-900 flex items-center justify-center min-h-[200px]">
+                    <img
+                      src={URL.createObjectURL(uploadedFile)}
+                      alt="Original"
+                      className="max-w-full max-h-[220px] object-contain rounded-lg shadow-sm"
+                    />
                   </div>
                 </div>
 
-                {/* Compressed */}
-                <div className="p-5 rounded-2xl border border-primary/30 bg-primary/5 flex items-center justify-between">
-                  <div>
-                    <div className="text-sm font-medium text-primary/80 mb-1">Compressed Size</div>
-                    <div className="flex items-center gap-3">
-                      <div className="text-2xl font-bold text-primary">{formatSize(result.processedSize)}</div>
-                      <Badge className="bg-green-500/15 text-green-700 dark:text-green-400 hover:bg-green-500/20 text-sm py-1">
-                        -{result.savedPercent}%
-                      </Badge>
-                    </div>
+                {/* After */}
+                <div className="rounded-2xl border border-primary/30 bg-primary/5 overflow-hidden">
+                  <div className="px-4 py-2.5 border-b border-primary/20 flex items-center justify-between">
+                    <span className="text-xs font-bold uppercase tracking-wider text-primary/80">After</span>
+                    <span className="text-xs font-bold text-primary bg-primary/10 px-2 py-0.5 rounded-md">{formatSize(result.processedSize)}</span>
                   </div>
-                  <Button onClick={handleDownload} className="gap-2 shadow-primary/25 h-12 px-6 rounded-xl">
-                    <Download className="w-5 h-5" />
-                    Download
-                  </Button>
+                  <div className="p-3 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHJlY3Qgd2lkdGg9IjEwIiBoZWlnaHQ9IjEwIiBmaWxsPSIjZjBmMGYwIi8+PHJlY3QgeD0iMTAiIHk9IjEwIiB3aWR0aD0iMTAiIGhlaWdodD0iMTAiIGZpbGw9IiNmMGYwZjAiLz48L3N2Zz4=')] dark:bg-zinc-900 flex items-center justify-center min-h-[200px]">
+                    <img
+                      src={result.imageUrl}
+                      alt="Compressed"
+                      className="max-w-full max-h-[220px] object-contain rounded-lg shadow-sm"
+                    />
+                  </div>
                 </div>
+              </div>
+
+              {/* Download + Reset row */}
+              <div className="flex flex-col sm:flex-row items-center gap-3 pt-1">
+                <Button
+                  onClick={handleDownload}
+                  className="btn-premium w-full sm:w-auto gap-2 h-13 px-8 rounded-2xl font-bold text-base shadow-lg shadow-primary/25 flex-1"
+                  size="lg"
+                >
+                  <Download className="w-5 h-5" />
+                  Download Compressed Image
+                </Button>
+                <Button
+                  variant="ghost"
+                  onClick={handleReset}
+                  className="w-full sm:w-auto gap-2 h-13 px-6 rounded-2xl font-medium text-muted-foreground hover:text-foreground"
+                  size="lg"
+                >
+                  <RefreshCw className="w-4 h-4" />
+                  Compress Another
+                </Button>
               </div>
             </motion.div>
           )}
