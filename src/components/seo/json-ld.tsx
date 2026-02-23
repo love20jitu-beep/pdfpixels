@@ -169,13 +169,13 @@ function BreadcrumbSchema() {
         '@type': 'ListItem',
         position: 2,
         name: 'Image Tools',
-        item: 'https://www.pdfpixels.com/compress-image',
+        item: 'https://www.pdfpixels.com/tools/compress-image',
       },
       {
         '@type': 'ListItem',
         position: 3,
         name: 'PDF Tools',
-        item: 'https://www.pdfpixels.com/merge-pdf',
+        item: 'https://www.pdfpixels.com/tools/merge-pdf',
       },
     ],
   };
@@ -232,7 +232,7 @@ function ServiceSchema() {
             '@type': 'Service',
             name: 'Image Compression',
             description: 'Reduce image file size while maintaining quality. Supports JPG, PNG, WebP, HEIC.',
-            url: 'https://www.pdfpixels.com/compress-image',
+            url: 'https://www.pdfpixels.com/tools/compress-image',
           },
         },
         {
@@ -241,7 +241,7 @@ function ServiceSchema() {
             '@type': 'Service',
             name: 'Image Resizing',
             description: 'Resize images to any dimension in pixels, cm, or inches with DPI control.',
-            url: 'https://www.pdfpixels.com/resize-image',
+            url: 'https://www.pdfpixels.com/tools/resize-image',
           },
         },
         {
@@ -250,7 +250,7 @@ function ServiceSchema() {
             '@type': 'Service',
             name: 'PDF Merge',
             description: 'Combine multiple PDF files into one document. Up to 500MB total.',
-            url: 'https://www.pdfpixels.com/merge-pdf',
+            url: 'https://www.pdfpixels.com/tools/merge-pdf',
           },
         },
         {
@@ -259,7 +259,7 @@ function ServiceSchema() {
             '@type': 'Service',
             name: 'PDF Split',
             description: 'Extract specific pages or split PDF into individual files.',
-            url: 'https://www.pdfpixels.com/split-pdf',
+            url: 'https://www.pdfpixels.com/tools/split-pdf',
           },
         },
         {
@@ -268,7 +268,7 @@ function ServiceSchema() {
             '@type': 'Service',
             name: 'Format Conversion',
             description: 'Convert between image formats: PNG to JPG, JPG to PNG, WebP, HEIC, AVIF.',
-            url: 'https://www.pdfpixels.com/png-to-jpg',
+            url: 'https://www.pdfpixels.com/tools/png-to-jpeg',
           },
         },
       ],

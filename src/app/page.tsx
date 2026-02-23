@@ -571,14 +571,14 @@ function CTASection() {
               </p>
               <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
                 <Link
-                  href="/compress-image"
+                  href="/tools/compress-image"
                   className="group inline-flex items-center gap-2.5 px-8 py-4 rounded-2xl btn-premium font-semibold text-sm relative z-10"
                 >
                   <span className="relative z-10">Try Compress Image</span>
                   <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform relative z-10" />
                 </Link>
                 <Link
-                  href="/resize-image"
+                  href="/tools/resize-image"
                   className="inline-flex items-center gap-2 px-8 py-4 rounded-2xl glass-card font-semibold text-sm hover:border-primary/40 transition-all hover:shadow-premium"
                 >
                   Resize Image

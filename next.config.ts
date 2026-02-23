@@ -249,6 +249,47 @@ const nextConfig: NextConfig = {
         destination: '/api/:path*',
         permanent: true,
       },
+      // Redirect standalone tool pages to dynamic slug pages
+      {
+        source: '/compress-image',
+        destination: '/tools/compress-image',
+        permanent: true,
+      },
+      {
+        source: '/resize-image',
+        destination: '/tools/resize-image',
+        permanent: true,
+      },
+      {
+        source: '/png-to-jpg',
+        destination: '/tools/png-to-jpeg',
+        permanent: true,
+      },
+      {
+        source: '/jpg-to-png',
+        destination: '/tools/jpeg-to-png',
+        permanent: true,
+      },
+      {
+        source: '/merge-pdf',
+        destination: '/tools/merge-pdf',
+        permanent: true,
+      },
+      {
+        source: '/split-pdf',
+        destination: '/tools/split-pdf',
+        permanent: true,
+      },
+      {
+        source: '/pdf-compress',
+        destination: '/tools/compress-pdf',
+        permanent: true,
+      },
+      {
+        source: '/image-to-pdf',
+        destination: '/tools/image-to-pdf',
+        permanent: true,
+      },
     ];
   },
 

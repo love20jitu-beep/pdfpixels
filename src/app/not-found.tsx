@@ -6,12 +6,12 @@ import { Home, Search, ArrowLeft } from 'lucide-react';
 
 export default function NotFound() {
     const popularTools = [
-        { name: 'Compress Image', href: '/compress-image' },
-        { name: 'Resize Image', href: '/resize-image' },
-        { name: 'PNG to JPG', href: '/png-to-jpg' },
-        { name: 'JPG to PNG', href: '/jpg-to-png' },
-        { name: 'Merge PDF', href: '/merge-pdf' },
-        { name: 'Split PDF', href: '/split-pdf' },
+        { name: 'Compress Image', href: '/tools/compress-image' },
+        { name: 'Resize Image', href: '/tools/resize-image' },
+        { name: 'PNG to JPG', href: '/tools/png-to-jpeg' },
+        { name: 'JPG to PNG', href: '/tools/jpeg-to-png' },
+        { name: 'Merge PDF', href: '/tools/merge-pdf' },
+        { name: 'Split PDF', href: '/tools/split-pdf' },
     ];
 
     return (

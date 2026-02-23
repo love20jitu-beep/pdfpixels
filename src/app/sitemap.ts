@@ -70,58 +70,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: (tool.popular || tool.isAI) ? 0.9 : 0.8,
   }));
 
-  // Direct tool page routes (for tools with dedicated routes)
-  const directToolPages: MetadataRoute.Sitemap = [
-    {
-      url: `${baseUrl}/compress-image`,
-      lastModified: now,
-      changeFrequency: 'weekly',
-      priority: 0.9,
-    },
-    {
-      url: `${baseUrl}/resize-image`,
-      lastModified: now,
-      changeFrequency: 'weekly',
-      priority: 0.9,
-    },
-    {
-      url: `${baseUrl}/png-to-jpg`,
-      lastModified: now,
-      changeFrequency: 'weekly',
-      priority: 0.9,
-    },
-    {
-      url: `${baseUrl}/jpg-to-png`,
-      lastModified: now,
-      changeFrequency: 'weekly',
-      priority: 0.9,
-    },
-    {
-      url: `${baseUrl}/merge-pdf`,
-      lastModified: now,
-      changeFrequency: 'weekly',
-      priority: 0.9,
-    },
-    {
-      url: `${baseUrl}/split-pdf`,
-      lastModified: now,
-      changeFrequency: 'weekly',
-      priority: 0.9,
-    },
-    {
-      url: `${baseUrl}/pdf-compress`,
-      lastModified: now,
-      changeFrequency: 'weekly',
-      priority: 0.9,
-    },
-    {
-      url: `${baseUrl}/image-to-pdf`,
-      lastModified: now,
-      changeFrequency: 'weekly',
-      priority: 0.8,
-    },
-  ];
-
   // Blog pages
   const blogPosts = getAllBlogPosts();
   const blogPages: MetadataRoute.Sitemap = [
@@ -139,5 +87,5 @@ export default function sitemap(): MetadataRoute.Sitemap {
     })),
   ];
 
-  return [...corePages, ...directToolPages, ...toolPages, ...blogPages, ...legalPages];
+  return [...corePages, ...toolPages, ...blogPages, ...legalPages];
 }
