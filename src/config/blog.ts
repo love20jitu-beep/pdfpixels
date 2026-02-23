@@ -382,5 +382,9 @@ export function getRelatedPosts(currentSlug: string, limit: number = 3): BlogPos
 }
 
 export function getAllBlogPosts(): BlogPost[] {
-    return blogPosts;
+    return [...blogPosts].sort((a, b) => {
+        const dateA = new Date(a.date).getTime();
+        const dateB = new Date(b.date).getTime();
+        return dateB - dateA;
+    });
 }

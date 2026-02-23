@@ -6,10 +6,12 @@ import { getAllBlogPosts } from "@/config/blog";
 import { siteConfig } from "@/lib/seo-config";
 import { Navigation } from "@/components/layout/navigation";
 import { Footer } from "@/components/layout/footer";
-import { Clock, User, ArrowRight, BookOpen, Sparkles } from "lucide-react";
+import { Clock, User, ArrowRight, BookOpen, Sparkles, CalendarDays } from "lucide-react";
+import { AnimatedMeshBg } from "@/components/ui/animated-mesh-bg";
+import { SpotlightCard } from "@/components/ui/spotlight-card";
 
 export const metadata: Metadata = {
-    title: "Blog - Image & PDF Tips, Guides & Tutorials",
+    title: "Blog - Image & PDF Tips, Guides & Tutorials | PdfPixels",
     description:
         "Expert guides on image editing, PDF tools, AI photo enhancement, background removal, and more. Free tutorials to help you master image and document processing in 2026.",
     keywords: [
@@ -112,134 +114,173 @@ export default function BlogPage() {
 
             <div className="min-h-screen bg-background">
                 {/* Hero Section */}
-                <section className="relative py-20 lg:py-28 overflow-hidden">
-                    <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-primary/5 blur-[120px] rounded-full -z-10" />
-                    <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-primary/3 blur-[100px] rounded-full -z-10" />
+                <section className="relative overflow-hidden border-b border-border/40 min-h-[40vh] flex flex-col justify-center">
+                    <AnimatedMeshBg />
 
-                    <div className="container mx-auto px-4 lg:px-8">
-                        <div className="text-center max-w-4xl mx-auto">
-                            <span className="inline-flex items-center gap-2 py-1.5 px-4 rounded-full bg-primary text-primary-foreground text-[10px] font-bold uppercase tracking-[0.2em] mb-8 shadow-lg">
-                                <BookOpen className="w-3 h-3" />
-                                Knowledge Hub
-                            </span>
-                            <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-foreground mb-8 tracking-tight">
-                                The{" "}
-                                <span className="gradient-text">
-                                    PdfPixels
-                                </span>{" "}
-                                Blog
-                            </h1>
-                            <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
-                                Practical guides, expert tips, and in-depth tutorials to help you get the most from your images and PDFs. No fluff — just actionable knowledge.
-                            </p>
-                        </div>
+                    <div className="relative z-10 container mx-auto px-4 lg:px-8 py-20 md:py-28 text-center">
+                        <span className="inline-flex items-center gap-2 py-1.5 px-4 rounded-full bg-primary/10 text-primary border border-primary/20 text-[10px] font-bold uppercase tracking-[0.2em] mb-8 shadow-sm backdrop-blur-md">
+                            <BookOpen className="w-3.5 h-3.5" />
+                            Knowledge Hub
+                        </span>
+                        <h1 className="text-4xl md:text-5xl lg:text-7xl font-extrabold text-foreground mb-6 tracking-tight drop-shadow-sm">
+                            The <span className="gradient-text">PdfPixels</span> Blog
+                        </h1>
+                        <p className="text-lg md:text-xl text-muted-foreground font-medium max-w-2xl mx-auto leading-relaxed">
+                            Practical guides, expert tips, and in-depth tutorials to help you get the most from your images and PDFs. No fluff — just actionable knowledge.
+                        </p>
                     </div>
                 </section>
 
                 {/* Featured Post */}
                 {featuredPost && (
-                    <section className="pb-20">
-                        <div className="container mx-auto px-4 lg:px-8">
-                            <div className="mb-10 flex items-center gap-6">
-                                <h2 className="text-sm font-bold text-muted-foreground uppercase tracking-widest flex items-center gap-2">
-                                    <Sparkles className="w-4 h-4 text-primary" />
+                    <section className="py-20 relative">
+                        {/* Decorative Background Glow */}
+                        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[600px] bg-primary/5 rounded-full blur-[120px] pointer-events-none" />
+
+                        <div className="container mx-auto px-4 lg:px-8 relative z-10 max-w-6xl">
+                            <div className="mb-10 flex items-center justify-center gap-4">
+                                <div className="h-px w-12 bg-gradient-to-r from-transparent to-primary/50" />
+                                <h2 className="text-sm font-bold text-primary uppercase tracking-[0.2em] flex items-center gap-2">
+                                    <Sparkles className="w-4 h-4" />
                                     Latest Article
                                 </h2>
-                                <div className="h-px flex-1 bg-border hidden md:block" />
+                                <div className="h-px w-12 bg-gradient-to-l from-transparent to-primary/50" />
                             </div>
 
                             <Link href={`/blog/${featuredPost.slug}`} className="block group">
-                                <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center p-6 md:p-10 bg-card border border-border rounded-3xl shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all duration-500 overflow-hidden">
-                                    {/* Cover Image */}
-                                    {featuredPost.coverImage && (
-                                        <div className="relative aspect-[16/10] rounded-2xl overflow-hidden shadow-md group-hover:shadow-lg transition-shadow">
-                                            <NextImage
-                                                src={featuredPost.coverImage}
-                                                alt={featuredPost.imageAlt || featuredPost.title}
-                                                fill
-                                                className="object-cover group-hover:scale-105 transition-transform duration-700"
-                                                priority
-                                            />
-                                        </div>
-                                    )}
+                                <SpotlightCard spotlightColor="rgba(99, 102, 241, 0.15)" className="p-2 sm:p-2 border border-border/60 bg-card/60 backdrop-blur-xl hover:border-primary/30 transition-all duration-300">
+                                    <div className="grid lg:grid-cols-2 gap-0 lg:gap-8 items-center rounded-3xl overflow-hidden">
 
-                                    {/* Content */}
-                                    <div>
-                                        <span className="inline-block px-3 py-1 text-xs font-bold bg-primary/10 text-primary rounded-full mb-6 uppercase tracking-wide">
-                                            {featuredPost.category}
-                                        </span>
-                                        <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-foreground mb-4 group-hover:text-primary transition-colors leading-tight tracking-tight">
-                                            {featuredPost.title}
-                                        </h2>
-                                        <p className="text-muted-foreground mb-8 text-base leading-relaxed line-clamp-3">
-                                            {featuredPost.excerpt}
-                                        </p>
-                                        <div className="flex flex-wrap items-center gap-6 text-sm text-muted-foreground">
-                                            <span className="flex items-center gap-2">
-                                                <User className="w-4 h-4 text-primary" />
-                                                {featuredPost.author}
-                                            </span>
-                                            <span className="flex items-center gap-2">
-                                                <Clock className="w-4 h-4 text-primary" />
-                                                {featuredPost.readTime}
-                                            </span>
-                                            <span>{featuredPost.date}</span>
+                                        {/* Cover Image Wrapper */}
+                                        <div className="relative aspect-[16/10] lg:aspect-square w-full h-full overflow-hidden rounded-2xl sm:rounded-[22px]">
+                                            {featuredPost.coverImage && (
+                                                <NextImage
+                                                    src={featuredPost.coverImage}
+                                                    alt={featuredPost.imageAlt || featuredPost.title}
+                                                    fill
+                                                    className="object-cover group-hover:scale-105 transition-transform duration-700 ease-in-out"
+                                                    priority
+                                                />
+                                            )}
+                                            {/* Inset Gradient Overlay */}
+                                            <div className="absolute inset-0 bg-gradient-to-t from-gray-900/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                                        </div>
+
+                                        {/* Content Wrapper */}
+                                        <div className="p-8 lg:p-12 xl:p-16 flex flex-col justify-center h-full">
+                                            <div className="flex items-center gap-3 mb-6 flex-wrap">
+                                                <span className="inline-block px-3 py-1 text-[11px] font-bold bg-primary/10 text-primary border border-primary/20 rounded-full uppercase tracking-widest shadow-sm">
+                                                    {featuredPost.category}
+                                                </span>
+                                                <span className="flex items-center gap-1.5 text-xs text-muted-foreground font-medium">
+                                                    <CalendarDays className="w-3.5 h-3.5" />
+                                                    {featuredPost.date}
+                                                </span>
+                                            </div>
+
+                                            <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-foreground mb-6 group-hover:text-primary transition-colors leading-[1.1] tracking-tight">
+                                                {featuredPost.title}
+                                            </h2>
+
+                                            <p className="text-muted-foreground mb-8 text-lg leading-relaxed line-clamp-3 font-medium">
+                                                {featuredPost.excerpt}
+                                            </p>
+
+                                            <div className="mt-auto pt-8 border-t border-border/50 flex flex-wrap items-center justify-between gap-4">
+                                                <div className="flex items-center gap-3">
+                                                    <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-primary to-violet-500 flex items-center justify-center text-white font-bold shadow-md">
+                                                        {featuredPost.author.charAt(0)}
+                                                    </div>
+                                                    <div>
+                                                        <p className="text-sm font-bold text-foreground">{featuredPost.author}</p>
+                                                        <p className="text-xs text-muted-foreground">{featuredPost.authorRole}</p>
+                                                    </div>
+                                                </div>
+                                                <span className="flex items-center gap-2 text-sm font-semibold text-primary group-hover:translate-x-1 transition-transform">
+                                                    Read Article <ArrowRight className="w-4 h-4" />
+                                                </span>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
+                                </SpotlightCard>
                             </Link>
                         </div>
                     </section>
                 )}
 
+                {/* Divider Line */}
+                {otherPosts.length > 0 && (
+                    <div className="container mx-auto px-4 lg:px-8 max-w-6xl">
+                        <div className="h-px bg-gradient-to-r from-transparent via-border to-transparent w-full" />
+                    </div>
+                )}
+
                 {/* Other Posts Grid */}
                 {otherPosts.length > 0 && (
-                    <section className="py-20 bg-muted/30">
-                        <div className="container mx-auto px-4 lg:px-8">
-                            <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-4">
-                                <div>
-                                    <span className="text-primary font-bold uppercase tracking-widest text-xs mb-3 block">
-                                        More Articles
-                                    </span>
-                                    <h2 className="text-3xl md:text-4xl font-bold text-foreground tracking-tight">
-                                        Latest Guides
-                                    </h2>
-                                </div>
-                                <p className="text-muted-foreground max-w-md text-sm">
+                    <section className="py-24 bg-muted/10">
+                        <div className="container mx-auto px-4 lg:px-8 max-w-6xl">
+                            <div className="text-center mb-16">
+                                <span className="inline-flex items-center gap-2 text-xs font-bold text-primary uppercase tracking-[0.2em] px-4 py-1.5 rounded-full bg-primary/8 border border-primary/15 mb-4">
+                                    More Articles
+                                </span>
+                                <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold mt-3 mb-4 tracking-tight">
+                                    Latest <span className="gradient-text">Guides</span>
+                                </h2>
+                                <p className="text-muted-foreground max-w-lg mx-auto font-medium">
                                     Deep dives into image optimization, PDF workflows, and AI-powered editing.
                                 </p>
                             </div>
 
-                            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
                                 {otherPosts.map((post) => (
-                                    <Link key={post.slug} href={`/blog/${post.slug}`} className="group">
-                                        <article className="h-full bg-card border border-border rounded-2xl overflow-hidden shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
+                                    <Link key={post.slug} href={`/blog/${post.slug}`} className="group h-full block">
+                                        <SpotlightCard className="h-full flex flex-col overflow-hidden bg-card/50 backdrop-blur-sm border-border/50 hover:border-primary/30 transition-all duration-300">
                                             {post.coverImage && (
-                                                <div className="relative aspect-[16/10] overflow-hidden">
+                                                <div className="relative aspect-[16/10] overflow-hidden rounded-t-2xl border-b border-border/50">
                                                     <NextImage
                                                         src={post.coverImage}
                                                         alt={post.imageAlt || post.title}
                                                         fill
-                                                        className="object-cover group-hover:scale-105 transition-transform duration-500"
+                                                        className="object-cover group-hover:scale-105 transition-transform duration-500 ease-out"
                                                     />
+                                                    <div className="absolute top-4 left-4">
+                                                        <span className="inline-block px-3 py-1 text-[10px] font-bold bg-background/90 backdrop-blur-md text-foreground border border-border/50 rounded-full uppercase tracking-wider shadow-sm">
+                                                            {post.category}
+                                                        </span>
+                                                    </div>
                                                 </div>
                                             )}
-                                            <div className="p-6">
-                                                <span className="text-xs font-bold text-primary bg-primary/10 px-2 py-1 rounded-md uppercase tracking-wide">
-                                                    {post.category}
-                                                </span>
-                                                <h3 className="text-lg font-bold text-foreground mt-3 mb-2 group-hover:text-primary transition-colors leading-tight">
+                                            <div className="p-6 md:p-8 flex flex-col flex-grow">
+                                                <div className="flex items-center gap-3 text-xs text-muted-foreground mb-4 font-medium">
+                                                    <span className="flex items-center gap-1.5">
+                                                        <CalendarDays className="w-3.5 h-3.5" />
+                                                        {post.date}
+                                                    </span>
+                                                    <span>•</span>
+                                                    <span className="flex items-center gap-1.5">
+                                                        <Clock className="w-3.5 h-3.5" />
+                                                        {post.readTime}
+                                                    </span>
+                                                </div>
+
+                                                <h3 className="text-xl font-bold text-foreground mb-3 group-hover:text-primary transition-colors leading-snug tracking-tight">
                                                     {post.title}
                                                 </h3>
-                                                <p className="text-muted-foreground text-sm line-clamp-2 mb-4">
+
+                                                <p className="text-muted-foreground text-sm leading-relaxed line-clamp-3 mb-6 flex-grow font-medium">
                                                     {post.excerpt}
                                                 </p>
-                                                <div className="flex items-center gap-4 text-xs text-muted-foreground">
-                                                    <span>{post.date}</span>
-                                                    <span>{post.readTime}</span>
+
+                                                <div className="flex items-center gap-3 pt-6 border-t border-border/50 mt-auto">
+                                                    <div className="w-8 h-8 rounded-full bg-gradient-to-br from-indigo-500/20 to-violet-500/20 flex items-center justify-center text-primary text-xs font-bold ring-1 ring-primary/20">
+                                                        {post.author.charAt(0)}
+                                                    </div>
+                                                    <span className="text-sm font-semibold text-foreground group-hover:text-primary transition-colors">
+                                                        {post.author}
+                                                    </span>
                                                 </div>
                                             </div>
-                                        </article>
+                                        </SpotlightCard>
                                     </Link>
                                 ))}
                             </div>
@@ -248,20 +289,21 @@ export default function BlogPage() {
                 )}
 
                 {/* CTA Section */}
-                <section className="py-24 relative overflow-hidden">
-                    <div className="absolute inset-0 bg-gradient-to-b from-transparent to-primary/5 -z-10" />
-                    <div className="container mx-auto px-4 lg:px-8 text-center">
-                        <h2 className="text-3xl md:text-5xl font-bold text-foreground mb-6 tracking-tight">
-                            Ready to{" "}
-                            <span className="gradient-text">Get Started</span>?
+                <section className="py-32 border-t border-border/50 relative overflow-hidden">
+                    <div className="absolute inset-0 bg-gradient-to-b from-transparent via-primary/[0.02] to-primary/5 -z-10" />
+                    <div className="absolute top-0 w-full h-px bg-gradient-to-r from-transparent via-primary/20 to-transparent" />
+
+                    <div className="container mx-auto px-4 lg:px-8 text-center max-w-3xl">
+                        <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-foreground mb-6 tracking-tight">
+                            Ready to <span className="gradient-text">Get Started</span>?
                         </h2>
-                        <p className="text-lg text-muted-foreground mb-10 max-w-xl mx-auto">
-                            Put these tips into action with our free suite of 40+ image and PDF tools. No sign-up required.
+                        <p className="text-lg md:text-xl text-muted-foreground font-medium mb-10 mx-auto leading-relaxed">
+                            Put these tips into action with our free suite of 38+ completely free image and PDF professional tools. No sign-ups required.
                         </p>
                         <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
                             <Link
                                 href="/"
-                                className="inline-flex items-center gap-2 px-8 py-4 bg-primary text-primary-foreground rounded-xl font-bold transition-all shadow-lg hover:shadow-xl hover:-translate-y-1 group"
+                                className="group inline-flex items-center justify-center gap-2.5 px-8 py-4 rounded-2xl btn-premium font-bold text-base shadow-xl shadow-primary/20 transition-all hover:-translate-y-1"
                             >
                                 Explore All Tools
                                 <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
