@@ -199,9 +199,6 @@ export default function RootLayout({
         <link rel="preconnect" href="https://pagead2.googlesyndication.com" />
         <link rel="preconnect" href="https://adservice.google.com" />
 
-        {/* Preload critical resources */}
-        <link rel="preload" href="/logo.svg" as="image" type="image/svg+xml" />
-
       </head>
       <body className={`${inter.variable} ${dmSans.variable} ${outfit.variable} antialiased bg-background text-foreground`}>
         <JsonLdSchemas />

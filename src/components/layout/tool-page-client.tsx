@@ -45,6 +45,11 @@ const ImageToPDFWorkspace = dynamic(
   { loading: () => <WorkspaceLoading />, ssr: false }
 );
 
+const PDFCompressWorkspace = dynamic(
+  () => import('@/components/layout/pdf-compress-workspace').then(mod => ({ default: mod.CompressPDFWorkspace })),
+  { loading: () => <WorkspaceLoading />, ssr: false }
+);
+
 const PDFToolsWorkspace = dynamic(
   () => import('@/components/layout/pdf-tools-workspace').then(mod => ({ default: mod.PDFToolsWorkspace })),
   { loading: () => <WorkspaceLoading />, ssr: false }
@@ -110,7 +115,7 @@ function getWorkspaceComponent(toolId: string) {
   if (toolId === 'pdf-merge') return <PDFMergeWorkspace />;
   if (toolId === 'pdf-split') return <PDFSplitWorkspace />;
   if (toolId === 'image-to-pdf') return <ImageToPDFWorkspace />;
-  if (toolId === 'pdf-compress') return <CompressWorkspace />;
+  if (toolId === 'pdf-compress') return <PDFCompressWorkspace />;
   if (toolId === 'pdf-to-image') return <ConvertWorkspace />;
   if (['pdf-rotate', 'pdf-watermark', 'pdf-protect', 'pdf-unlock', 'pdf-delete-pages', 'pdf-reorder'].includes(toolId)) {
     return <PDFToolsWorkspace />;
