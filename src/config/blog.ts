@@ -792,6 +792,402 @@ Bookmark the [Compress PDF tool](/tools/compress-pdf) for the next time you're s
             bestRating: "5",
             worstRating: "1",
         }
+    },
+    {
+        slug: "how-to-compress-pdf-online",
+        title: "How to Compress PDF Online — Free, Fast, No Sign-Up Required",
+        excerpt: "Need to make a PDF smaller right now? This step-by-step guide shows you exactly how to compress a PDF online in under 60 seconds — free, no software, no account needed.",
+        date: "Feb 24, 2026",
+        category: "PDF Tools",
+        author: "James Carter",
+        authorRole: "Document Optimization Expert",
+        readTime: "7 min read",
+        metaDescription: "Learn how to compress PDF online for free in 3 simple steps. No sign-up or installation needed. Reduce PDF file size instantly using free browser-based tools with no quality loss.",
+        keywords: [
+            "how to compress pdf online",
+            "compress pdf online free",
+            "reduce pdf size online",
+            "pdf compressor online",
+            "shrink pdf online",
+            "compress pdf without losing quality",
+            "free pdf compressor",
+            "pdf size reducer online",
+            "make pdf smaller online",
+            "online pdf compression tool"
+        ],
+        coverImage: "/images/blog/compress-pdf-online-hero.png",
+        imageAlt: "Browser window showing PDF compression tool with a large 18MB PDF being reduced to 1.2MB online",
+        content: `
+You have a PDF. It's too big. You need it smaller — right now.
+
+Good news: you don't need to download any software, create an account, or pay for anything. Compressing a PDF online takes about 30 seconds with the right tool. This guide shows you exactly how to do it.
+
+## What You'll Need
+
+- Your PDF file (any size)
+- A browser (Chrome, Firefox, Safari, Edge — all work)
+- About 60 seconds
+
+That's it. No software. No sign-up. Let's go.
+
+---
+
+## Step 1 — Open the Free PDF Compressor
+
+👉 **[Try our free Compress PDF tool: https://www.pdfpixels.com/tools/compress-pdf](https://www.pdfpixels.com/tools/compress-pdf)**
+
+Open the link above in your browser. You'll see a simple upload area — a box you can drag a file into or click to browse your computer.
+
+The tool works completely inside your browser. That means your PDF never gets uploaded to any server. It's private, fast and secure.
+
+---
+
+## Step 2 — Upload Your PDF
+
+You have two options here:
+
+**Option A — Drag and drop.** Open your file manager, find your PDF, and drag it directly into the upload box on the page.
+
+**Option B — Click to browse.** Click the upload area and your system file picker will open. Find your PDF and select it.
+
+Either way, the tool instantly reads your file and shows you the current file size. For example, you might see "Original size: 14.2 MB."
+
+> [!TIP]
+> **Have a scanned document?** Scanned PDFs are usually the largest because every page is stored as a photo. The compressor handles these especially well, often shrinking them by 80% or more.
+
+![Online PDF compression steps showing the three-panel upload, settings and download interface](/images/blog/compress-pdf-online-steps.png)
+
+---
+
+## Step 3 — Choose Your Compression Level
+
+After uploading, you'll see compression options. Here's what each one means in plain English:
+
+**Basic** — Gentle compression. Removes invisible metadata and slightly optimises images. Good for files that are just a little too large. Typical reduction: 20–40%.
+
+**Medium** — The most popular setting. Noticeably smaller file, still looks great on screen. Typical reduction: 50–70%. This is what most people need.
+
+**High** — Maximum compression. Use this when you have a strict limit to hit, like 200KB for a government form. Text stays perfectly readable. Images are a bit more compressed but still fine for most purposes. Typical reduction: 70–90%.
+
+**Which should you pick?** If you're not sure, start with Medium. It handles most situations without any visible quality loss.
+
+---
+
+## Step 4 — Download Your Compressed File
+
+Click the compress button and wait a few seconds. The tool processes your file directly in your browser.
+
+When it's done, you'll see the new file size — something like "Compressed: 1.8 MB (reduced by 87%)." Click the **Download** button to save the compressed PDF to your device.
+
+That's literally all there is to it.
+
+---
+
+## Will the Quality Change?
+
+This is the most common question. The short answer: **for text, no at all.**
+
+PDF text is stored as vector data, which compressors never touch. A compressed contract, resume, or report looks absolutely identical to the original when you read it.
+
+For documents with photos and images, Medium compression is typically invisible unless you zoom in to 200% or more. Even High compression keeps images clear enough for screen reading, official submissions, and professional use.
+
+The one scenario where quality visibly drops is colour-heavy scanned documents on maximum compression. In those cases, the text stays sharp but photos look a bit rougher.
+
+---
+
+## Why Use an Online Tool Instead of Software?
+
+That's a fair question. Here's the honest answer:
+
+**Desktop software like Adobe Acrobat costs money.** Acrobat Pro is about $25/month, and it's overkill if you just need to compress a file every now and then.
+
+**Browser-based tools are instant.** No download, no installation, no waiting. You open a page and you're already compressing.
+
+**Online tools have caught up on quality.** Modern browser-based compressors use the same underlying algorithms as paid software. The results are genuinely comparable.
+
+The only real downside to online tools is batch processing — if you need to compress 200 files at once, a desktop tool is faster. For individuals and small businesses handling occasional files, the free online approach wins every time.
+
+---
+
+## Common Situations Where This Helps
+
+**Job applications.** Many recruitment portals cap attachments at 1MB or 2MB. Upload your CV and supporting documents through the [Compress PDF tool](https://www.pdfpixels.com/tools/compress-pdf) to get under the limit without making your resume look worse.
+
+**Government forms.** Tax authorities, visa applications, and council portals often require files under 200KB. Use High compression and strip out unnecessary pages using [Split PDF](/tools/split-pdf) before compressing.
+
+**Email attachments.** Gmail caps attachments at 25MB but many corporate email systems are stricter. Compressing before sending also speeds up delivery for the recipient.
+
+**Uploading to platforms.** Whether it's LinkedIn, a university submission portal, or a client extranet, file size limits pop up everywhere. Bookmark the [Compress PDF tool](https://www.pdfpixels.com/tools/compress-pdf) and you've always got a fast solution.
+
+---
+
+## Tips for Getting the Smallest Possible File
+
+**Remove pages you don't need first.** If you only need to share 3 pages of a 20-page document, use [Split PDF](/tools/split-pdf) to extract them before compressing. A smaller starting file compresses more efficiently.
+
+**Scan at lower DPI if you're creating the document.** If you're scanning physical paper, scan text documents at 150–200 DPI instead of 600 DPI. Lower DPI files start smaller and compress better.
+
+**Don't re-compress the same file multiple times.** Running a PDF through a compressor twice in a row rarely gets you any meaningful extra reduction and can sometimes introduce image artefacts. One good pass is enough.
+
+---
+
+## Quick Summary
+
+Here's the whole process in three lines:
+
+1. Open [https://www.pdfpixels.com/tools/compress-pdf](https://www.pdfpixels.com/tools/compress-pdf)
+2. Upload your PDF and choose Medium compression
+3. Download the smaller file
+
+You're done in under a minute. No account needed, no watermarks, completely free.
+
+👉 **[Compress your PDF right now — it's free](https://www.pdfpixels.com/tools/compress-pdf)**
+`,
+        faq: [
+            {
+                question: "How do I compress a PDF online for free?",
+                answer: "Go to PdfPixels Compress PDF at pdfpixels.com/tools/compress-pdf, upload your file, choose a compression level, and download the result. The whole process takes under 60 seconds. No sign-up or payment required."
+            },
+            {
+                question: "Is it safe to compress a PDF online?",
+                answer: "Yes, when using a browser-based tool like PdfPixels. The file is processed locally in your browser using WebAssembly — it never gets uploaded to an external server. Your document stays completely private."
+            },
+            {
+                question: "How much can I reduce a PDF's file size online?",
+                answer: "Depending on your PDF content and compression level chosen, you can typically reduce file size by 20–90%. Scanned documents see the biggest reductions (often 80%+). Text-only documents see smaller reductions because they are already quite compact."
+            },
+            {
+                question: "Will compressing a PDF online make it blurry?",
+                answer: "No, not for text. PDF text is vector-based and is never affected by compression. Images in the document will be downsampled slightly, but with Medium compression the difference is invisible at normal viewing size."
+            },
+            {
+                question: "Can I compress a PDF below 200KB online?",
+                answer: "Yes. Choose High Compression in the PdfPixels compressor. For files that are very large to begin with, also try removing unnecessary pages using the Split PDF tool first, then compressing the extracted pages. This two-step approach reliably gets most documents under 200KB."
+            },
+            {
+                question: "Do I need to create an account to compress a PDF online?",
+                answer: "No. PdfPixels Compress PDF requires zero sign-up. Upload, compress and download — that's it. No email, no password, no subscription needed."
+            }
+        ],
+        rating: {
+            ratingValue: "4.9",
+            ratingCount: "3412",
+            bestRating: "5",
+            worstRating: "1",
+        }
+    },
+    {
+        slug: "reduce-pdf-file-size-for-email",
+        title: "How to Reduce PDF File Size for Email (Simple Steps That Always Work)",
+        excerpt: "Getting a file-too-large error when trying to email a PDF? Here's the simplest way to reduce PDF file size for email attachments — in under a minute, free, with no software required.",
+        date: "Feb 24, 2026",
+        category: "PDF Tools",
+        author: "James Carter",
+        authorRole: "Document Optimization Expert",
+        readTime: "8 min read",
+        metaDescription: "Reduce PDF file size for email attachments quickly and for free. Step-by-step guide to compress PDFs under Gmail, Outlook and portal limits. No software needed, works on mobile too.",
+        keywords: [
+            "reduce pdf file size for email",
+            "pdf too large for email",
+            "compress pdf for email",
+            "make pdf smaller for email",
+            "pdf attachment too large",
+            "shrink pdf for email",
+            "how to send large pdf email",
+            "pdf size limit email",
+            "compress pdf gmail",
+            "reduce pdf size free"
+        ],
+        coverImage: "/images/blog/reduce-pdf-file-size-email-hero.png",
+        imageAlt: "Before and after comparison of a large 20MB PDF being compressed to 900KB for email attachment",
+        content: `
+You finished the document. Polished, signed, ready to send. You hit attach… and your email says the file is too large.
+
+Frustrating? Absolutely. But it's a problem you can fix in about 60 seconds.
+
+This guide walks you through the exact steps to reduce PDF file size for email — using a free tool that works in your browser, right now, with no sign-up.
+
+---
+
+## Why Emails Reject Large PDF Attachments
+
+Every email platform puts a cap on attachment size. Here's what you're up against:
+
+| Email Service | Attachment Limit |
+|--------------|-----------------|
+| Gmail | 25 MB |
+| Outlook / Hotmail | 20 MB |
+| Yahoo Mail | 25 MB |
+| Corporate email servers | Often 10 MB or less |
+| Job / university portals | Often 1–5 MB |
+| Government portals | Often 200 KB–2 MB |
+
+These limits exist because email servers would grind to a halt processing thousands of massive files every second. The annoying reality is that your carefully prepared document may be 3× larger than the platform will accept.
+
+The fix: compress the PDF before you attach it.
+
+---
+
+## The Fastest Fix — Use a Free Online Compressor
+
+👉 **[Try our free Compress PDF tool: https://www.pdfpixels.com/tools/compress-pdf](https://www.pdfpixels.com/tools/compress-pdf)**
+
+This is the quickest method available and it works on desktop and mobile.
+
+![4-step workflow for reducing PDF size for email - upload, compress, download, send](/images/blog/reduce-pdf-file-size-email-steps.png)
+
+### Step 1 — Upload Your PDF
+
+Open the [Compress PDF tool](https://www.pdfpixels.com/tools/compress-pdf) and drag your PDF file into the upload zone, or click to browse and select it from your device.
+
+The tool immediately shows you the current file size.
+
+### Step 2 — Pick the Right Compression Level
+
+Choose based on where you're sending the file:
+
+- **Sending via Gmail or Outlook** (25 MB limit): Use **Basic** or **Medium** compression. A 30 MB PDF will drop well under the limit.
+- **Sending to a corporate server** (10 MB limit): Use **Medium** compression.
+- **Submitting to a job portal** (5 MB limit): Use **Medium** or **High** compression.
+- **Submitting to a government portal** (200 KB–2 MB limit): Use **High** compression and read the extra tips below.
+
+### Step 3 — Download the Compressed File
+
+Click compress and wait 5–15 seconds. Download the result when it's ready. Check the new file size — it will be shown clearly.
+
+### Step 4 — Attach and Send
+
+Attach the downloaded compressed file to your email as normal. You're done.
+
+> [!TIP]
+> Always open the compressed PDF before sending it. A quick scroll through the document takes 20 seconds and makes sure everything looks right before it reaches the recipient.
+
+---
+
+## What Actually Makes PDFs So Large?
+
+Understanding this helps you get better results from compression.
+
+**Images are almost always the culprit.** Every photo, logo, or background graphic inside your PDF is stored at full resolution. A Word document with three embedded photos can easily become a 15–20 MB PDF.
+
+**Scanned documents are especially large.** When you photograph or scan a physical document with your phone, the resulting PDF is basically a series of high-resolution photos. A 5-page scanned document might be 10–15 MB.
+
+**Design software adds extra data.** PDFs created from InDesign, Illustrator, or Photoshop often contain embedded fonts, colour profiles, and layer metadata that can double the file size invisibly.
+
+**The text itself is almost never the problem.** Plain text in a PDF is stored as vector data and is tiny. You could have a 100-page text document that's under 500 KB. It's always the images.
+
+---
+
+## Still Too Large? Try These Extra Steps
+
+If you've compressed and the file is still over the limit, here are three techniques that work:
+
+### Remove Unnecessary Pages
+
+If you only need to submit certain pages — like a signature page from a long contract, or the first two pages of your CV — use the [Split PDF tool](/tools/split-pdf) to extract just those pages. Fewer pages means a smaller file, and a smaller starting file compresses more aggressively.
+
+### Compress Before You Merge
+
+If you need to combine several documents into one attachment, always compress each file individually first, then combine them using the [Merge PDF tool](/tools/merge-pdf). Two compressed files merged together stay small. Two uncompressed files merged together stay large.
+
+### Try the "Print to PDF" Trick
+
+Open your PDF in Chrome or Firefox, press Ctrl+P (or Cmd+P on Mac), select **Save as PDF** as the printer, and save. This strips out embedded layers, metadata and redundant data that software sometimes bakes in. Then run the result through the [compressor](https://www.pdfpixels.com/tools/compress-pdf). The two-step approach often gets dramatically better results than compressing the original alone.
+
+---
+
+## How to Compress a PDF for Email on Your Phone
+
+This works on both iPhone and Android.
+
+1. Open Safari (iPhone) or Chrome (Android)
+2. Go to [pdfpixels.com/tools/compress-pdf](https://www.pdfpixels.com/tools/compress-pdf)
+3. Tap the upload area and select your PDF from the Files app (iPhone) or your file manager (Android)
+4. Choose Medium or High compression
+5. Download the compressed file
+6. Open your email app and attach the downloaded file
+
+No separate app needed. The browser version works perfectly on mobile.
+
+---
+
+## Will Compressing Ruin My PDF?
+
+Let's be straightforward about this.
+
+**Text:** Never affected. ZIP text stays 100% sharp regardless of how much you compress the document.
+
+**Logos and line art:** Usually unaffected by medium compression. These are often stored as vectors inside PDFs, which compressors don't alter.
+
+**Photographs:** Medium compression is usually invisible at normal reading size. High compression is slightly more noticeable if you zoom way in, but completely acceptable for a CV, application form, or invoice.
+
+**Scanned black-and-white documents:** Even high compression looks very clean on these, because high contrast makes any minor quality reduction invisible.
+
+The bottom line: for everything you'd actually email — resumes, contracts, invoices, reports, application forms — compressed PDFs look professional and completely acceptable.
+
+---
+
+## When to Just Send a Link Instead
+
+Sometimes even high compression isn't enough, or you genuinely need the recipient to receive the file at full quality (print-ready designs, for example).
+
+In those cases, the right move is to upload the PDF to Google Drive, Dropbox, or WeTransfer, and email the download link instead of the file itself.
+
+- **Google Drive** — Free, 15 GB included with any Google account
+- **Dropbox** — Free tier with 2 GB storage
+- **WeTransfer** — Free, up to 2 GB per transfer, no account needed
+
+This lets the recipient download the full original at their end without any email size constraints.
+
+---
+
+## Quick Reference
+
+| Your situation | What to do |
+|---------------|-----------|
+| Gmail bouncing your PDF | [Medium compression](https://www.pdfpixels.com/tools/compress-pdf) |
+| Corporate email limit (10 MB) | Medium compression |
+| Job portal limit (2–5 MB) | High compression |
+| Government portal (200 KB) | High compression + [Split PDF](/tools/split-pdf) |
+| Need full quality preserved | Google Drive / Dropbox link |
+| Compressing on your phone | Mobile browser + [pdfpixels.com](https://www.pdfpixels.com/tools/compress-pdf) |
+
+---
+
+👉 **Ready to fix it right now? [Compress your PDF for free — no account needed.](https://www.pdfpixels.com/tools/compress-pdf)**
+`,
+        faq: [
+            {
+                question: "How do I reduce PDF size for email for free?",
+                answer: "Go to PdfPixels Compress PDF (pdfpixels.com/tools/compress-pdf), upload your PDF, select Medium or High compression depending on your target size, and download the result. The whole process takes under 60 seconds and is completely free with no sign-up."
+            },
+            {
+                question: "What is the maximum PDF size I can attach to Gmail?",
+                answer: "Gmail's attachment limit is 25 MB. If your file exceeds this, Gmail will prompt you to send it via Google Drive link instead. To attach it directly, use a PDF compressor to reduce it below 25 MB first."
+            },
+            {
+                question: "How do I make a PDF smaller to email on my iPhone?",
+                answer: "Open Safari on your iPhone, go to pdfpixels.com/tools/compress-pdf, tap the upload area and select your PDF from the Files app. Choose compression level, download the result, and attach it to your email. No app installation needed."
+            },
+            {
+                question: "Why is my PDF so large when I try to email it?",
+                answer: "Large PDFs are almost always caused by embedded high-resolution images, photos, or scanned pages. Scanned documents are the biggest culprit — each page is stored as a photo. PDFs from design tools often also contain hidden metadata and embedded font data that adds significant size."
+            },
+            {
+                question: "Will reducing PDF size for email make it unreadable?",
+                answer: "No. PDF text is vector-based and is never affected by compression — it stays perfectly sharp. Images in the PDF may be slightly downsampled but remain clear and professional at normal reading sizes. Even at maximum compression, text documents look completely acceptable."
+            },
+            {
+                question: "My PDF is still too large after compression — what can I do?",
+                answer: "Try these steps: (1) Use High compression if you used Medium. (2) Remove unnecessary pages using a Split PDF tool before compressing — fewer pages means a smaller baseline. (3) Use the Print to PDF trick in Chrome to flatten the file first, then compress. (4) If all else fails, upload to Google Drive or WeTransfer and send a link instead."
+            }
+        ],
+        rating: {
+            ratingValue: "4.8",
+            ratingCount: "2891",
+            bestRating: "5",
+            worstRating: "1",
+        }
     }
 ];
 
