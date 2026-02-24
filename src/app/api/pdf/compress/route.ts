@@ -1,68 +1,78 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { PDFDocument } from 'pdf-lib';
+import { NextRequest } from 'next/server'
+import { spawn } from 'child_process'
+import fs from 'fs'
+import path from 'path'
+import os from 'os'
+import crypto from 'crypto'
 
-export async function POST(request: NextRequest) {
+export const runtime = 'nodejs'
+
+export async function POST(req: NextRequest) {
+  let inputPath = ''
+  let outputPath = ''
+
   try {
-    const formData = await request.formData();
-    const file = formData.get('file') as File;
-    const quality = formData.get('quality') as string || 'medium'; // 'low', 'medium', 'high'
-    const targetSize = formData.get('targetSize') ? parseInt(formData.get('targetSize') as string) : null; // in KB
-    
+    const form = await req.formData()
+    const file = form.get('file') as File
+
     if (!file) {
-      return NextResponse.json(
-        { error: 'No PDF file provided' },
-        { status: 400 }
-      );
+      return new Response(JSON.stringify({ error: 'No file uploaded' }), { status: 400 })
     }
 
-    const arrayBuffer = await file.arrayBuffer();
-    const pdfBytes = new Uint8Array(arrayBuffer);
-    const originalSize = arrayBuffer.byteLength;
-    
-    // Load the PDF
-    const pdf = await PDFDocument.load(pdfBytes, { ignoreEncryption: true });
-    
-    // Create a new PDF with optimized settings
-    const newPdf = await PDFDocument.create();
-    
-    // Copy all pages
-    const copiedPages = await newPdf.copyPages(pdf, pdf.getPageIndices());
-    for (const page of copiedPages) {
-      newPdf.addPage(page);
+    // size limit 25MB
+    if (file.size > 25 * 1024 * 1024) {
+      return new Response(JSON.stringify({ error: 'File too large (25MB max)' }), { status: 400 })
     }
-    
-    // Save with compression options
-    // pdf-lib doesn't have built-in image compression, but we can optimize the PDF structure
-    const saveOptions = {
-      useObjectStreams: true, // Better compression
-    };
-    
-    let compressedPdfBytes = await newPdf.save(saveOptions);
-    
-    // Note: For actual PDF compression with image downsampling, 
-    // you would need additional tools like Ghostscript or Sharp for images inside PDF
-    
-    const compressedSize = compressedPdfBytes.length;
-    const savedPercent = Math.round((1 - compressedSize / originalSize) * 100);
-    
-    // Convert to base64
-    const base64 = Buffer.from(compressedPdfBytes).toString('base64');
-    const dataUrl = `data:application/pdf;base64,${base64}`;
 
-    return NextResponse.json({
-      success: true,
-      pdfUrl: dataUrl,
-      fileName: `compressed-${Date.now()}.pdf`,
-      originalSize,
-      compressedSize,
-      savedPercent: Math.max(0, savedPercent),
-      pageCount: pdf.getPageCount(),
-    });
-  } catch (error) {
-    console.error('PDF compress error:', error);
-    return NextResponse.json(
-      { error: 'Failed to compress PDF', details: error instanceof Error ? error.message : 'Unknown error' },
-      { status: 500 }
-    );
+    const tempDir = os.tmpdir()
+
+    // SAFE random filenames
+    const id = crypto.randomUUID()
+    inputPath = path.join(tempDir, `${id}.pdf`)
+    outputPath = path.join(tempDir, `${id}-compressed.pdf`)
+
+    // write uploaded file
+    const buffer = Buffer.from(await file.arrayBuffer())
+    fs.writeFileSync(inputPath, buffer)
+
+    // ghostscript args
+    const args = [
+      '-sDEVICE=pdfwrite',
+      '-dCompatibilityLevel=1.4',
+      '-dPDFSETTINGS=/ebook',
+      '-dNOPAUSE',
+      '-dQUIET',
+      '-dBATCH',
+      `-sOutputFile=${outputPath}`,
+      inputPath
+    ]
+
+    // run ghostscript
+    await new Promise((resolve, reject) => {
+      const gs = spawn('gs', args)
+
+      gs.on('close', (code) => {
+        if (code === 0) resolve(true)
+        else reject(new Error('Ghostscript failed'))
+      })
+
+      gs.on('error', reject)
+    })
+
+    const compressed = fs.readFileSync(outputPath)
+
+    return new Response(compressed, {
+      headers: {
+        'Content-Type': 'application/pdf',
+        'Content-Disposition': 'attachment; filename="compressed.pdf"'
+      }
+    })
+
+  } catch (err) {
+    console.error(err)
+    return new Response(JSON.stringify({ error: 'Compression failed' }), { status: 500 })
+  } finally {
+    if (inputPath && fs.existsSync(inputPath)) fs.unlinkSync(inputPath)
+    if (outputPath && fs.existsSync(outputPath)) fs.unlinkSync(outputPath)
   }
 }
