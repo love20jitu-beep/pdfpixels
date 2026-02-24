@@ -401,13 +401,11 @@ export function JsonLdSchemas() {
   return (
     <>
       <KnowledgeGraphSchema />
-      <FAQSchema />
       <HowToSchemas />
       <BreadcrumbSchema />
       <SpeakableSchema />
       <ServiceSchema />
       <APISchema />
-      <AEOAnswerSchema />
       <MentionsSchema />
     </>
   );

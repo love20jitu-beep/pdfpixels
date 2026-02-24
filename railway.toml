@@ -1,0 +1,8 @@
+[build]
+builder = "NIXPACKS"
+
+[phases.setup]
+nixPkgs = ["ghostscript"]
+
+[start]
+cmd = "npm run start"
