@@ -131,12 +131,12 @@ export const metadata: Metadata = {
 
   // Verification tags for all major search engines
   verification: {
-    google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION || 'google-site-verification-code',
+    google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION || 'google1b97f335783a2de5',
     other: {
       // Bing Webmaster verification
-      'msvalidate.01': process.env.NEXT_PUBLIC_BING_SITE_VERIFICATION || 'bing-verification-code',
+      'msvalidate.01': process.env.NEXT_PUBLIC_BING_SITE_VERIFICATION || 'FB59613C2AC3152EE30F7AA64D5F67BA',
       // Yandex Webmaster verification
-      'yandex-verification': process.env.NEXT_PUBLIC_YANDEX_VERIFICATION || 'yandex-verification-code',
+      'yandex-verification': process.env.NEXT_PUBLIC_YANDEX_VERIFICATION || 'c91f89e27af42d74',
       // Baidu verification
       'baidu-site-verification': process.env.NEXT_PUBLIC_BAIDU_VERIFICATION || 'baidu-verification-code',
       // Naver verification
