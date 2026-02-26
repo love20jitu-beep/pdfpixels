@@ -10,6 +10,7 @@ import { AnimatedMeshBg } from '@/components/ui/animated-mesh-bg';
 import { SpotlightCard } from '@/components/ui/spotlight-card';
 import { toolCategories } from '@/lib/tools-data';
 import { faqData } from '@/lib/seo-config';
+import { HomePageSchemas } from '@/components/seo/json-ld';
 import {
   ArrowUp, Search, X, ChevronDown, Upload, Sliders,
   Download, Shield, Zap, Globe, Lock, FileImage,
@@ -607,6 +608,7 @@ export default function Home() {
       <Navigation />
 
       <main className="flex-1" role="main">
+        <HomePageSchemas />
         <ToolsSection />
         <StatsBanner />
         <HowItWorks />

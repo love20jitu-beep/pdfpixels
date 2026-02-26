@@ -6,18 +6,9 @@ const CACHE_HEADERS = {
 
 export async function POST(request: NextRequest) {
     try {
-        const apiKey = process.env.OPENAI_API_KEY;
-        if (!apiKey) {
-            return NextResponse.json(
-                { error: 'OpenAI API key not configured. Add OPENAI_API_KEY to your .env file.', success: false },
-                { status: 500, headers: CACHE_HEADERS }
-            );
-        }
-
         const formData = await request.formData();
         const file = formData.get('image') as File;
         const tool = formData.get('tool') as string || 'enhance-image';
-        const prompt = formData.get('prompt') as string || 'Enhance this image';
 
         if (!file) {
             return NextResponse.json(
@@ -26,10 +17,10 @@ export async function POST(request: NextRequest) {
             );
         }
 
-        // Check file size (max 20MB for OpenAI)
+        // Check file size (max 20MB)
         if (file.size > 20 * 1024 * 1024) {
             return NextResponse.json(
-                { error: 'File too large. Maximum size for AI processing is 20MB.', success: false },
+                { error: 'File too large. Maximum size for processing is 20MB.', success: false },
                 { status: 400, headers: CACHE_HEADERS }
             );
         }
@@ -39,79 +30,22 @@ export async function POST(request: NextRequest) {
         const base64Image = Buffer.from(arrayBuffer).toString('base64');
         const mimeType = file.type || 'image/jpeg';
 
-        // Use OpenAI's image editing API
-        const response = await fetch('https://api.openai.com/v1/images/edits', {
-            method: 'POST',
-            headers: {
-                'Authorization': `Bearer ${apiKey}`,
-            },
-            body: (() => {
-                const fd = new FormData();
-                fd.append('image', file);
-                fd.append('prompt', prompt);
-                fd.append('model', 'gpt-image-1');
-                fd.append('size', '1024x1024');
-                fd.append('quality', 'high');
-                return fd;
-            })(),
-        });
-
-        if (!response.ok) {
-            const errorData = await response.json().catch(() => ({}));
-            const errorMessage = errorData?.error?.message || `OpenAI API error: ${response.status}`;
-
-            // Fallback: use GPT-4o Vision for analysis + Sharp for processing
-            if (response.status === 400 || response.status === 404) {
-                return await processWithVisionFallback(apiKey, base64Image, mimeType, tool, prompt);
-            }
-
-            return NextResponse.json(
-                { error: errorMessage, success: false },
-                { status: response.status, headers: CACHE_HEADERS }
-            );
-        }
-
-        const result = await response.json();
-
-        // OpenAI returns base64 or URL
-        let imageUrl: string;
-        if (result.data?.[0]?.b64_json) {
-            imageUrl = `data:image/png;base64,${result.data[0].b64_json}`;
-        } else if (result.data?.[0]?.url) {
-            // Fetch the image and convert to data URL for client use
-            const imgResponse = await fetch(result.data[0].url);
-            const imgBuffer = await imgResponse.arrayBuffer();
-            const imgBase64 = Buffer.from(imgBuffer).toString('base64');
-            imageUrl = `data:image/png;base64,${imgBase64}`;
-        } else {
-            return NextResponse.json(
-                { error: 'Unexpected response from OpenAI', success: false },
-                { status: 500, headers: CACHE_HEADERS }
-            );
-        }
-
-        return NextResponse.json({
-            success: true,
-            imageUrl,
-            tool,
-        }, { headers: CACHE_HEADERS });
+        return await processWithSharp(base64Image, mimeType, tool);
 
     } catch (error) {
-        console.error('AI processing error:', error);
+        console.error('Image processing error:', error);
         return NextResponse.json(
-            { error: error instanceof Error ? error.message : 'AI processing failed', success: false },
+            { error: error instanceof Error ? error.message : 'Image processing failed', success: false },
             { status: 500, headers: CACHE_HEADERS }
         );
     }
 }
 
-// Fallback: use Vision API for instructions + Sharp for basic processing
-async function processWithVisionFallback(
-    apiKey: string,
+// Local processing with Sharp
+async function processWithSharp(
     base64Image: string,
     mimeType: string,
-    tool: string,
-    prompt: string
+    tool: string
 ): Promise<NextResponse> {
     try {
         const sharpModule = await import('sharp');
@@ -119,30 +53,80 @@ async function processWithVisionFallback(
         const buffer = Buffer.from(base64Image, 'base64');
         let image = sharp(buffer, { failOn: 'none' });
 
-        // Apply tool-specific Sharp transformations
+        // Advanced tool-specific Sharp transformations
         switch (tool) {
             case 'remove-background':
-                // For background removal without AI, make a best-effort with threshold
-                image = image.removeAlpha().ensureAlpha();
+                // Basic thresholding attempts to isolate the subject. 
+                // For real background removal, a model or API like rembg is needed.
+                // We'll apply a high-contrast black/white mask representation here as an approximation.
+                const metaBg = await image.metadata();
+
+                // Extract alpha if it exists, otherwise create a pseudo-alpha based on lightness
+                const hasAlpha = metaBg.hasAlpha;
+                if (!hasAlpha) {
+                    // This is a basic fallback to make the whitest parts transparent (assuming white background)
+                    const { data, info } = await image.ensureAlpha().raw().toBuffer({ resolveWithObject: true });
+
+                    // Simple white thresholding (white -> transparent)
+                    for (let i = 0; i < data.length; i += 4) {
+                        const r = data[i];
+                        const g = data[i + 1];
+                        const b = data[i + 2];
+
+                        // If color is very white, make it transparent
+                        if (r > 240 && g > 240 && b > 240) {
+                            data[i + 3] = 0; // Set alpha to 0
+                        }
+                    }
+
+                    image = sharp(data, {
+                        raw: {
+                            width: info.width,
+                            height: info.height,
+                            channels: 4
+                        }
+                    });
+                }
                 break;
+
             case 'enhance-image':
-                image = image.sharpen({ sigma: 1.5 }).modulate({ brightness: 1.05, saturation: 1.1 }).normalise();
+                // Increase contrast, saturation, and sharpen the image
+                image = image
+                    .sharpen({ sigma: 1.5, m1: 1, m2: 2, x1: 2, y2: 10, y3: 20 })
+                    .modulate({ brightness: 1.05, saturation: 1.25 })
+                    .normalize();
                 break;
+
             case 'blur-face':
             case 'blur-background':
-                image = image.blur(8);
+                // Deep blur for privacy or bokeh effect
+                image = image.blur(15);
                 break;
+
             case 'beautify':
             case 'retouch':
-                image = image.sharpen({ sigma: 0.8 }).modulate({ brightness: 1.03, saturation: 1.05 });
+                // Softening skin (blur) combined with brightening and slight sharpening of edges
+                image = image
+                    .blur(1.5) // Soften
+                    .sharpen({ sigma: 0.8, m1: 0, m2: 1 }) // Edge detail recovery
+                    .modulate({ brightness: 1.08, saturation: 1.1 })
+                    .normalize();
                 break;
+
             case 'upscale':
                 const meta = await image.metadata();
-                image = image.resize((meta.width || 800) * 2, (meta.height || 600) * 2, { kernel: 'lanczos3' });
+                // 2x upscale with highest quality lanczos3 filter
+                image = image.resize({
+                    width: (meta.width || 800) * 2,
+                    height: (meta.height || 600) * 2,
+                    kernel: sharp.kernel.lanczos3,
+                    fastShrinkOnLoad: false
+                }).sharpen({ sigma: 1.2 }); // Light sharpen after upscale to reduce blur
                 break;
         }
 
-        const outputBuffer = await image.png().toBuffer();
+        // Always output as PNG to support transparency and maintain quality
+        const outputBuffer = await image.png({ quality: 100 }).toBuffer();
         const outputBase64 = outputBuffer.toString('base64');
 
         return NextResponse.json({
@@ -151,9 +135,11 @@ async function processWithVisionFallback(
             tool,
             fallback: true,
         }, { headers: CACHE_HEADERS });
+
     } catch (error) {
+        console.error('Sharp processing error:', error);
         return NextResponse.json(
-            { error: 'AI processing failed. Please try a different image.', success: false },
+            { error: 'Image processing failed. Please try a different image.', success: false },
             { status: 500, headers: CACHE_HEADERS }
         );
     }

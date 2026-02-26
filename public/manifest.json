@@ -48,7 +48,7 @@
       "name": "Compress Image",
       "short_name": "Compress",
       "description": "Compress image file size",
-      "url": "/?tool=compress",
+      "url": "/tools/compress-image",
       "icons": [
         {
           "src": "/logo.svg",
@@ -60,7 +60,7 @@
       "name": "Resize Image",
       "short_name": "Resize",
       "description": "Resize image dimensions",
-      "url": "/?tool=resize",
+      "url": "/tools/resize-image",
       "icons": [
         {
           "src": "/logo.svg",
@@ -72,7 +72,7 @@
       "name": "Merge PDF",
       "short_name": "Merge PDF",
       "description": "Combine multiple PDFs",
-      "url": "/?tool=pdf-merge",
+      "url": "/tools/merge-pdf",
       "icons": [
         {
           "src": "/logo.svg",

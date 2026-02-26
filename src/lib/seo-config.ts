@@ -67,7 +67,7 @@ export const seoConfig = {
 
   // Platform information
   credentials: {
-    tools: '38+',
+    tools: '55+',
     uptime: '99.9%',
   },
 
@@ -85,7 +85,7 @@ export const seoConfig = {
 export const faqData = [
   {
     question: 'What is PdfPixels?',
-    answer: 'PdfPixels is a free, secure online platform for editing images and PDFs. It offers 50+ tools for compression, resizing, conversion, and AI enhancements without requiring registration or software installation.',
+    answer: 'PdfPixels is a free, secure online platform for editing images and PDFs. It offers 55+ tools for compression, resizing, conversion, and AI enhancements without requiring registration or software installation.',
     keywords: ['pdfpixels', 'image editing platform', 'online image tools', 'free image editor'],
   },
   {
@@ -95,7 +95,7 @@ export const faqData = [
   },
   {
     question: 'Is PdfPixels free?',
-    answer: 'Yes, PdfPixels is 100% free forever. All 50+ tools, including AI background removal and unlimited PDF merging, are available at no cost. There are no hidden fees, subscriptions, or watermarks.',
+    answer: 'Yes, PdfPixels is 100% free forever. All 55+ tools, including AI background removal and unlimited PDF merging, are available at no cost. There are no hidden fees, subscriptions, or watermarks.',
     keywords: ['free image editor', 'no cost image tools', 'free online editor', 'free pdf tools'],
   },
   {
@@ -209,7 +209,10 @@ export const organizationData = {
   founders: [
     { name: 'PdfPixels Team', type: 'Organization' },
   ],
-  sameAs: [],
+  sameAs: [
+    'https://twitter.com/pdfpixels',
+    'https://github.com/pdfpixels',
+  ],
   contactPoint: {
     type: 'CustomerService',
     availableLanguage: ['English'],

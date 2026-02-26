@@ -402,11 +402,21 @@ export function JsonLdSchemas() {
     <>
       <KnowledgeGraphSchema />
       <HowToSchemas />
-      <BreadcrumbSchema />
       <SpeakableSchema />
       <ServiceSchema />
       <APISchema />
       <MentionsSchema />
+    </>
+  );
+}
+
+// Homepage-specific schemas — only render on the homepage where FAQ content is visible
+export function HomePageSchemas() {
+  return (
+    <>
+      <FAQSchema />
+      <AEOAnswerSchema />
+      <BreadcrumbSchema />
     </>
   );
 }
