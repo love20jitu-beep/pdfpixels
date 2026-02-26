@@ -76,9 +76,15 @@ export const metadata: Metadata = {
   // Icons
   icons: {
     icon: [
+      { url: '/favicon.ico', sizes: '32x32', type: 'image/x-icon' },
+      { url: '/favicon-16.png', sizes: '16x16', type: 'image/png' },
+      { url: '/favicon-32.png', sizes: '32x32', type: 'image/png' },
+      { url: '/favicon-96.png', sizes: '96x96', type: 'image/png' },
+      { url: '/icon-192.png', sizes: '192x192', type: 'image/png' },
+      { url: '/icon-512.png', sizes: '512x512', type: 'image/png' },
       { url: '/logo.svg', type: 'image/svg+xml' },
-      { url: '/favicon.ico', sizes: 'any' },
     ],
+    shortcut: '/favicon.ico',
     apple: [
       { url: '/apple-touch-icon.png', sizes: '180x180', type: 'image/png' },
     ],
@@ -137,12 +143,6 @@ export const metadata: Metadata = {
       'msvalidate.01': process.env.NEXT_PUBLIC_BING_SITE_VERIFICATION || 'FB59613C2AC3152EE30F7AA64D5F67BA',
       // Yandex Webmaster verification
       'yandex-verification': process.env.NEXT_PUBLIC_YANDEX_VERIFICATION || 'c91f89e27af42d74',
-      // Baidu verification
-      'baidu-site-verification': process.env.NEXT_PUBLIC_BAIDU_VERIFICATION || 'baidu-verification-code',
-      // Naver verification
-      'naver-site-verification': process.env.NEXT_PUBLIC_NAVER_SITE_VERIFICATION || 'naver-verification-code',
-      // Pinterest verification
-      'p:domain_verify': process.env.NEXT_PUBLIC_PINTEREST_VERIFICATION || 'pinterest-verification-code',
     },
   },
 
@@ -198,6 +198,15 @@ export default function RootLayout({
         {/* Preconnect for Google AdSense */}
         <link rel="preconnect" href="https://pagead2.googlesyndication.com" />
         <link rel="preconnect" href="https://adservice.google.com" />
+
+        {/* Explicit Favicon Links - Critical for Google Search logo */}
+        <link rel="shortcut icon" href="/favicon.ico" />
+        <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
+        <link rel="icon" type="image/png" sizes="96x96" href="/favicon-96.png" />
+        <link rel="icon" type="image/svg+xml" href="/logo.svg" />
+        <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
 
       </head>
       <body className={`${inter.variable} ${dmSans.variable} ${outfit.variable} antialiased bg-background text-foreground`}>
