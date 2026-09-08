@@ -61,13 +61,11 @@ export async function POST(request: NextRequest) {
       console.warn('Ghostscript PDF/A conversion failed, falling back to pdf-lib metadata tagging:', gsError);
     }
 
-    // Fallback: Embed PDF/A metadata if Ghostscript was unable to run
     if (!processedBytes || processedBytes.length === 0) {
-      pdf.setTitle(file?.name?.replace(/\.pdf$/i, '') || 'Archival Document');
-      pdf.setProducer('PdfPixels Archival Engine (PDF/A Compliant)');
-      pdf.setCreator('PdfPixels (https://www.pdfpixels.com)');
-      pdf.setModificationDate(new Date());
-      processedBytes = await pdf.save();
+      return apiError(
+        'PDF/A conversion requires Ghostscript which is not available on this server. Please try again later.',
+        503
+      );
     }
 
     const baseName = file?.name ? file.name.replace(/\.pdf$/i, '') : 'document';

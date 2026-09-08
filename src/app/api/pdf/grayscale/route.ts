@@ -56,9 +56,11 @@ export async function POST(request: NextRequest) {
       console.warn('Ghostscript grayscale failed, using pdf-lib fallback:', gsError);
     }
 
-    // Fallback: save through pdf-lib if Ghostscript fails or is unavailable
     if (!processedBytes || processedBytes.length === 0) {
-      processedBytes = await pdf.save();
+      return apiError(
+        'Grayscale conversion requires Ghostscript which is not available on this server. Please try again later.',
+        503
+      );
     }
 
     const baseName = file?.name ? file.name.replace(/\.pdf$/i, '') : 'document';

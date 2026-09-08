@@ -56,6 +56,17 @@ export async function POST(request: NextRequest) {
         ? pageHeight - box.y - box.height
         : box.y;
 
+      // Draw white rectangle to visually blank the area first
+      page.drawRectangle({
+        x: Math.max(0, box.x),
+        y: Math.max(0, yPos),
+        width: box.width,
+        height: box.height,
+        color: rgb(1, 1, 1),
+        borderWidth: 0,
+        opacity: 1.0,
+      });
+      // Draw black redaction box on top
       page.drawRectangle({
         x: Math.max(0, box.x),
         y: Math.max(0, yPos),
@@ -79,7 +90,10 @@ export async function POST(request: NextRequest) {
     const outBytes = await pdf.save();
     const fileName = file!.name ? file!.name.replace(/\.pdf$/i, '-redacted.pdf') : `redacted-${Date.now()}.pdf`;
 
-    return pdfBinaryResponse(outBytes, fileName);
+    return pdfBinaryResponse(outBytes, fileName, {
+      'x-redaction-type': 'visual-overlay',
+      'x-redaction-count': String(redactions.length),
+    });
   } catch (error) {
     console.error('PDF redact error:', error);
     return apiError(error instanceof Error ? error.message : 'Failed to redact PDF', 500);

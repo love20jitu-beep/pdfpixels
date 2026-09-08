@@ -1,52 +1,72 @@
 import { apiError } from '@/lib/api-response';
 import { openEditablePdf } from '@/lib/pdf-api';
 import { NextRequest, NextResponse } from 'next/server';
+import { inflateSync } from 'zlib';
 
 export const maxDuration = 60;
 export const runtime = 'nodejs';
 
 /**
  * Extracts plain text from a raw PDF buffer by parsing content streams,
- * Tj, TJ, and ' / " operators, decoding standard escape sequences and octal codes.
+ * including FlateDecode compressed streams. Handles Tj, TJ, and ' / " operators.
  */
 function extractTextFromPdfBuffer(buffer: Buffer): string {
   const content = buffer.toString('latin1');
   const textPieces: string[] = [];
 
-  // Match text stream objects between BT (Begin Text) and ET (End Text)
-  const streamRegex = /BT[\s\S]*?ET/g;
+  // 1. Extract and decompress all stream content
+  const allStreams: string[] = [];
+  const streamRegex = /stream\r?\n([\s\S]*?)\r?\nendstream/g;
+  let sMatch: RegExpExecArray | null;
+
+  while ((sMatch = streamRegex.exec(content)) !== null) {
+    const rawBytes = Buffer.from(sMatch[1], 'latin1');
+    // Try to inflate (FlateDecode); if fails, use raw
+    let decoded: string;
+    try {
+      decoded = inflateSync(rawBytes).toString('latin1');
+    } catch {
+      decoded = sMatch[1];
+    }
+    allStreams.push(decoded);
+  }
+
+  const fullContent = allStreams.join('\n');
+
+  // 2. Parse BT...ET text blocks from all decoded streams
+  const btEtRegex = /BT[\s\S]*?ET/g;
   let match: RegExpExecArray | null;
 
-  while ((match = streamRegex.exec(content)) !== null) {
+  while ((match = btEtRegex.exec(fullContent)) !== null) {
     const stream = match[0];
 
-    // 1. Matches (Text) Tj or (Text) ' or (Text) "
+    // Matches (Text) Tj or (Text) ' or (Text) "
     const tjRegex = /\((.*?)\)\s*(?:Tj|'|")/g;
     let tjMatch: RegExpExecArray | null;
     while ((tjMatch = tjRegex.exec(stream)) !== null) {
       textPieces.push(decodePdfString(tjMatch[1]));
     }
 
-    // 2. Matches [(Text)-100(More)-50] TJ
+    // Matches [(Text)-100(More)-50] TJ
     const tjArrayRegex = /\[(.*?)\]\s*TJ/g;
     let arrayMatch: RegExpExecArray | null;
     while ((arrayMatch = tjArrayRegex.exec(stream)) !== null) {
       const inner = arrayMatch[1];
       const strRegex = /\((.*?)\)/g;
-      let sMatch: RegExpExecArray | null;
+      let innerMatch: RegExpExecArray | null;
       let line = '';
-      while ((sMatch = strRegex.exec(inner)) !== null) {
-        line += decodePdfString(sMatch[1]);
+      while ((innerMatch = strRegex.exec(inner)) !== null) {
+        line += decodePdfString(innerMatch[1]);
       }
       if (line.trim()) textPieces.push(line);
     }
   }
 
-  // Fallback: If no BT...ET blocks found (e.g. uncompressed or plain streams)
+  // Fallback: If no BT...ET blocks found
   if (textPieces.length === 0) {
     const rawParenRegex = /\(([A-Za-z0-9 .,;:!?'"/\-_#@$%&*+=<>()]{3,})\)/g;
     let rawMatch: RegExpExecArray | null;
-    while ((rawMatch = rawParenRegex.exec(content)) !== null) {
+    while ((rawMatch = rawParenRegex.exec(fullContent)) !== null) {
       const decoded = decodePdfString(rawMatch[1]);
       if (decoded.length > 2 && !/^Font|ColorSpace|Metadata|Encoding|ProcSet/i.test(decoded)) {
         textPieces.push(decoded);
