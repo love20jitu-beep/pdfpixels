@@ -56,6 +56,66 @@ const PDFToolsWorkspace = dynamic(
   { loading: () => <WorkspaceLoading />, ssr: false }
 );
 
+const PDFSignWorkspace = dynamic(
+  () => import('@/components/layout/pdf-sign-workspace').then(mod => ({ default: mod.PDFSignWorkspace })),
+  { loading: () => <WorkspaceLoading />, ssr: false }
+);
+
+const PDFRedactWorkspace = dynamic(
+  () => import('@/components/layout/pdf-redact-workspace').then(mod => ({ default: mod.PDFRedactWorkspace })),
+  { loading: () => <WorkspaceLoading />, ssr: false }
+);
+
+const PDFFlattenWorkspace = dynamic(
+  () => import('@/components/layout/pdf-flatten-workspace').then(mod => ({ default: mod.PDFFlattenWorkspace })),
+  { loading: () => <WorkspaceLoading />, ssr: false }
+);
+
+const PDFCropWorkspace = dynamic(
+  () => import('@/components/layout/pdf-crop-workspace').then(mod => ({ default: mod.PDFCropWorkspace })),
+  { loading: () => <WorkspaceLoading />, ssr: false }
+);
+
+const PDFExtractWorkspace = dynamic(
+  () => import('@/components/layout/pdf-extract-workspace').then(mod => ({ default: mod.PDFExtractWorkspace })),
+  { loading: () => <WorkspaceLoading />, ssr: false }
+);
+
+const PDFFillWorkspace = dynamic(
+  () => import('@/components/layout/pdf-fill-workspace').then(mod => ({ default: mod.PDFFillWorkspace })),
+  { loading: () => <WorkspaceLoading />, ssr: false }
+);
+
+const PDFGrayscaleWorkspace = dynamic(
+  () => import('@/components/layout/pdf-grayscale-workspace').then(mod => ({ default: mod.PDFGrayscaleWorkspace })),
+  { loading: () => <WorkspaceLoading />, ssr: false }
+);
+
+const PDFToTextWorkspace = dynamic(
+  () => import('@/components/layout/pdf-to-text-workspace').then(mod => ({ default: mod.PDFToTextWorkspace })),
+  { loading: () => <WorkspaceLoading />, ssr: false }
+);
+
+const PDFToPDFAWorkspace = dynamic(
+  () => import('@/components/layout/pdf-to-pdfa-workspace').then(mod => ({ default: mod.PDFToPDFAWorkspace })),
+  { loading: () => <WorkspaceLoading />, ssr: false }
+);
+
+const WordToPDFWorkspace = dynamic(
+  () => import('@/components/layout/word-to-pdf-workspace').then(mod => ({ default: mod.WordToPDFWorkspace })),
+  { loading: () => <WorkspaceLoading />, ssr: false }
+);
+
+const PDFToWordWorkspace = dynamic(
+  () => import('@/components/layout/pdf-to-word-workspace').then(mod => ({ default: mod.PDFToWordWorkspace })),
+  { loading: () => <WorkspaceLoading />, ssr: false }
+);
+
+const PDFToExcelWorkspace = dynamic(
+  () => import('@/components/layout/pdf-to-excel-workspace').then(mod => ({ default: mod.PDFToExcelWorkspace })),
+  { loading: () => <WorkspaceLoading />, ssr: false }
+);
+
 const OCRWorkspace = dynamic(
   () => import('@/components/layout/ocr-workspace').then(mod => ({ default: mod.OCRWorkspace })),
   { loading: () => <WorkspaceLoading />, ssr: false }
@@ -138,6 +198,18 @@ function getWorkspaceComponent(toolId: string) {
   if (toolId === 'image-to-pdf') return <ImageToPDFWorkspace />;
   if (toolId === 'pdf-compress') return <PDFCompressWorkspace />;
   if (toolId === 'pdf-to-image') return <ConvertWorkspace />;
+  if (toolId === 'pdf-sign') return <PDFSignWorkspace />;
+  if (toolId === 'pdf-redact') return <PDFRedactWorkspace />;
+  if (toolId === 'pdf-flatten') return <PDFFlattenWorkspace />;
+  if (toolId === 'pdf-crop') return <PDFCropWorkspace />;
+  if (toolId === 'pdf-extract') return <PDFExtractWorkspace />;
+  if (toolId === 'pdf-fill') return <PDFFillWorkspace />;
+  if (toolId === 'pdf-grayscale') return <PDFGrayscaleWorkspace />;
+  if (toolId === 'pdf-to-text') return <PDFToTextWorkspace />;
+  if (toolId === 'pdf-to-pdfa') return <PDFToPDFAWorkspace />;
+  if (toolId === 'word-to-pdf') return <WordToPDFWorkspace />;
+  if (toolId === 'pdf-to-word') return <PDFToWordWorkspace />;
+  if (toolId === 'pdf-to-excel') return <PDFToExcelWorkspace />;
   if (['pdf-rotate', 'pdf-watermark', 'pdf-protect', 'pdf-unlock', 'pdf-delete-pages', 'pdf-reorder', 'pdf-linearize', 'pdf-add-page-numbers'].includes(toolId)) {
     return <PDFToolsWorkspace />;
   }

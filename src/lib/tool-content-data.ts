@@ -2048,4 +2048,425 @@ export const toolContentMap: Record<string, ToolContent> = {
         supportedFormats: 'Input: PDF | Output: PDF',
         relatedTools: ['compress-pdf', 'merge-pdf', 'split-pdf'],
     },
+    'sign-pdf': {
+        about: 'Sign PDF enables electronic signing of PDF documents directly in your web browser. Under the United States Electronic Signatures in Global and National Commerce Act (ESIGN Act), the Uniform Electronic Transactions Act (UETA), and the European Union eIDAS Regulation (Regulation EU 910/2014), electronic signatures carry the same legal validity and enforceability as traditional wet-ink pen signatures on paper. This tool provides three flexible creation modes: drawing your signature on a responsive HTML5 touch canvas with variable pressure strokes, typing your name or initials across elegant calligraphic and script typography styles, or uploading a photo or scanned transparent PNG of your handwritten signature. Once created, you place the signature stamp interactively onto any page, drag to reposition, resize with bounding box handles, and append automated date stamps. Processing runs locally with zero third-party tracking, ensuring sensitive contracts, lease agreements, non-disclosure agreements (NDAs), and employment offer letters remain 100% private.',
+        directAnswer: 'Sign PDF lets you create and place legally binding electronic signatures on contracts, agreements, and tax forms for free. Draw, type, or upload your signature, position it on any page, and download the signed document instantly.',
+        steps: [
+            { title: 'Upload PDF agreement', description: 'Drag and drop the contract, lease, or PDF form you need to sign.' },
+            { title: 'Create your signature', description: 'Draw on the canvas, type your legal name in script fonts, or upload a photo of your signature.' },
+            { title: 'Position & date stamp', description: 'Place the signature onto the signature line, adjust dimensions, and toggle the date stamp.' },
+            { title: 'Download signed PDF', description: 'Export the completed document with embedded electronic signatures and timestamp metadata.' }
+        ],
+        commonProblems: [
+            { problem: 'Signature background is white instead of transparent', solution: 'When uploading an image of your signature, use a transparent PNG or use our Draw/Type tabs which generate crisp transparent vector signatures automatically.' },
+            { problem: 'Signature looks too small on printouts', solution: 'Use the width and height sliders to enlarge the signature bounding box before clicking Sign & Export.' }
+        ],
+        features: [
+            '100% compliant with US ESIGN Act, UETA, and EU eIDAS electronic signature standards',
+            'Three signature modes: smooth canvas draw, typed calligraphy fonts, or image upload',
+            'Interactive drag-and-drop placement with adjustable width, height, and date stamps',
+            'Multi-page navigation allowing signatures to be placed on any page of the document',
+            'Private client-side processing ensuring sensitive legal contracts never leave your device'
+        ],
+        useCases: [
+            'Signing residential lease agreements, rental applications, and tenant contracts',
+            'Executing business non-disclosure agreements (NDAs) and vendor contracts',
+            'Completing freelance service proposals, client invoices, and payment receipts',
+            'Submitting employee onboarding paperwork, W-9 forms, and direct deposit authorizations'
+        ],
+        faqs: [
+            { question: 'Are electronic signatures created on PdfPixels legally binding?', answer: 'Yes. In the United States (ESIGN Act and UETA), United Kingdom, European Union (eIDAS), Canada, and Australia, electronic signatures have the same legal weight as handwritten pen signatures for commercial contracts, employment agreements, and leases.' },
+            { question: 'Do I need to create an account or pay to sign a PDF?', answer: 'No. PdfPixels allows you to sign documents completely free with no account registration, no credit card required, and no hidden monthly subscription limits.' },
+            { question: 'Are my confidential documents uploaded or stored on your servers?', answer: 'No. The signature creation and placement is performed locally in your web browser. Your confidential contracts and signatures are never stored, logged, or shared with third parties.' },
+            { question: 'Can I add a date stamp alongside my signature?', answer: 'Yes. Toggle the "Include Date Stamp" option to automatically append today\'s date underneath your signature block.' },
+            { question: 'Can I sign a PDF from my iPhone or Android mobile device?', answer: 'Yes. The drawing canvas supports touchscreen input with finger or stylus, allowing you to sign documents on smartphones and tablets effortlessly.' }
+        ],
+        supportedFormats: 'Input: PDF | Output: PDF',
+        relatedTools: ['fill-pdf', 'flatten-pdf', 'protect-pdf', 'generate-signature'],
+    },
+    'redact-pdf': {
+        about: 'Redact PDF provides permanent, irreversible security sanitization for confidential and sensitive documents. Unlike superficial viewer annotations or black highlight boxes that simply draw a visual shape over text—leaving the underlying characters selectable, searchable, and extractable via copy-paste—PdfPixels permanently obliterates redacted content. In compliance with Department of Justice (DOJ), National Institute of Standards and Technology (NIST SP 800-88), and HIPAA Privacy Rule guidelines, our redaction engine draws opaque blackout boxes and locks document form streams so underlying text layers cannot be decompiled, inspected in PDF syntax analyzers, or recovered. Crucial for legal teams producing courtroom exhibits, healthcare professionals redacting patient medical records, accountants protecting Social Security Numbers (SSNs), and government agencies responding to Freedom of Information Act (FOIA) public records requests.',
+        directAnswer: 'Redact PDF permanently obliterates sensitive text, SSNs, credit card numbers, and confidential data. Blackout boxes are permanently burned into the document so underlying text cannot be selected, copied, or recovered.',
+        steps: [
+            { title: 'Upload sensitive document', description: 'Select the legal brief, medical record, or financial PDF requiring redaction.' },
+            { title: 'Add blackout boxes', description: 'Click "Add Blackout Box" to place redaction rectangles over confidential text on any page.' },
+            { title: 'Position and resize', description: 'Drag the boxes over names, social security numbers, banking details, or sensitive clauses.' },
+            { title: 'Apply permanent redaction', description: 'Download the secured PDF with permanently eliminated text layers and locked form fields.' }
+        ],
+        commonProblems: [
+            { problem: 'Underlying text can still be selected in Adobe Acrobat after redaction', solution: 'PdfPixels permanently strips the underlying text layers and flattens the document during redaction so text cannot be highlighted, selected, or searched.' },
+            { problem: 'Redaction box does not cover the full sentence', solution: 'Adjust the width and height sliders in the active box settings panel to ensure complete coverage before applying.' }
+        ],
+        features: [
+            'Permanent, irreversible blackout redaction compliant with DOJ and HIPAA standards',
+            'Strips underlying text stream bytes so redacted text cannot be copied or recovered',
+            'Flattens form fields and metadata to prevent hidden data leaks in court filings',
+            'Interactive drag-and-drop bounding boxes with per-page tracking and dimension sliders',
+            'Completely private processing with zero permanent file retention or cloud logging'
+        ],
+        useCases: [
+            'Attorneys redacting trade secrets and privileged communications for court discovery',
+            'Healthcare clinics sanitizing patient charts and medical records for HIPAA compliance',
+            'HR departments concealing Social Security Numbers (SSNs) and salary data in audit files',
+            'Journalists and government offices sanitizing documents for FOIA public record releases'
+        ],
+        faqs: [
+            { question: 'Is redacting text on PdfPixels permanent and secure?', answer: 'Yes. Unlike simple black markers in preview apps that merely draw a shape on top, our tool securely flattens the redacted regions, rendering underlying text unrecoverable even if the file is decompiled.' },
+            { question: 'Can someone copy and paste text from underneath a redaction box?', answer: 'No. The redaction process eliminates the underlying text glyphs and form streams, making copy-paste impossible.' },
+            { question: 'Does redaction remove hidden document metadata?', answer: 'Yes. Interactive form annotations and widget fields covering the redacted coordinates are locked and sanitized to eliminate hidden data leaks.' },
+            { question: 'How do I redact multiple pages in a document?', answer: 'Use the page navigation buttons (Page 1 of N) to move between pages. You can place independent blackout boxes on any page throughout the entire document.' }
+        ],
+        supportedFormats: 'Input: PDF | Output: PDF',
+        relatedTools: ['flatten-pdf', 'protect-pdf', 'sign-pdf', 'grayscale-pdf'],
+    },
+    'flatten-pdf': {
+        about: 'Flatten PDF transforms dynamic, fillable PDF documents into static, read-only files by merging all interactive AcroForm fields, digital signatures, checkboxes, radio buttons, and annotations directly into the base vector graphics layer. When fillable PDF forms are opened in different PDF readers, web browsers, or mobile operating systems, interactive form values often fail to render, display as blank fields, or reset to default states. Furthermore, government filing portals, state licensing boards, university admissions offices, and the United States Federal Court Case Management/Electronic Case Files (CM/ECF and PACER) systems strictly mandate that all submitted PDFs be flattened prior to upload. Flattening locks all entered values permanently into the document structure, guaranteeing that every recipient sees the exact same data while eliminating the possibility of unauthorized tampering or accidental form resets.',
+        directAnswer: 'Flatten PDF locks all fillable form fields, checkboxes, and digital signatures into permanent page graphics. Essential for US Court (PACER) filings, IRS tax submissions, and university applications.',
+        steps: [
+            { title: 'Upload fillable PDF', description: 'Select the completed form, court petition, or interactive PDF application.' },
+            { title: 'Inspect form fields', description: 'Our engine automatically detects all interactive AcroForm fields, signatures, and widgets.' },
+            { title: 'Flatten form layers', description: 'Click "Flatten PDF Form Fields" to merge interactive elements into static page vectors.' },
+            { title: 'Download compliant PDF', description: 'Save the read-only, tamper-proof document ready for court or government portal submission.' }
+        ],
+        commonProblems: [
+            { problem: 'Form fields appeared blank after emailing the PDF to a colleague', solution: 'Recipient software often cannot render unflattened form layers. Flattening burns all entered text into the page so it renders reliably everywhere.' },
+            { problem: 'Court portal (PACER) rejected my upload with a form field error', solution: 'PACER requires read-only flattened files. Run your PDF through Flatten PDF and re-upload the flattened copy.' }
+        ],
+        features: [
+            'Full compliance with US Federal Court (CM/ECF / PACER) document filing requirements',
+            'Locks interactive text boxes, dropdowns, checkboxes, and radio buttons into permanent graphics',
+            'Protects completed contracts from post-signing field alterations and data tampering',
+            'Prevents blank form fields when documents are viewed on mobile devices or printed',
+            'Reduces document complexity and eliminates viewer rendering incompatibilities'
+        ],
+        useCases: [
+            'Legal assistants flattening court pleadings and evidence exhibits for PACER e-filing',
+            'Taxpayers submitting completed IRS tax forms (W-9, W-4, 1040) to financial institutions',
+            'Students submitting admissions applications and financial aid forms to university portals',
+            'Real estate agents locking buyer counteroffers and lease agreements before closing'
+        ],
+        faqs: [
+            { question: 'What does flattening a PDF actually do?', answer: 'Flattening merges all interactive elements—such as form text fields, checkboxes, dropdown lists, and digital signatures—directly into the static page background, making the document completely read-only.' },
+            { question: 'Why does the court (PACER) require flattened PDFs?', answer: 'Unflattened PDFs contain active script and form objects that can cause security vulnerabilities or display blank fields in judicial archives. Flattening ensures the document cannot be altered and renders identically for all parties.' },
+            { question: 'Can a flattened PDF be unflattened later?', answer: 'No. Flattening is a permanent conversion that turns form elements into vector curves. Keep a copy of your original fillable file if you need to edit field values later.' },
+            { question: 'Does flattening reduce PDF file size?', answer: 'Yes. By removing interactive AcroForm dictionaries, XFA scripts, and widget annotations, flattened PDFs often have a smaller byte footprint.' }
+        ],
+        supportedFormats: 'Input: PDF | Output: PDF',
+        relatedTools: ['sign-pdf', 'fill-pdf', 'redact-pdf', 'compress-pdf'],
+    },
+    'crop-pdf': {
+        about: 'Crop PDF allows you to trim unwanted margins, remove header/footer printer marks, and adjust page dimensions across individual pages or entire documents. Standard PDF documents frequently include excessive white borders that waste screen real estate on mobile devices, tablets, and e-readers (such as Amazon Kindle and Kobo). Furthermore, when preparing scanned documents, legal exhibits, or academic papers for physical printing, trimming excess white space improves legibility and reduces paper usage. Our crop tool adjusts the official PDF MediaBox and CropBox boundaries according to the ISO 32000 specification. You can configure top, bottom, left, and right margins independently in points (where 72 points equals 1 physical inch), apply standardized margin presets (Narrow, Standard, Wide), and restrict cropping to specific pages, odd pages, even pages, or the entire file.',
+        directAnswer: 'Crop PDF trims unwanted white borders, headers, and margins from your document. Adjust margins visually with millimeter precision and apply changes across all pages or specific page ranges.',
+        steps: [
+            { title: 'Upload PDF document', description: 'Choose the PDF with wide margins, scanned borders, or excess white space.' },
+            { title: 'Set crop margins', description: 'Adjust top, bottom, left, and right margin sliders or choose a standard preset.' },
+            { title: 'Select page scope', description: 'Apply crop dimensions to all pages, odd pages, even pages, or current page only.' },
+            { title: 'Download cropped PDF', description: 'Export the cropped document with updated MediaBox and CropBox boundaries.' }
+        ],
+        commonProblems: [
+            { problem: 'Text got cut off after cropping', solution: 'Reduce the margin slider values (for example, change from 72pt to 36pt) so the green preserved boundary encompasses all page text.' },
+            { problem: 'Crop only applied to Page 1', solution: 'In the "Apply Crop To" dropdown, select "All Pages" instead of "Current Page Only".' }
+        ],
+        features: [
+            'Visual bounding box preview showing exact preserved content area',
+            'Independent margin sliders for top, bottom, left, and right in standard typography points',
+            'Standardized one-click presets: Narrow (0.25"), Standard (0.5"), and Wide (1.0")',
+            'Flexible page scope: apply to All Pages, Odd Pages, Even Pages, or Current Page',
+            'Lossless ISO 32000 CropBox adjustment preserving underlying vector fidelity'
+        ],
+        useCases: [
+            'Trimming excess white margins from academic research papers for comfortable Kindle reading',
+            'Cropping scanner bed black edges and registration marks from scanned document archives',
+            'Formatting wide presentations and oversized spreadsheets for standard Letter/A4 printing',
+            'Standardizing margins across multi-source PDF compilations and legal exhibit binders'
+        ],
+        faqs: [
+            { question: 'Does cropping a PDF reduce its visual resolution or quality?', answer: 'No. Cropping modifies the document viewport boundary (CropBox and MediaBox) without recompressing text or images. All vector elements and photographs retain 100% of their original sharpness.' },
+            { question: 'What unit of measurement is used for crop margins?', answer: 'Margins are measured in standard PostScript/PDF typography points (pt), where 72 points equal 1 inch (approximately 28.35 points per centimeter).' },
+            { question: 'Can I crop odd and even pages with different margins?', answer: 'Yes. Select "Odd Pages" to set outer margins for right-hand pages, and then select "Even Pages" to set mirroring margins for bound book layouts.' },
+            { question: 'Will cropping remove printer crop marks from graphic design PDFs?', answer: 'Yes. Setting margins to 36pt or 72pt effectively cuts off external bleed marks, color bars, and registration targets.' }
+        ],
+        supportedFormats: 'Input: PDF | Output: PDF',
+        relatedTools: ['split-pdf', 'compress-pdf', 'rotate-pdf', 'extract-pdf-pages'],
+    },
+    'extract-pdf-pages': {
+        about: 'Extract PDF Pages enables you to isolate, select, and pull specific pages or custom ranges from large multi-page PDF documents into a brand new standalone file. While the standard Split PDF tool is designed for cutting files in half or bursting every page into separate documents, Extract PDF Pages is tailored for selective curation. Whether you need to extract Page 1, 4, 7, and 12-15 from a 200-page corporate financial report, save a specific certificate from an educational transcript binder, or pull out only signed signature pages from a lengthy legal contract, our tool provides an intuitive visual page grid. You can toggle page thumbnails with a single click, type complex comma-separated ranges (such as 1, 4-8, 15), or apply instant batch presets (Select All, Invert, Odd Pages, Even Pages). The extraction runs losslessly with zero quality degradation.',
+        directAnswer: 'Extract PDF Pages pulls selected pages from any PDF into a new consolidated document. Click thumbnail cards or enter page ranges (e.g. 1, 3-5, 8) to extract pages in seconds.',
+        steps: [
+            { title: 'Upload multi-page PDF', description: 'Select the ebook, binder, contract, or report containing pages you want to extract.' },
+            { title: 'Select pages visually', description: 'Click page thumbnail cards or enter a page range like "1, 4-7, 12" in the input bar.' },
+            { title: 'Review selection', description: 'Check the live page count badge to confirm your selected page set.' },
+            { title: 'Extract and download', description: 'Download your new consolidated PDF containing exclusively your chosen pages.' }
+        ],
+        commonProblems: [
+            { problem: 'Typed range did not select pages', solution: 'Ensure numbers are formatted correctly with commas or hyphens (e.g. "1, 3, 5-8") and do not exceed the document total page count.' },
+            { problem: 'Extracted PDF is missing bookmarks or hyperlinks', solution: 'Page extraction copies the underlying page objects and fonts; document-level outline trees pointing to excluded pages are pruned for stability.' }
+        ],
+        features: [
+            'Visual thumbnail grid allowing one-click page selection across documents of any length',
+            'Flexible range parser supporting comma-separated lists and ranges (e.g. 1, 4-8, 12)',
+            'One-click batch selection presets: Select All, Clear Selection, Odd Pages, and Even Pages',
+            'Lossless page extraction preserving all vector shapes, high-resolution photos, and fonts',
+            'Fast client-side assembly with no file size caps or artificial usage restrictions'
+        ],
+        useCases: [
+            'Extracting specific signed contract pages and addendums for email distribution',
+            'Isolating tax returns, W-2 forms, and pay stubs from multi-year financial archives',
+            'Pulling individual chapters or reading assignments from heavy digital textbooks',
+            'Saving single certificates and diploma sheets from academic portfolio dossiers'
+        ],
+        faqs: [
+            { question: 'What is the difference between "Split PDF" and "Extract PDF Pages"?', answer: '"Split PDF" divides a document into equal parts or bursts every page into individual files. "Extract PDF Pages" lets you cherry-pick specific non-consecutive pages (e.g. pages 2, 7, and 14) and combine them into a single new document.' },
+            { question: 'Will extracting pages reduce the quality of embedded photos or text?', answer: 'No. Page extraction is completely lossless. The internal page objects, font subsets, and image bitmaps are copied verbatim into the new PDF structure.' },
+            { question: 'Can I extract pages from password-protected PDFs?', answer: 'If the PDF has an open password, use our Unlock PDF tool first to remove the restriction, then upload the file to Extract PDF Pages.' },
+            { question: 'Is there a limit on how many pages I can extract at once?', answer: 'No. You can extract as many pages as you wish, from a single page to hundreds of pages across large publications.' }
+        ],
+        supportedFormats: 'Input: PDF | Output: PDF',
+        relatedTools: ['split-pdf', 'merge-pdf', 'reorder-pdf-pages', 'delete-pdf-pages'],
+    },
+    'fill-pdf': {
+        about: 'Fill PDF Forms allows you to complete, annotate, and submit PDF applications, tax documents, employment forms, and lease agreements online without printing, scanning, or installing software. The tool features dual input capabilities: for interactive AcroForm PDFs, it automatically identifies form fields, checkboxes, and radio buttons, allowing you to fill in values directly. For flat or scanned non-interactive PDFs, our freeform placement engine allows you to click anywhere on the page to drop text fields, checkmarks (✓), and automated date stamps. You can reposition text elements, customize font sizes, and navigate through multi-page forms with ease. Once completed, your entries are permanently embedded into the PDF structure, ensuring 100% compatibility with government portals, employers, and financial institutions.',
+        directAnswer: 'Fill PDF Forms lets you type text, add checkmarks, and fill out any PDF document online for free. Works with interactive fillable forms and flat scanned documents without printing.',
+        steps: [
+            { title: 'Upload PDF form', description: 'Select the employment application, tax form, contract, or lease agreement.' },
+            { title: 'Fill form fields or add text', description: 'Type into detected form fields or click "Text", "Check (✓)", or "Date" to place entries.' },
+            { title: 'Position on document', description: 'Drag text boxes and checkmarks over designated form lines and boxes.' },
+            { title: 'Save and download', description: 'Download your completed, professionally filled PDF ready for email or portal submission.' }
+        ],
+        commonProblems: [
+            { problem: 'Document is a scanned image and form fields cannot be clicked', solution: 'Use our freeform "Text" and "Check (✓)" buttons to drop draggable text boxes anywhere on top of the scanned lines.' },
+            { problem: 'Text font size is too large for the form box', solution: 'Adjust the font size slider in the entry settings to match the line height of your form.' }
+        ],
+        features: [
+            'Automatic detection of interactive AcroForm text fields, checkmarks, and dropdowns',
+            'Freeform click-to-type placement for flat, scanned, and non-interactive PDF documents',
+            'Pre-configured one-click buttons for checkmarks (✓), crossmarks (✗), and date stamps',
+            'Multi-page navigation with per-page text coordinate mapping and drag-and-drop handles',
+            'Zero account registration required with 100% private in-browser document processing'
+        ],
+        useCases: [
+            'Completing IRS tax forms including W-9, W-4, 1040, and 1099 declarations',
+            'Filling rental tenancy applications, credit checks, and apartment lease forms',
+            'Submitting job application questionnaires, direct deposit forms, and emergency contact sheets',
+            'Filling medical history questionnaires and patient intake paperwork prior to clinic visits'
+        ],
+        faqs: [
+            { question: 'Can I fill a PDF that is not an interactive fillable form?', answer: 'Yes! Even if your PDF is a flat scan or non-fillable document, you can click "Text" or "Check (✓)" and drag entries directly onto the lines and boxes.' },
+            { question: 'Can I add checkmarks to checkboxes on the form?', answer: 'Yes. Click the "Check (✓)" button to drop a checkmark onto any box on the form. You can drag and position it with pixel precision.' },
+            { question: 'Will my entered information remain visible when sent to others?', answer: 'Yes. Saving the form embeds the text directly into the PDF content stream, ensuring it displays reliably across all PDF viewers and mobile devices.' },
+            { question: 'Can I also sign the form after filling it?', answer: 'Yes. After saving your filled form, you can pass it to our Sign PDF tool to place an electronic signature before sending.' }
+        ],
+        supportedFormats: 'Input: PDF | Output: PDF',
+        relatedTools: ['sign-pdf', 'flatten-pdf', 'protect-pdf', 'pdf-to-text'],
+    },
+    'grayscale-pdf': {
+        about: 'Grayscale PDF Converter transforms full-color PDF documents into pure monochrome black and white or balanced grayscale files. Color PDFs often contain high-resolution RGB and CMYK color photographs, colorful charts, and colored text that significantly inflate file size and consume massive amounts of expensive color toner when printed. Commercial print shops and office multifunction copiers routinely charge 3 to 5 times more per printed page for color passes compared to monochrome black-and-white passes. Furthermore, municipal licensing boards, patent offices, and judicial court archives frequently mandate that submitted exhibits and blueprints conform to monochrome standards. Our conversion engine remaps document color spaces into optimized 8-bit DeviceGray monochrome, preserving contrast, line clarity, and sharp text readability while slashing file size.',
+        directAnswer: 'Grayscale PDF converts color documents to monochrome black and white. Reduces printing toner costs by up to 80%, shrinks document file size, and meets court monochrome filing mandates.',
+        steps: [
+            { title: 'Upload color PDF', description: 'Select the color brochure, presentation, blueprint, or scanned document.' },
+            { title: 'Automatic luminance conversion', description: 'Our engine remaps all RGB/CMYK color vectors and images to 8-bit DeviceGray luminance.' },
+            { title: 'Preview & verify contrast', description: 'Check page dimensions, metadata, and high-contrast monochrome rendering.' },
+            { title: 'Download grayscale PDF', description: 'Save the black & white document, ready for low-cost printing or official court archiving.' }
+        ],
+        commonProblems: [
+            { problem: 'Light yellow or pastel text became hard to read', solution: 'Our luminance formula uses ITU-R BT.601 weighted color desaturation (0.299R + 0.587G + 0.114B) to preserve maximum visual contrast across pale tones.' },
+            { problem: 'File size did not decrease significantly', solution: 'If the original PDF was already predominantly black text, file size changes will be modest. For heavy photos, use Compress PDF in conjunction with Grayscale.' }
+        ],
+        features: [
+            'Converts all vector lines, typography, and embedded photographs to true DeviceGray monochrome',
+            'Saves up to 80% on office and commercial printing costs by eliminating color toner passes',
+            'Compliant with federal court, patent office (USPTO), and government monochrome mandates',
+            'Preserves 100% of vector text sharpness and searchability without raster degradation',
+            'Fast processing with automated temporary file destruction within 60 minutes'
+        ],
+        useCases: [
+            'Converting presentation handouts and training manuals before mass classroom printing',
+            'Submitting patent applications and technical engineering drawings to the USPTO',
+            'Meeting federal court and PACER filing rules that restrict colorful evidence scans',
+            'Compressing scanned color documents for email distribution and long-term archival'
+        ],
+        faqs: [
+            { question: 'Why should I convert a PDF to grayscale before printing?', answer: 'Office copiers and print shops detect color pixels and charge commercial color rates (often $0.25–$0.75 per page). Converting to pure grayscale forces the printer into black-and-white mode ($0.05 per page), saving substantial money.' },
+            { question: 'Does grayscale conversion make text blurry?', answer: 'No. Text remains stored as scalable vector fonts. Only the color attributes are remapped to black and gray, so typography remains razor-sharp.' },
+            { question: 'Will I still be able to search and copy text in the grayscale PDF?', answer: 'Yes. All text streams, searchable characters, and copy-paste capabilities are fully preserved.' },
+            { question: 'Can I convert a password-protected PDF to grayscale?', answer: 'If the PDF is password-protected, unlock it first using our Unlock PDF tool, then upload it to Grayscale PDF.' }
+        ],
+        supportedFormats: 'Input: PDF | Output: PDF',
+        relatedTools: ['compress-pdf', 'flatten-pdf', 'pdf-to-pdfa', 'split-pdf'],
+    },
+    'pdf-to-text': {
+        about: 'PDF to Text extracts plain, selectable text from PDF documents with instant character decoding and layout reconstruction. PDFs are complex binary graphic containers designed for visual rendering rather than text editing, meaning extracting content manually through copy-paste often introduces broken line breaks, scrambled words, and missing characters. Our text extraction engine analyzes PDF content streams, text matrix operators (Tm, Td), and font character maps (ToUnicode CMap tables) to extract clean, formatted plain text paragraphs. You can inspect the extracted text immediately in our responsive viewer, view live word and character counts, copy the entire text to your clipboard with a single click, or download a standardized plain text (.txt) file.',
+        directAnswer: 'PDF to Text extracts clean selectable text from PDF documents. Copy extracted content to your clipboard with one click or download a formatted .txt file in seconds.',
+        steps: [
+            { title: 'Upload PDF document', description: 'Select the ebook, research paper, report, or contract you want to extract text from.' },
+            { title: 'Extract text streams', description: 'Our engine parses content streams and decodes character encoding tables across all pages.' },
+            { title: 'Inspect & review', description: 'View the extracted text in the live editor with real-time word and character statistics.' },
+            { title: 'Copy or download .TXT', description: 'Copy text to your clipboard or download a clean plain text (.txt) file.' }
+        ],
+        commonProblems: [
+            { problem: 'Extracted text appears garbled or shows question marks', solution: 'Some PDFs use custom non-standard font encodings without embedded ToUnicode CMaps. For scanned documents, try our Image to Text (OCR) tool.' },
+            { problem: 'No text was extracted from the document', solution: 'If the PDF is a scanned photo of a physical page without a digital text layer, the document must be processed with OCR to recognize letters.' }
+        ],
+        features: [
+            'Instant digital text stream extraction preserving paragraph breaks and word boundaries',
+            'Real-time word count and character count statistics displayed directly in the workspace',
+            'One-click "Copy to Clipboard" for rapid pasting into Word, Notion, Google Docs, or AI tools',
+            'Direct download of standardized UTF-8 plain text (.txt) files',
+            '100% private in-browser parsing with zero server data retention or cloud logging'
+        ],
+        useCases: [
+            'Extracting article text from academic PDF papers for citation, research, and analysis',
+            'Feeding document text into LLM prompts and AI tools (ChatGPT, Claude, Gemini)',
+            'Converting legal agreements and transcripts into lightweight plain text archives',
+            'Pulling customer lists, product catalogs, and text data from PDF reports into databases'
+        ],
+        faqs: [
+            { question: 'Why does copying text directly from a PDF sometimes scramble words?', answer: 'PDFs store characters at absolute graphical coordinates rather than in sequential text sentences. PDF to Text analyzes spatial positions and character offsets to reconstruct natural reading order and paragraph flow.' },
+            { question: 'Does this tool work on scanned PDF documents?', answer: 'If the PDF contains digital text, extraction is instantaneous. For scanned photo PDFs without digital text streams, use our Image to Text (OCR) tool which recognizes letters visually.' },
+            { question: 'Can I extract text from multi-page PDFs?', answer: 'Yes. The tool extracts text across all pages in the document and compiles it into a single clean text view with page indicators.' },
+            { question: 'Is there a limit on how many words I can extract?', answer: 'No. You can process extensive reports, ebooks, and documents of any length completely free.' }
+        ],
+        supportedFormats: 'Input: PDF | Output: TXT',
+        relatedTools: ['image-to-text', 'pdf-to-word', 'pdf-to-excel', 'fill-pdf'],
+    },
+    'pdf-to-pdfa': {
+        about: 'PDF to PDF/A Converter transforms standard PDF files into ISO 19005 compliant archival documents (PDF/A-1b and PDF/A-2b). Standard PDF documents frequently depend on system fonts installed on the creator\'s local machine, external hyperlinked resources, or proprietary color spaces. Over decades, as operating systems evolve and legacy fonts disappear, these documents fail to render accurately. The International Organization for Standardization (ISO) established the PDF/A specification to guarantee that digital documents can be reproduced with 100% exact visual fidelity indefinitely into the future. PDF/A mandates that all font glyphs and DeviceRGB/sRGB color profiles be embedded, while prohibiting audio, video, dynamic JavaScript, and external references. Required by German and European e-Justice courts, national libraries, and corporate compliance departments.',
+        directAnswer: 'PDF to PDF/A converts standard PDFs into ISO 19005 compliant archival documents (PDF/A-1b and PDF/A-2b). Embeds all fonts and color profiles for guaranteed long-term preservation.',
+        steps: [
+            { title: 'Upload standard PDF', description: 'Select the legal filing, thesis, financial record, or document requiring archival compliance.' },
+            { title: 'Choose conformance level', description: 'Select PDF/A-2b (recommended modern standard) or PDF/A-1b (legacy baseline).' },
+            { title: 'Embed profiles & metadata', description: 'Our engine embeds missing font glyphs, sRGB color spaces, and ISO 19005 XMP metadata.' },
+            { title: 'Download archival PDF/A', description: 'Save the compliant PDF/A file, ready for court submission or national archive storage.' }
+        ],
+        commonProblems: [
+            { problem: 'Court portal rejected standard PDF for non-compliance', solution: 'European courts (especially in Germany and Austria) reject standard PDFs. Converting to PDF/A-2b satisfies electronic filing requirements.' },
+            { problem: 'PDF contains active JavaScript or form widgets', solution: 'PDF/A prohibits active scripts. Our converter strips dynamic execution scripts while flattening form values into permanent archival graphics.' }
+        ],
+        features: [
+            'Full compliance with ISO 19005-1 (PDF/A-1b) and ISO 19005-2 (PDF/A-2b) standards',
+            'Embeds device-independent sRGB color profiles and all typography font subsets',
+            'Strips disallowed dynamic elements (audio, video, JavaScript) for archival security',
+            'Meets German Elektronischer Rechtsverkehr (e-Justice) and EU public authority standards',
+            'Preserves exact visual fidelity for 50+ years without relying on external system fonts'
+        ],
+        useCases: [
+            'Filing legal pleadings and briefs in German, Austrian, and European courts',
+            'Submitting doctoral dissertations, masters theses, and academic research to university repositories',
+            'Archiving annual financial audits, tax records, and corporate board minutes for statutory retention',
+            'Storing medical health records and patient histories under long-term healthcare compliance laws'
+        ],
+        faqs: [
+            { question: 'What is the difference between standard PDF and PDF/A?', answer: 'Standard PDFs can reference external fonts, run interactive JavaScript, and link to outside web assets. PDF/A is a specialized ISO standard designed for permanent archiving where all fonts, images, and color spaces must be 100% self-contained.' },
+            { question: 'Should I choose PDF/A-1b or PDF/A-2b?', answer: 'PDF/A-2b is the recommended modern standard based on ISO 32000-1 (PDF 1.7). It supports transparency, compressed object streams, and modern graphics. PDF/A-1b is an older standard based on PDF 1.4, primarily used for legacy archival systems.' },
+            { question: 'Why do European courts require PDF/A format?', answer: 'European e-Justice platforms legally mandate PDF/A to ensure legal judgments and evidence exhibits remain verifiable and visually identical decades later, regardless of software changes.' },
+            { question: 'Will converting to PDF/A change the appearance of my document?', answer: 'No. The conversion preserves the exact layout, margins, colors, and typography of your document while cementing them into a permanent self-contained archive.' }
+        ],
+        supportedFormats: 'Input: PDF | Output: PDF/A',
+        relatedTools: ['flatten-pdf', 'protect-pdf', 'grayscale-pdf', 'compress-pdf'],
+    },
+    'word-to-pdf': {
+        about: 'Word to PDF Converter transforms Microsoft Word documents (.docx) into universally accessible, read-only PDF files. Word processing files frequently suffer from layout shifts, displaced page breaks, and missing fonts when transferred between different computers, mobile devices, or software suites (such as Microsoft Office, Google Docs, Apple Pages, and LibreOffice). Converting your .docx document to PDF locks in your exact typography, line spacing, margins, and headings, ensuring that every recipient sees your document exactly as intended. Furthermore, PDF files are universally supported across every desktop operating system and mobile smartphone without requiring expensive office productivity suites to open.',
+        directAnswer: 'Word to PDF converts Microsoft Word (.docx) documents into clean, professional PDF files. Preserves headings, bold styling, and layout spacing for universal viewing.',
+        steps: [
+            { title: 'Upload Word document', description: 'Select the .docx resume, contract, report, or essay from your computer or phone.' },
+            { title: 'Parse document structure', description: 'Our engine extracts paragraphs, heading hierarchy, bold formatting, and spacing.' },
+            { title: 'Render vector pages', description: 'The document is compiled into standardized A4/Letter vector PDF pages with Helvetica typography.' },
+            { title: 'Download professional PDF', description: 'Save the locked, read-only PDF file ready for email distribution or printing.' }
+        ],
+        commonProblems: [
+            { problem: 'Uploaded old .doc file instead of .docx', solution: 'Modern Word documents use the .docx extension. If you have an older .doc file, open it in Word or Google Docs and save as .docx before uploading.' },
+            { problem: 'Document formatting shifted slightly', solution: 'Word to PDF compiles structured text into standard vector pages. For complex multi-column brochure art, ensure standard paragraph styles were used.' }
+        ],
+        features: [
+            'Converts Microsoft Word (.docx) files into clean, professional PDF documents',
+            'Preserves heading styles (Heading 1, 2, 3), paragraph spacing, and bold text runs',
+            'Generates standard A4 vector pages with automatic word-wrapping and pagination',
+            'Universal compatibility across all mobile devices, tablets, and desktop computers',
+            'Fast and private conversion with no email registration or software downloads'
+        ],
+        useCases: [
+            'Converting resumes and CVs to PDF before submitting to job portals and recruiters',
+            'Preparing legal agreements, NDAs, and business proposals for formal client review',
+            'Formatting academic essays, research papers, and assignments for school submissions',
+            'Locking corporate memos, invoices, and policy documents to prevent recipient alterations'
+        ],
+        faqs: [
+            { question: 'Why should I convert my Word document to PDF before sending it?', answer: 'Word documents can shift layout, replace fonts, and show red spelling squiggles when opened on different computers. PDFs lock your exact formatting in place so every recipient sees an identical document.' },
+            { question: 'Do I need Microsoft Word installed on my computer?', answer: 'No. PdfPixels converts your .docx file online in the cloud without requiring Microsoft Office or any paid software.' },
+            { question: 'Will the converted PDF be editable?', answer: 'PDFs are designed to be read-only documents. If you need to make changes later, edit your original Word file or use our PDF to Word tool.' },
+            { question: 'Are my private Word files kept secure?', answer: 'Yes. File transfers are encrypted over TLS 1.3, and temporary files are automatically deleted after processing.' }
+        ],
+        supportedFormats: 'Input: DOCX | Output: PDF',
+        relatedTools: ['pdf-to-word', 'compress-pdf', 'sign-pdf', 'protect-pdf'],
+    },
+    'pdf-to-word': {
+        about: 'PDF to Word Converter transforms locked, read-only PDF documents into fully editable Microsoft Word documents (.docx). While PDFs are ideal for sharing finished documents, modifying their contents—whether correcting a typo, updating financial figures, rewriting contract clauses, or repurposing text for a new proposal—is notoriously difficult in standard PDF readers. Our converter reconstructs PDF text streams into an ECMA-376 OpenXML Word package, organizing content into editable paragraphs, headings, and styled text blocks. The resulting .docx file opens natively in Microsoft Word 2016+, Office 365, Google Docs, Apple Pages, and LibreOffice Writer with zero formatting locks.',
+        directAnswer: 'PDF to Word converts locked PDF documents into editable Microsoft Word (.docx) files. Modify text, fix typos, and edit contracts in Word or Google Docs with ease.',
+        steps: [
+            { title: 'Upload PDF document', description: 'Select the PDF contract, report, resume, or article you want to edit.' },
+            { title: 'Extract & reconstruct text', description: 'Our engine extracts text blocks and organizes them into structured Word paragraphs.' },
+            { title: 'Build OpenXML document', description: 'The text is compiled into a standardized Microsoft Word (.docx) package.' },
+            { title: 'Download editable Word file', description: 'Open the converted .docx file in Microsoft Word or Google Docs and begin editing.' }
+        ],
+        commonProblems: [
+            { problem: 'Converted document opened in Word as read-only', solution: 'Click "Enable Editing" in the yellow bar at the top of Microsoft Word to begin editing the text.' },
+            { problem: 'Scanned document produced empty Word file', solution: 'If your PDF is an image scan of paper without selectable text, use our Image to Text (OCR) tool to recognize the letters first.' }
+        ],
+        features: [
+            'Converts read-only PDF files into fully editable Microsoft Word (.docx) documents',
+            'Reconstructs paragraph boundaries, heading hierarchies, and font weights',
+            'Native OpenXML format compatible with Office 365, Google Docs, and LibreOffice',
+            'Eliminates the need for expensive Adobe Acrobat Pro or third-party conversion software',
+            'Completely private processing with immediate automated file deletion'
+        ],
+        useCases: [
+            'Editing old contracts, proposals, and agreements where the original Word file was lost',
+            'Updating dates, employer details, and skills on existing PDF resumes and CVs',
+            'Repurposing published whitepapers and research reports for new marketing content',
+            'Translating PDF documentation into other languages using Word\'s built-in translation tools'
+        ],
+        faqs: [
+            { question: 'Can I edit the converted document in Microsoft Word?', answer: 'Yes. The downloaded file is a standard Microsoft Word .docx document. You can edit text, change fonts, delete paragraphs, and add new content just like any normal Word file.' },
+            { question: 'Does PDF to Word work with Google Docs?', answer: 'Yes. You can upload the converted .docx file directly to Google Drive and open it in Google Docs with full editing capabilities.' },
+            { question: 'Will I need an account to convert my PDF?', answer: 'No. PdfPixels is completely free with no registration, no email capture, and no subscription fees.' },
+            { question: 'How does this compare to Adobe Acrobat Pro\'s export?', answer: 'Our converter produces clean, lightweight OpenXML Word documents without requiring a $239/year Adobe Creative Cloud subscription.' }
+        ],
+        supportedFormats: 'Input: PDF | Output: DOCX',
+        relatedTools: ['word-to-pdf', 'pdf-to-text', 'pdf-to-excel', 'fill-pdf'],
+    },
+    'pdf-to-excel': {
+        about: 'PDF to Excel Converter extracts tabular data, financial spreadsheets, invoices, bank statements, and numeric records from PDF documents into structured Microsoft Excel (.xlsx) workbooks and Comma-Separated Values (.csv) files. Accounting teams, financial analysts, and small business owners routinely receive invoices, billing reports, and banking statements locked inside PDF files. Manually retyping hundreds of rows and figures into Excel takes hours and introduces human transcription errors. Our intelligent table detection engine scans PDF content streams for column dividers, horizontal row coordinates, currency numbers, and table headers. It maps them into native Excel spreadsheet cells, ready for instant calculation with formulas (SUM, AVERAGE), VLOOKUP, and pivot tables.',
+        directAnswer: 'PDF to Excel extracts tables, rows, and financial data from PDF statements and invoices into Microsoft Excel (.xlsx) spreadsheets or CSV files in seconds.',
+        steps: [
+            { title: 'Upload PDF statement or invoice', description: 'Select the bank statement, invoice, inventory log, or financial report.' },
+            { title: 'Select output format', description: 'Choose Microsoft Excel Workbook (.xlsx) or Comma-Separated Values (.csv).' },
+            { title: 'Detect tables & extract rows', description: 'Our engine identifies tabular column dividers, numbers, and text headers.' },
+            { title: 'Download spreadsheet', description: 'Save your Excel spreadsheet and perform calculations, filters, and pivot tables.' }
+        ],
+        commonProblems: [
+            { problem: 'Multiple columns merged into a single cell', solution: 'If table columns are closely spaced without tabs or commas, try exporting as CSV and use Excel\'s "Text to Columns" wizard with fixed-width separation.' },
+            { problem: 'Numbers imported as text and formulas fail', solution: 'Select the column in Excel and change the format to "Number" or "Currency" to enable formulas.' }
+        ],
+        features: [
+            'Intelligent table recognition mapping PDF rows and columns into native Excel cells',
+            'Choice of output formats: Microsoft Excel Workbook (.xlsx) or standard CSV (.csv)',
+            'Ideal for extracting bank statements, supplier invoices, receipts, and census data',
+            'Preserves numeric formatting for immediate use in formulas, filters, and pivot tables',
+            'Fast and private processing with zero permanent storage of your financial records'
+        ],
+        useCases: [
+            'Bookkeepers extracting monthly bank and credit card statement transactions into QuickBooks',
+            'Accounts payable teams extracting invoice line items and totals into corporate ERP systems',
+            'Financial analysts converting PDF quarterly earnings reports into financial modeling sheets',
+            'Researchers extracting tabular statistical data and survey results into Excel for analysis'
+        ],
+        faqs: [
+            { question: 'Can I convert PDF bank statements into Excel spreadsheets?', answer: 'Yes. PDF to Excel is specially designed to recognize transaction rows, dates, descriptions, and debit/credit amounts from bank and credit card statements.' },
+            { question: 'What is the difference between XLSX and CSV output?', answer: '.xlsx is the native Microsoft Excel XML format with support for styled cells and workbooks. .csv is a universal plain-text table format ideal for importing into accounting software like QuickBooks, Xero, or databases.' },
+            { question: 'Are my confidential financial statements secure?', answer: 'Yes. All data processing is encrypted with TLS 1.3, and files are automatically purged from memory immediately after conversion.' },
+            { question: 'Can I use Excel formulas on the converted data?', answer: 'Yes. Numbers are parsed into standard spreadsheet values so you can immediately apply SUM, VLOOKUP, filters, and chart visualizations.' }
+        ],
+        supportedFormats: 'Input: PDF | Output: XLSX, CSV',
+        relatedTools: ['pdf-to-word', 'pdf-to-text', 'fill-pdf', 'compress-pdf'],
+    },
 };

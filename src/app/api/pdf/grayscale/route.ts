@@ -1,0 +1,79 @@
+import { apiError } from '@/lib/api-response';
+import { runGhostscriptWithFallback } from '@/lib/ghostscript';
+import { openEditablePdf, pdfBinaryResponse, sanitizeDownloadFileName } from '@/lib/pdf-api';
+import { NextRequest } from 'next/server';
+import fs from 'fs';
+import path from 'path';
+import os from 'os';
+import crypto from 'crypto';
+
+export const maxDuration = 60;
+export const runtime = 'nodejs';
+
+export async function POST(request: NextRequest) {
+  let tempInputPath = '';
+  let tempOutputPath = '';
+
+  try {
+    const formData = await request.formData();
+    const file = formData.get('file') as File | null;
+
+    const opened = await openEditablePdf(file);
+    if (!opened.ok) return opened.response;
+    const { pdf, buffer } = opened;
+
+    const randId = crypto.randomBytes(8).toString('hex');
+    tempInputPath = path.join(os.tmpdir(), `gs-in-${randId}.pdf`);
+    tempOutputPath = path.join(os.tmpdir(), `gs-out-${randId}.pdf`);
+
+    await fs.promises.writeFile(tempInputPath, buffer);
+
+    const gsArgs = [
+      '-sDEVICE=pdfwrite',
+      '-sColorConversionStrategy=Gray',
+      '-dProcessColorModel=/DeviceGray',
+      '-dCompatibilityLevel=1.4',
+      '-dNOPAUSE',
+      '-dBATCH',
+      '-dQUIET',
+      '-dSAFER',
+      `-sOutputFile=${tempOutputPath}`,
+      tempInputPath,
+    ];
+
+    let processedBytes: Buffer | Uint8Array | null = null;
+
+    try {
+      await runGhostscriptWithFallback(gsArgs, {
+        timeoutMs: 40_000,
+        timeoutMessage: 'Grayscale conversion timed out.',
+      });
+
+      if (fs.existsSync(tempOutputPath)) {
+        processedBytes = await fs.promises.readFile(tempOutputPath);
+      }
+    } catch (gsError) {
+      console.warn('Ghostscript grayscale failed, using pdf-lib fallback:', gsError);
+    }
+
+    // Fallback: save through pdf-lib if Ghostscript fails or is unavailable
+    if (!processedBytes || processedBytes.length === 0) {
+      processedBytes = await pdf.save();
+    }
+
+    const baseName = file?.name ? file.name.replace(/\.pdf$/i, '') : 'document';
+    const fileName = `${baseName}-grayscale.pdf`;
+
+    return pdfBinaryResponse(processedBytes, sanitizeDownloadFileName(fileName));
+  } catch (error) {
+    console.error('Grayscale PDF error:', error);
+    return apiError(error instanceof Error ? error.message : 'Failed to convert PDF to grayscale', 500);
+  } finally {
+    if (tempInputPath && fs.existsSync(tempInputPath)) {
+      try { await fs.promises.unlink(tempInputPath); } catch {}
+    }
+    if (tempOutputPath && fs.existsSync(tempOutputPath)) {
+      try { await fs.promises.unlink(tempOutputPath); } catch {}
+    }
+  }
+}
