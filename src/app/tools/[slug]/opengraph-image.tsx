@@ -12,8 +12,10 @@ export const size = {
 
 export const contentType = 'image/png';
 
-export default async function Image({ params }: { params: { slug: string } }) {
-  const tool = getToolBySlug(params.slug);
+export default async function Image({ params }: { params: Promise<{ slug: string }> | { slug: string } }) {
+  const resolvedParams = await params;
+  const slug = resolvedParams?.slug;
+  const tool = slug ? getToolBySlug(slug) : undefined;
 
   if (!tool) {
     return new Response('Not Found', { status: 404 });

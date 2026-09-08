@@ -35,13 +35,13 @@ const dynamicRoutes = [
   /^\/api\//,
   /^\/feed$/,
   /^\/tools\/[^/]+\/opengraph-image$/,
+  /^\/blog\/[^/]+\/opengraph-image$/,
   /^\/opengraph-image/,
 ];
 
 function existsInternal(href) {
   const clean = href.split('#')[0].split('?')[0].replace(/\/$/, '') || '/';
   if (pageRoutes.has(clean)) return true;
-  if (redirectSources.has(clean)) return true;
   if (publicFiles.has(clean)) return true;
   if (publicFiles.has(clean.replace(/\/$/, ''))) return true;
   if (dynamicRoutes.some((re) => re.test(clean))) return true;
@@ -51,6 +51,8 @@ function existsInternal(href) {
 }
 
 const broken = new Map();
+const redirectsUsed = new Map();
+
 for (const f of htmlFiles) {
   const page = '/' + path.relative(appDir, f).replace(/\.html$/, '').replace(/\\/g, '/');
   const src = fs.readFileSync(f, 'utf8');
@@ -60,15 +62,28 @@ for (const f of htmlFiles) {
   ];
   for (const ref of refs) {
     if (ref.startsWith('/_next/')) continue; // build assets live in .next/static, not public/
-    if (!existsInternal(ref)) {
+    const clean = ref.split('#')[0].split('?')[0].replace(/\/$/, '') || '/';
+    if (redirectSources.has(clean)) {
+      if (!redirectsUsed.has(ref)) redirectsUsed.set(ref, new Set());
+      redirectsUsed.get(ref).add(page);
+    } else if (!existsInternal(ref)) {
       if (!broken.has(ref)) broken.set(ref, new Set());
       broken.get(ref).add(page);
     }
   }
 }
 
-if (broken.size === 0) {
-  console.log('✅ No broken internal links or asset refs found across', htmlFiles.length, 'pages');
+if (redirectsUsed.size > 0) {
+  console.log(`⚠️  ${redirectsUsed.size} internal links point to redirect sources (should link directly to canonical target):`);
+  for (const [ref, pages] of [...redirectsUsed.entries()].sort()) {
+    console.log(`  ${ref}  (linked from ${pages.size} pages, e.g. ${[...pages][0]})`);
+  }
+}
+
+if (broken.size === 0 && redirectsUsed.size === 0) {
+  console.log('✅ No broken internal links or redirect refs found across', htmlFiles.length, 'pages');
+} else if (broken.size === 0) {
+  console.log('✅ No broken (404) internal links found across', htmlFiles.length, 'pages');
 } else {
   console.log(`❌ ${broken.size} broken internal refs:`);
   for (const [ref, pages] of [...broken.entries()].sort()) {

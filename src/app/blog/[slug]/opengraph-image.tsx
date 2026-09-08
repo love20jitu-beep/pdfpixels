@@ -11,8 +11,10 @@ export const size = {
 
 export const contentType = 'image/png';
 
-export default async function Image({ params }: { params: { slug: string } }) {
-  const post = getBlogPostBySlug(params.slug);
+export default async function Image({ params }: { params: Promise<{ slug: string }> | { slug: string } }) {
+  const resolvedParams = await params;
+  const slug = resolvedParams?.slug;
+  const post = slug ? getBlogPostBySlug(slug) : undefined;
 
   if (!post) {
     return new Response('Not Found', { status: 404 });
