@@ -56,6 +56,7 @@ export function Footer() {
     { name: 'Guides & Blog', href: '/blog' },
     { name: 'Free Pricing', href: '/pricing' },
     { name: 'Privacy Policy', href: '/privacy' },
+    { name: 'Cookie Policy', href: '/privacy#cookies' },
     { name: 'Terms of Service', href: '/terms' },
     { name: 'Disclaimer', href: '/disclaimer' },
     { name: 'DMCA Policy', href: '/dmca' },

@@ -147,6 +147,11 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         <link rel="preconnect" href="https://adservice.google.com" />
         <meta name="google-adsense-account" content="ca-pub-3541576002060495" />
         <script
+          dangerouslySetInnerHTML={{
+            __html: 'window.adsbygoogle = window.adsbygoogle || []; window.adsbygoogle.requestNonPersonalizedAds = 1;',
+          }}
+        />
+        <script
           async
           src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3541576002060495"
           crossOrigin="anonymous"

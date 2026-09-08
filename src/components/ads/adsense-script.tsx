@@ -1,8 +1,7 @@
 'use client';
 
-import Script from 'next/script';
-import { adsConfig, hasAdvertisingConsent } from '@/lib/ads-config';
-import { useEffect, useState } from 'react';
+import { hasAdvertisingConsent } from '@/lib/ads-config';
+import { useEffect } from 'react';
 
 // Google AdSense Script Component
 //
@@ -12,11 +11,14 @@ import { useEffect, useState } from 'react';
 // requestNonPersonalizedAds: 1 (Google's documented fallback for consent-gated
 // traffic), and personalization resumes once consent is granted.
 export function AdSenseScript() {
-  const [adConsent, setAdConsent] = useState(false);
-
   useEffect(() => {
     const handleConsentUpdate = () => {
-      setAdConsent(hasAdvertisingConsent());
+      const consent = hasAdvertisingConsent();
+      if (typeof window !== 'undefined') {
+        const adsArr = ((window as unknown as { adsbygoogle: unknown[] }).adsbygoogle =
+          (window as unknown as { adsbygoogle: unknown[] }).adsbygoogle || []);
+        (adsArr as unknown as { requestNonPersonalizedAds?: number }).requestNonPersonalizedAds = consent ? 0 : 1;
+      }
     };
     handleConsentUpdate();
     window.addEventListener('cookie-consent-updated', handleConsentUpdate);
@@ -25,29 +27,5 @@ export function AdSenseScript() {
     };
   }, []);
 
-  if (!adsConfig.enabled || !adsConfig.publisherId) {
-    return null;
-  }
-
-  return (
-    <>
-      <Script
-        id="adsense-npa"
-        strategy="beforeInteractive"
-        dangerouslySetInnerHTML={{
-          __html: `
-            window.adsbygoogle = window.adsbygoogle || [];
-            ${!adConsent ? 'window.adsbygoogle.requestNonPersonalizedAds = 1;' : 'window.adsbygoogle.requestNonPersonalizedAds = 0;'}
-          `,
-        }}
-      />
-      <Script
-        id="adsense-loader"
-        async
-        src={adsConfig.scriptUrl}
-        crossOrigin="anonymous"
-        strategy="afterInteractive"
-      />
-    </>
-  );
+  return null;
 }

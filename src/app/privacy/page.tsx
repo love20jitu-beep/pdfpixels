@@ -95,7 +95,7 @@ export default function PrivacyPolicy() {
         </p>
       </section>
 
-      <section>
+      <section id="cookies">
         <h2>5. Cookies and Tracking Technologies</h2>
         <p>We use cookies and similar technologies to support the Service and understand performance.</p>
         <ul>
